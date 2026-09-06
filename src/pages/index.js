@@ -200,8 +200,8 @@ export function productPage(product, locale) {
               </div>
               <noscript>
                 <div style="margin-block-start:var(--s-4);display:flex;gap:var(--s-3);flex-wrap:wrap">
-                  ${waLink(locale === 'ar' ? `مرحبًا يا حكايتي ✨ أرغب بطلب: ${p.name}` : `Hello Ya 7kayti ✨ I'd like to order: ${p.name}`)
-                    ? `<a class="btn" href="${waLink(locale === 'ar' ? `مرحبًا يا حكايتي ✨ أرغب بطلب: ${p.name}` : `Hello Ya 7kayti ✨ I'd like to order: ${p.name}`)}" rel="noopener">${icons.whatsapp(18)} ${esc(c.finalCta.secondary)}</a>`
+                  ${waLink(locale === 'ar' ? `مرحبًا يا حكايتي، أرغب بطلب: ${p.name}` : `Hello Ya 7kayti, I'd like to order: ${p.name}`)
+                    ? `<a class="btn" href="${waLink(locale === 'ar' ? `مرحبًا يا حكايتي، أرغب بطلب: ${p.name}` : `Hello Ya 7kayti, I'd like to order: ${p.name}`)}" rel="noopener">${icons.whatsapp(18)} ${esc(c.finalCta.secondary)}</a>`
                     : `<a class="btn" href="${url(locale, routes.contact.path)}">${esc(c.nav.contact)} ${icons.arrow(16)}</a>`}
                 </div>
               </noscript>
@@ -287,7 +287,7 @@ export function aboutPage(locale) {
 export function contactPage(locale) {
   const c = copy[locale];
   const t = c.pages.contact;
-  const wa = waLink(locale === 'ar' ? 'مرحبًا يا حكايتي ✨' : 'Hello Ya 7kayti ✨');
+  const wa = waLink(locale === 'ar' ? 'مرحبًا يا حكايتي' : 'Hello Ya 7kayti');
   const has = wa || site.instagram;
 
   return {

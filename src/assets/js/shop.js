@@ -336,8 +336,8 @@
     var wa = cfg && cfg.settings.whatsapp;
 
     var msg = YK.LOCALE === 'ar'
-      ? 'مرحبًا يا حكايتي ✨ أرسلت طلبي رقم ' + number + ' وأرغب بمتابعة التفاصيل.'
-      : 'Hello Ya 7kayti ✨ I’ve placed order ' + number + ' and would like to continue with the details.';
+      ? 'مرحبًا يا حكايتي، أرسلت طلبي رقم ' + number + ' وأرغب بمتابعة التفاصيل.'
+      : 'Hello Ya 7kayti, I’ve placed order ' + number + ' and would like to continue with the details.';
 
     var payLabel = o.paymentMethod === 'cod' ? t('cod') : t('whish');
 

@@ -360,7 +360,7 @@
 
     var o = r.data.order, tl = r.data.timeline || [];
     var wa = String(o.customer.phone || '').replace(/\D/g, '');
-    var waMsg = 'مرحبًا ' + o.customer.name + ' ✨ نتواصل معك من يا حكايتي بخصوص طلبك ' + o.orderNumber + '.';
+    var waMsg = 'مرحبًا ' + o.customer.name + '، نتواصل معك من يا حكايتي بخصوص طلبك ' + o.orderNumber + '.';
 
     var sel = function (id2, list, cur) {
       return '<select class="select" id="' + id2 + '">'

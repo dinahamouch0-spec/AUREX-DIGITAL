@@ -272,7 +272,7 @@ export function faqSection(locale, { limit = 0, showAll = false } = {}) {
 /* ----------------------------------------------------------- final CTA --- */
 export function finalCta(locale) {
   const t = copy[locale].finalCta;
-  const wa = waLink(locale === 'ar' ? 'مرحبًا يا حكايتي ✨ أرغب بالاستفسار عن منتجاتكم.' : 'Hello Ya 7kayti ✨ I’d like to ask about your products.');
+  const wa = waLink(locale === 'ar' ? 'مرحبًا يا حكايتي، أرغب بالاستفسار عن منتجاتكم.' : 'Hello Ya 7kayti, I’d like to ask about your products.');
   return `
 <section class="section">
   <div class="wrap">
