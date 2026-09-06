@@ -1,0 +1,79 @@
+/* =========================================================================
+   Ya 7kayti — design tokens
+   Part 1 §5: every colour is sampled from the supplied logo and the three
+   approved promotional assets. Components reference tokens only.
+   ========================================================================= */
+:root {
+  /* Brand — sampled from the assets */
+  --c-ink:          #10103a;   /* deep navy from "Personalized" headline      */
+  --c-ink-soft:     #4b4a72;   /* body copy                                   */
+  --c-ink-faint:    #7d7c9c;   /* meta / captions                             */
+
+  --c-pink:         #ee2e86;   /* signature vibrant pink — headlines          */
+  --c-pink-cta:     #f0609f;   /* CTA fill, sampled from the asset button     */
+  --c-pink-deep:    #c4185f;   /* hover / pressed                             */
+  --c-blush:        #fdeef6;   /* soft blush surface                          */
+  --c-blush-deep:   #fbdcec;
+
+  --c-purple:       #50418f;   /* logo purple                                 */
+  --c-purple-soft:  #f2effb;
+  --c-sky:          #3fa3d4;
+  --c-sky-soft:     #eaf5fb;
+  --c-mint:         #2fbe84;
+  --c-gold:         #f5b915;   /* star / sparkle micro-accent                 */
+
+  /* Surfaces */
+  --c-bg:           #fffcf8;   /* warm ivory foundation                       */
+  --c-bg-alt:       #fdf7f1;
+  --c-surface:      #ffffff;
+  --c-border:       #f0e6dd;
+  --c-border-strong:#e2d5c9;
+
+  /* Feedback */
+  --c-danger:       #c02a35;
+  --c-danger-soft:  #fdeef0;
+  --c-success:      #1c8757;
+
+  /* Typography */
+  --font-display: 'Baloo Bhaijaan 2', 'Cairo', system-ui, sans-serif;
+  --font-body-ar: 'Cairo', system-ui, -apple-system, sans-serif;
+  --font-body-en: 'Nunito', system-ui, -apple-system, sans-serif;
+  --font-body:    var(--font-body-en);
+
+  /* Fluid type scale */
+  --t-hero:  clamp(2.15rem, 1.15rem + 4.4vw, 4.35rem);
+  --t-h1:    clamp(1.85rem, 1.15rem + 2.9vw, 3.15rem);
+  --t-h2:    clamp(1.55rem, 1.10rem + 1.9vw, 2.45rem);
+  --t-h3:    clamp(1.20rem, 1.02rem + 0.8vw, 1.55rem);
+  --t-lead:  clamp(1.02rem, 0.96rem + 0.34vw, 1.22rem);
+  --t-body:  1rem;
+  --t-sm:    0.9rem;
+  --t-xs:    0.8rem;
+
+  /* Space */
+  --s-1: .25rem;  --s-2: .5rem;   --s-3: .75rem;  --s-4: 1rem;
+  --s-5: 1.5rem;  --s-6: 2rem;    --s-7: 2.75rem; --s-8: 3.5rem;
+  --s-9: 5rem;    --s-10: 7rem;
+  --section-y: clamp(3.5rem, 2rem + 6vw, 6.5rem);
+  --gutter:    clamp(1.1rem, 0.6rem + 2.2vw, 2.5rem);
+  --maxw: 1180px;
+  --maxw-narrow: 760px;
+
+  /* Radius & shadow */
+  --r-sm: 10px; --r-md: 16px; --r-lg: 24px; --r-xl: 32px; --r-pill: 999px;
+  --sh-sm: 0 1px 2px rgba(16,16,58,.05), 0 2px 8px rgba(16,16,58,.04);
+  --sh-md: 0 2px 6px rgba(16,16,58,.06), 0 12px 28px rgba(16,16,58,.07);
+  --sh-lg: 0 4px 12px rgba(16,16,58,.07), 0 24px 56px rgba(16,16,58,.10);
+  --sh-pink: 0 8px 24px rgba(240,96,159,.32);
+
+  /* Motion */
+  --ease: cubic-bezier(.22,.61,.36,1);
+  --dur-fast: .16s; --dur: .28s; --dur-slow: .5s;
+
+  --header-h: 68px;
+}
+
+@media (min-width: 900px) { :root { --header-h: 80px; } }
+
+/* Arabic gets its own body face; the display face covers both scripts. */
+[lang="ar"] { --font-body: var(--font-body-ar); }

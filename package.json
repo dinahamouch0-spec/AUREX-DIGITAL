@@ -1,0 +1,15 @@
+{
+  "devDependencies": {
+    "playwright": "^1.49.1"
+  },
+  "name": "ya7kayti-storefront",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Ya 7kayti — bilingual personalized children's products storefront",
+  "scripts": {
+    "build": "node build.mjs",
+    "dev": "node build.mjs && python3 -m http.server 8899 --directory dist",
+    "preview": "python3 -m http.server 8899 --directory dist"
+  }
+}

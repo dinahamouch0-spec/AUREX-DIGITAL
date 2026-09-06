@@ -1,0 +1,263 @@
+// All customer-facing strings, both locales. Part 1 §7: neither language is a
+// translation layer bolted onto the other — each is written to read naturally.
+// Part 3 §21/§25 later serves this from Admin; the key shape is the contract.
+
+export const copy = {
+  ar: {
+    dir: 'rtl',
+    nav: {
+      home: 'الرئيسية', shop: 'المتجر', stories: 'القصص', stickers: 'الستيكرات',
+      notebooks: 'الدفاتر', how: 'كيف تتم', about: 'من نحن', faq: 'الأسئلة',
+      contact: 'تواصلوا معنا', cart: 'السلة', menu: 'القائمة', close: 'إغلاق',
+      startCta: 'ابدأ التخصيص', skip: 'تخطّي إلى المحتوى', langSwitch: 'English',
+    },
+    hero: {
+      eyebrow: 'قصص وستيكرات ودفاتر مخصّصة',
+      title: 'طفلك بطل حكايته',
+      lead: 'اختاروا المنتج، ارفعوا صورة طفلك، وأخبرونا عن العالم أو الشخصية التي يحبّها — ونصنع له شيئًا خاصًّا به وحده.',
+      primary: 'ابدأ حكاية طفلك', secondary: 'تصفّح المنتجات',
+      badge: 'يُصنع خصيصًا لكل طفل',
+    },
+    how: {
+      eyebrow: 'بأربع خطوات',
+      title: 'كيف يحدث السحر',
+      lead: 'من الاختيار حتى التسليم، الطريق قصير وواضح.',
+      steps: [
+        { n: '٠١', title: 'اختاروا', text: 'قصة، أو ستيكرات، أو غلاف دفتر — أو أي منتج جديد نضيفه لاحقًا.' },
+        { n: '٠٢', title: 'خصّصوا', text: 'املأوا المعلومات التي يحتاجها هذا المنتج تحديدًا.' },
+        { n: '٠٣', title: 'ارفعوا وتخيّلوا', text: 'ارفعوا صورة طفلك واختاروا شخصيته أو عالمه المفضّل.' },
+        { n: '٠٤', title: 'نصنع ونوصّل', text: 'نصمّم العمل ونجهّزه، ثم ننسّق معكم التسليم.' },
+      ],
+    },
+    featured: { eyebrow: 'ابدأوا من هنا', title: 'منتجاتنا', lead: 'كل منتج يُصنع من الصفر حول طفل واحد.' },
+    creations: {
+      eyebrow: 'من أعمالنا السابقة',
+      title: 'حكايات صنعناها بحب',
+      lead: 'نماذج حقيقية من تصاميم يا حكايتي — كل واحدة صُنعت لطفل بعينه.',
+      privacy: 'لا ننشر صور الأطفال التي تصلنا مع الطلبات. ما تشاهدونه هنا نماذج تسويقية معتمدة فقط.',
+    },
+    why: {
+      eyebrow: 'لماذا يا حكايتي',
+      title: 'ليس طباعة… بل ذكرى',
+      items: [
+        { title: 'مصنوع لطفلك', text: 'ليس منتجًا جاهزًا يُباع للجميع، بل عمل يبدأ من طفلك أنت.' },
+        { title: 'صورته وعالمه', text: 'صورة طفلك الحقيقية داخل الشخصية أو العالم الذي يحبّه.' },
+        { title: 'يُصنع بعناية', text: 'كل تصميم يُعدّ يدويًا ويُراجع قبل الطباعة.' },
+        { title: 'يبقى معه', text: 'شيء ملموس يُحفظ، لا هدية تُفتح مرة وتُنسى.' },
+        { title: 'بالعربية والإنجليزية', text: 'حسب ما يناسب المنتج وطفلك.' },
+      ],
+    },
+    moment: {
+      line1: 'بعض الهدايا تُفتح مرّة.',
+      line2: 'وبعضها يصبح جزءًا من الطفولة.',
+    },
+    reviews: {
+      eyebrow: 'آراء الأهل', title: 'ماذا قالوا عنّا',
+      empty: 'نجمع حاليًا آراء العائلات التي جرّبت يا حكايتي. ستظهر هنا قريبًا.',
+    },
+    faq: {
+      eyebrow: 'أسئلة شائعة', title: 'قبل أن تبدأوا', all: 'كل الأسئلة',
+      lead: 'أكثر ما يسأل عنه الأهل قبل الطلب.',
+    },
+    finalCta: {
+      title: 'جاهزين نخلّي طفلك بطل حكايته؟',
+      lead: 'اختاروا المنتج وابدأوا التخصيص — الباقي علينا.',
+      primary: 'ابدأ الآن', secondary: 'تواصلوا معنا عبر واتساب',
+    },
+    shop: {
+      title: 'المتجر', lead: 'كل منتجات يا حكايتي، جاهزة للتخصيص باسم طفلك وصورته.',
+      all: 'كل المنتجات', empty: 'لا توجد منتجات معروضة حاليًا.',
+      emptyCat: 'لا توجد منتجات في هذا القسم حاليًا.',
+    },
+    product: {
+      from: 'يبدأ من', each: 'للقطعة', customize: 'خصّصه لطفلك',
+      available: 'متوفّر', unavailable: 'غير متوفّر حاليًا',
+      production: 'مدة التنفيذ عادةً من ٢ إلى ٥ أيام',
+      productionNote: 'هذه مدة التنفيذ والتحضير. مدة التوصيل تُحدَّد وتُنسَّق معكم حسب موقعكم.',
+      personalize: 'ما الذي نحتاجه منكم',
+      privacy: 'نستخدم صورة طفلك فقط لتجهيز طلبك، ولا ننشرها لأغراض تسويقية دون موافقتكم.',
+      related: 'قد يعجبكم أيضًا',
+      gallery: 'نماذج من هذا المنتج',
+      soon: 'التخصيص والطلب عبر الموقع قيد التجهيز. للطلب الآن تواصلوا معنا مباشرة.',
+      required: 'مطلوب', optional: 'اختياري',
+    },
+    pages: {
+      how: {
+        title: 'كيف تتم العملية',
+        lead: 'من اللحظة التي تختارون فيها المنتج، حتى وصوله بين يدي طفلك.',
+        steps: [
+          { title: 'اختاروا المنتج', text: 'قصة، ستيكرات، أو غلاف دفتر — كل منتج له خياراته الخاصة.' },
+          { title: 'أخبرونا عن طفلك', text: 'الاسم، والعمر إن كان المنتج يحتاجه، وأي تفصيل يهمّكم.' },
+          { title: 'ارفعوا صورته', text: 'صورة واضحة تكفي. نستخدمها لتجهيز الطلب فقط.' },
+          { title: 'اختاروا عالمه المفضّل', text: 'شخصية كرتونية، رياضة، أميرات، فضاء… أو اطلبوا ما تريدون.' },
+          { title: 'نصمّم العمل', text: 'نجهّز التصميم يدويًا حول طفلك.' },
+          { title: 'ننسّق الموافقة والدفع والتوصيل', text: 'نرسل لكم التصميم للمراجعة عبر واتساب، ونتفق على التفاصيل.' },
+          { title: 'نطبع ونوصّل', text: 'بعد موافقتكم نطبع العمل ونجهّزه للتسليم.' },
+        ],
+        approval: 'مراجعة التصميم والموافقة عليه تتمّان عبر واتساب قبل الطباعة، حتى تصلكم النتيجة كما تتمنّون.',
+      },
+      about: {
+        title: 'من نحن',
+        lead: 'يا حكايتي — قِصَصٌ تُحكَى بِحُبّ.',
+        body: [
+          'يا حكايتي تصنع منتجات مخصّصة للأطفال: قصص وستيكرات وأغلفة دفاتر، يكون فيها الطفل نفسه هو البطل — بصورته، وباسمه، وبالعالم الذي يحبّه.',
+          'نؤمن أن الطفل حين يرى نفسه داخل قصة أو على غلاف دفتره، لا يرى منتجًا… بل يرى أنه مهمّ. وهذا الشعور يبقى.',
+          'كل عمل يُجهَّز على حدة. لا قوالب جاهزة تُباع للجميع، بل تصميم يبدأ من طفل واحد وينتهي عنده.',
+        ],
+        pending: 'قصة يا حكايتي بصوت صاحبتها ستُضاف هنا قريبًا.',
+      },
+      contact: {
+        title: 'تواصلوا معنا', lead: 'أسرع طريقة للوصول إلينا هي واتساب.',
+        wa: 'راسلونا على واتساب', ig: 'تابعونا على إنستغرام',
+        pending: 'معلومات التواصل ستُضاف هنا قريبًا.',
+        hours: 'نردّ عادةً خلال ساعات النهار.',
+      },
+      faq: { title: 'الأسئلة الشائعة', lead: 'كل ما تحتاجون معرفته قبل الطلب: كيف يتم التخصيص، أي صورة ترفعون، مدة التنفيذ، التوصيل، الدفع، وماذا يحدث لصورة طفلكم بعد اكتمال الطلب.' },
+      privacy: { title: 'سياسة الخصوصية' },
+      terms: { title: 'الشروط والأحكام' },
+      shipping: { title: 'سياسة الشحن والتوصيل' },
+      cart: { title: 'السلة', empty: 'سلتك فارغة حاليًا.', browse: 'تصفّح المنتجات' },
+      notFound: { title: 'الصفحة غير موجودة', lead: 'الرابط الذي فتحتموه غير متاح.', home: 'العودة للرئيسية' },
+    },
+    footer: {
+      about: 'منتجات مخصّصة للأطفال، يكون فيها طفلك هو البطل.',
+      shop: 'المتجر', info: 'معلومات', legal: 'سياسات', follow: 'تابعونا',
+      rights: 'جميع الحقوق محفوظة.',
+      pendingContact: 'قنوات التواصل ستُضاف قريبًا.',
+    },
+    common: {
+      loading: 'جارٍ التحميل…', error: 'حدث خطأ غير متوقّع.',
+      retry: 'إعادة المحاولة', soon: 'قريبًا', back: 'رجوع',
+      imageFailed: 'تعذّر تحميل الصورة',
+    },
+  },
+
+  en: {
+    dir: 'ltr',
+    nav: {
+      home: 'Home', shop: 'Shop', stories: 'Stories', stickers: 'Stickers',
+      notebooks: 'Notebooks', how: 'How it works', about: 'About', faq: 'FAQ',
+      contact: 'Contact', cart: 'Cart', menu: 'Menu', close: 'Close',
+      startCta: 'Start personalizing', skip: 'Skip to content', langSwitch: 'العربية',
+    },
+    hero: {
+      eyebrow: 'Personalized stories, stickers & notebooks',
+      title: 'Your child. Their story. Their world.',
+      lead: 'Choose a product, upload your child’s photo, and tell us the world or character they love — we’ll make something that belongs to them alone.',
+      primary: 'Start their story', secondary: 'Explore products',
+      badge: 'Made for one child at a time',
+    },
+    how: {
+      eyebrow: 'Four steps',
+      title: 'How the magic works',
+      lead: 'From choosing to delivery, the path is short and clear.',
+      steps: [
+        { n: '01', title: 'Choose', text: 'A story, stickers, a notebook cover — or any product we add later.' },
+        { n: '02', title: 'Personalize', text: 'Fill in what that particular product needs.' },
+        { n: '03', title: 'Upload & imagine', text: 'Upload your child’s photo and pick their favourite character or world.' },
+        { n: '04', title: 'We create & deliver', text: 'We design it, prepare it, and coordinate delivery with you.' },
+      ],
+    },
+    featured: { eyebrow: 'Start here', title: 'Our products', lead: 'Every piece is made from scratch around one child.' },
+    creations: {
+      eyebrow: 'From our previous work',
+      title: 'Made with love',
+      lead: 'Real examples of Ya 7kayti designs — each one made for a particular child.',
+      privacy: 'We never publish the photos families send with their orders. Everything shown here is approved marketing material only.',
+    },
+    why: {
+      eyebrow: 'Why Ya 7kayti',
+      title: 'Not printing — a memory',
+      items: [
+        { title: 'Made for your child', text: 'Not an off-the-shelf product sold to everyone, but work that starts with your child.' },
+        { title: 'Their photo, their world', text: 'Your child’s real photo inside the character or world they love.' },
+        { title: 'Created with care', text: 'Every design is prepared by hand and reviewed before printing.' },
+        { title: 'Made to keep', text: 'Something physical that stays, not a gift opened once and forgotten.' },
+        { title: 'Arabic & English', text: 'Whichever suits the product and your child.' },
+      ],
+    },
+    moment: {
+      line1: 'Some gifts are opened once.',
+      line2: 'Some become part of childhood.',
+    },
+    reviews: {
+      eyebrow: 'From parents', title: 'What families say',
+      empty: 'We’re collecting reviews from families who’ve tried Ya 7kayti. They’ll appear here soon.',
+    },
+    faq: {
+      eyebrow: 'Common questions', title: 'Before you begin', all: 'All questions',
+      lead: 'What parents ask most before ordering.',
+    },
+    finalCta: {
+      title: 'Ready to make your child the hero?',
+      lead: 'Pick a product and start personalizing — we’ll take it from there.',
+      primary: 'Start personalizing', secondary: 'Talk to us on WhatsApp',
+    },
+    shop: {
+      title: 'Shop', lead: 'Every Ya 7kayti product, ready to personalize with your child’s name and photo.',
+      all: 'All products', empty: 'No products are listed right now.',
+      emptyCat: 'No products in this category right now.',
+    },
+    product: {
+      from: 'From', each: 'each', customize: 'Customize for your child',
+      available: 'Available', unavailable: 'Currently unavailable',
+      production: 'Production usually takes 2–5 days',
+      productionNote: 'That’s the time to make and prepare your order. Delivery time is separate and is arranged with you based on your location.',
+      personalize: 'What we’ll need from you',
+      privacy: 'We use your child’s photo only to prepare your order, and never for marketing without your permission.',
+      related: 'You may also like',
+      gallery: 'Examples of this product',
+      soon: 'Online personalization and ordering are being prepared. To order now, message us directly.',
+      required: 'Required', optional: 'Optional',
+    },
+    pages: {
+      how: {
+        title: 'How it works',
+        lead: 'From the moment you choose a product, to the moment it reaches your child.',
+        steps: [
+          { title: 'Choose a product', text: 'A story, stickers or a notebook cover — each has its own options.' },
+          { title: 'Tell us about your child', text: 'Their name, their age where the product needs it, and anything that matters to you.' },
+          { title: 'Upload their photo', text: 'One clear photo is enough. We use it only to prepare the order.' },
+          { title: 'Choose their favourite world', text: 'A cartoon character, sport, princesses, space… or ask for something specific.' },
+          { title: 'We design it', text: 'We prepare the artwork by hand, around your child.' },
+          { title: 'We coordinate approval, payment & delivery', text: 'We send the design for review on WhatsApp and agree the details with you.' },
+          { title: 'We print and deliver', text: 'Once you approve, we print and prepare it for delivery.' },
+        ],
+        approval: 'Design review and approval happen over WhatsApp before printing, so what arrives is what you hoped for.',
+      },
+      about: {
+        title: 'About us',
+        lead: 'Ya 7kayti — stories told with love.',
+        body: [
+          'Ya 7kayti makes personalized products for children: stories, stickers and notebook covers in which the child themselves is the hero — their photo, their name, and the world they love.',
+          'We believe that when a child sees themselves inside a story or on the cover of their notebook, they don’t see a product. They see that they matter. That feeling stays.',
+          'Every piece is prepared individually. No ready-made template sold to everyone — a design that begins with one child and ends with them.',
+        ],
+        pending: 'The Ya 7kayti story, in the founder’s own words, will be added here soon.',
+      },
+      contact: {
+        title: 'Contact us', lead: 'The fastest way to reach us is WhatsApp.',
+        wa: 'Message us on WhatsApp', ig: 'Follow us on Instagram',
+        pending: 'Contact details will be added here soon.',
+        hours: 'We usually reply during daytime hours.',
+      },
+      faq: { title: 'Frequently asked questions', lead: 'Everything you need to know before ordering.' },
+      privacy: { title: 'Privacy Policy' },
+      terms: { title: 'Terms & Conditions' },
+      shipping: { title: 'Shipping & Delivery Policy' },
+      cart: { title: 'Cart', empty: 'Your cart is empty.', browse: 'Browse products' },
+      notFound: { title: 'Page not found', lead: 'The link you opened isn’t available.', home: 'Back to home' },
+    },
+    footer: {
+      about: 'Personalized products for children, where your child is the hero.',
+      shop: 'Shop', info: 'Information', legal: 'Policies', follow: 'Follow us',
+      rights: 'All rights reserved.',
+      pendingContact: 'Contact channels will be added soon.',
+    },
+    common: {
+      loading: 'Loading…', error: 'Something went wrong.',
+      retry: 'Try again', soon: 'Soon', back: 'Back',
+      imageFailed: 'Image could not be loaded',
+    },
+  },
+};

@@ -1,0 +1,221 @@
+/* =========================== page hero (inner) =========================== */
+.page-hero {
+  padding-block: clamp(2.5rem, 1.5rem + 4vw, 4.5rem) clamp(2rem, 1rem + 3vw, 3.25rem);
+  background:
+    radial-gradient(760px 400px at 78% -20%, var(--c-blush) 0%, transparent 64%),
+    var(--c-bg);
+  border-block-end: 1px solid var(--c-border);
+}
+.page-hero h1 { max-inline-size: 20ch; }
+.page-hero .lead { max-inline-size: 56ch; margin-block-end: 0; }
+/* The hero already provides generous breathing room, so the section that
+   follows it starts tighter instead of stacking two full rhythms. */
+.page-hero + .section { padding-block-start: clamp(2rem, 1.2rem + 2.5vw, 3.25rem); }
+
+.crumbs {
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-2);
+  list-style: none; margin: 0 0 var(--s-4); padding: 0;
+  font-size: var(--t-sm); color: var(--c-ink-faint);
+}
+.crumbs li { margin: 0; display: inline-flex; align-items: center; gap: var(--s-2); }
+.crumbs a { color: var(--c-ink-faint); text-decoration: none; font-weight: 600; }
+.crumbs a:hover { color: var(--c-pink-deep); }
+/* Separator flips with writing direction. Part 1 §7. */
+.crumbs li + li::before { content: '›'; opacity: .5; }
+[dir="rtl"] .crumbs li + li::before { content: '‹'; }
+
+/* ============================= filter bar =============================== */
+.filters {
+  display: flex; gap: var(--s-2); flex-wrap: wrap;
+  margin-block-end: var(--s-6);
+}
+@media (max-width: 640px) {
+  .filters {
+    flex-wrap: nowrap; overflow-x: auto; padding-block-end: var(--s-2);
+    scrollbar-width: none; -webkit-overflow-scrolling: touch;
+    margin-inline: calc(var(--gutter) * -1); padding-inline: var(--gutter);
+  }
+  .filters::-webkit-scrollbar { display: none; }
+}
+
+/* =========================== product detail ============================= */
+.pdp {
+  display: grid; gap: var(--s-6); grid-template-columns: 1fr;
+  align-items: start;
+}
+@media (min-width: 940px) {
+  .pdp { grid-template-columns: 1.06fr 1fr; gap: var(--s-8); }
+  .pdp__media { position: sticky; inset-block-start: calc(var(--header-h) + var(--s-4)); }
+}
+.pdp__gallery {
+  border-radius: var(--r-lg); overflow: hidden;
+  border: 1px solid var(--c-border); background: var(--c-surface);
+  box-shadow: var(--sh-md);
+}
+.pdp__gallery img { inline-size: 100%; block-size: auto; }
+.pdp__gallery figcaption {
+  padding: var(--s-3) var(--s-4); font-size: var(--t-xs);
+  color: var(--c-ink-faint); border-block-start: 1px solid var(--c-border);
+}
+.pdp__title { font-size: var(--t-h1); margin-block-end: var(--s-3); }
+.pdp__meta { display: flex; flex-wrap: wrap; gap: var(--s-2); margin-block-end: var(--s-4); }
+.pdp__price {
+  display: flex; align-items: baseline; gap: var(--s-2); flex-wrap: wrap;
+  padding-block: var(--s-4); margin-block: var(--s-4);
+  border-block: 1px solid var(--c-border);
+}
+.pdp__price .price__value { font-size: 1.9rem; color: var(--c-pink-deep); }
+.pdp__desc { font-size: var(--t-lead); }
+
+.panel {
+  background: var(--c-surface); border: 1px solid var(--c-border);
+  border-radius: var(--r-lg); padding: var(--s-5); margin-block-start: var(--s-5);
+}
+.panel h2, .panel h3 { font-size: 1.06rem; margin-block-end: var(--s-4); }
+
+/* Field checklist — the shape Part 2's customizer renders into. */
+.field-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--s-3); }
+.field-list li {
+  display: flex; align-items: flex-start; gap: var(--s-3); margin: 0;
+  padding-block-end: var(--s-3); border-block-end: 1px dashed var(--c-border);
+}
+.field-list li:last-child { border: 0; padding-block-end: 0; }
+.field-list__ico {
+  flex: 0 0 auto; inline-size: 34px; block-size: 34px; border-radius: var(--r-sm);
+  display: grid; place-items: center;
+  background: var(--c-blush); color: var(--c-pink-deep);
+}
+.field-list__txt { flex: 1; min-inline-size: 0; }
+.field-list__txt strong { color: var(--c-ink); font-weight: 700; display: block; font-size: .97rem; }
+.field-list__txt span { font-size: var(--t-xs); color: var(--c-ink-faint); }
+.req {
+  font-size: .68rem; font-weight: 800; padding: .12rem .45rem;
+  border-radius: var(--r-pill); background: var(--c-blush); color: var(--c-pink-deep);
+  margin-inline-start: var(--s-2); vertical-align: middle;
+}
+.req--opt { background: #f1eff4; color: var(--c-ink-faint); }
+
+/* Privacy reassurance sits with the upload, never only in the footer.
+   Part 2 §13 / Part 3 §38. */
+.privacy-note {
+  display: flex; gap: var(--s-3); align-items: flex-start;
+  padding: var(--s-4); border-radius: var(--r-md);
+  background: #f2fbf6; border: 1px solid #cfeede;
+  font-size: var(--t-sm); color: #1d6a4a;
+}
+.privacy-note svg { flex: 0 0 auto; color: var(--c-success); margin-block-start: 2px; }
+
+.note-inline {
+  display: flex; gap: var(--s-3); align-items: flex-start;
+  font-size: var(--t-sm); color: var(--c-ink-faint);
+  padding: var(--s-4); background: var(--c-bg-alt);
+  border-radius: var(--r-md); border: 1px solid var(--c-border);
+}
+.note-inline svg { flex: 0 0 auto; margin-block-start: 2px; color: var(--c-sky); }
+
+/* ============================ how-it-works flow ========================== */
+.flow { display: flex; flex-direction: column; gap: var(--s-4); counter-reset: flow; }
+.flow__item {
+  display: flex; gap: var(--s-4); align-items: flex-start;
+  background: var(--c-surface); border: 1px solid var(--c-border);
+  border-radius: var(--r-lg); padding: var(--s-5);
+}
+.flow__n {
+  flex: 0 0 auto; inline-size: 42px; block-size: 42px; border-radius: var(--r-pill);
+  display: grid; place-items: center;
+  background: var(--c-ink); color: #fff;
+  font-family: var(--font-display); font-weight: 800;
+}
+.flow__item h3 { font-size: 1.08rem; margin-block-end: var(--s-1); }
+.flow__item p { font-size: var(--t-sm); margin: 0; }
+
+/* ================================ prose ================================= */
+.prose { max-inline-size: 68ch; }
+.prose h2 { font-size: 1.35rem; margin-block: var(--s-7) var(--s-3); }
+.prose h2:first-child { margin-block-start: 0; }
+.prose p { color: var(--c-ink-soft); }
+.doc-note {
+  padding: var(--s-4); border-radius: var(--r-md);
+  background: #fffaf0; border: 1px solid #f2e2bd;
+  color: #7a5c12; font-size: var(--t-sm); margin-block-end: var(--s-6);
+  display: flex; gap: var(--s-3); align-items: flex-start;
+}
+.doc-note svg { flex: 0 0 auto; margin-block-start: 2px; }
+
+/* ============================ contact cards ============================= */
+.contact-grid { display: grid; gap: var(--s-4); grid-template-columns: 1fr; }
+@media (min-width: 640px) { .contact-grid { grid-template-columns: repeat(2, 1fr); } }
+.contact-card {
+  display: flex; gap: var(--s-4); align-items: flex-start;
+  padding: var(--s-5); border-radius: var(--r-lg);
+  background: var(--c-surface); border: 1px solid var(--c-border);
+  text-decoration: none; color: inherit;
+  transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+}
+a.contact-card:hover { transform: translateY(-3px); box-shadow: var(--sh-md); }
+.contact-card__ico {
+  flex: 0 0 auto; inline-size: 46px; block-size: 46px; border-radius: var(--r-md);
+  display: grid; place-items: center; background: var(--c-blush); color: var(--c-pink-deep);
+}
+.contact-card h3 { font-size: 1.04rem; margin-block-end: var(--s-1); }
+.contact-card p { font-size: var(--t-sm); margin: 0; color: var(--c-ink-faint); }
+
+/* ============================== UI states =============================== */
+/* Part 1 §32: empty / error / loading are designed, not accidental. */
+.state {
+  text-align: center; padding: var(--s-8) var(--s-5);
+  border: 1px dashed var(--c-border-strong); border-radius: var(--r-lg);
+  background: var(--c-surface);
+}
+.state__ico {
+  inline-size: 62px; block-size: 62px; border-radius: var(--r-pill);
+  display: grid; place-items: center; margin: 0 auto var(--s-4);
+  background: var(--c-bg-alt); color: var(--c-ink-faint);
+}
+.state h3 { font-size: 1.1rem; margin-block-end: var(--s-2); }
+.state p { font-size: var(--t-sm); color: var(--c-ink-faint); max-inline-size: 44ch; margin-inline: auto; }
+.state--error { border-color: #f0cdd2; background: var(--c-danger-soft); }
+.state--error .state__ico { background: #fadfe2; color: var(--c-danger); }
+.state--error h3 { color: var(--c-danger); }
+
+.skeleton {
+  background: linear-gradient(90deg, var(--c-bg-alt) 25%, #f6efe8 50%, var(--c-bg-alt) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s linear infinite;
+  border-radius: var(--r-md);
+}
+@keyframes shimmer { to { background-position: -200% 0; } }
+@media (prefers-reduced-motion: reduce) { .skeleton { animation: none; } }
+
+/* Image that failed to load still occupies its reserved box. Part 1 §32/§34. */
+.img-fallback {
+  display: grid; place-items: center; gap: var(--s-2);
+  background: var(--c-bg-alt); color: var(--c-ink-faint);
+  font-size: var(--t-xs); text-align: center; padding: var(--s-5);
+  block-size: 100%;
+}
+
+/* ============================== reveal ================================== */
+/* Pure-CSS scroll reveal. Content is visible by default and only animates
+   where the browser supports scroll-driven animations, so there is no state
+   in which JS failing or an observer misfiring can leave content hidden.    */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      animation: reveal-in linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 22%;
+    }
+  }
+}
+/* Transform only, never opacity: content is legible at every point of the
+   animation, so no scroll position or engine quirk can hide it. */
+@keyframes reveal-in {
+  from { transform: translateY(20px) scale(.995); }
+  to   { transform: none; }
+}
+
+@media print {
+  .reveal { opacity: 1 !important; transform: none !important; animation: none !important; }
+  .loader, .header, .drawer, .footer, .cta-band { display: none !important; }
+}
