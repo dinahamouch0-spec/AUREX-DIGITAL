@@ -130,6 +130,31 @@ async function buildRoot() {
   written.push('index.html');
 }
 
+/* -------------------------------------------------------------- admin --- */
+/* A single shell document. Everything inside is rendered by the dashboard
+   against the API, and the API is the thing that enforces access. §29, §52. */
+async function buildAdmin() {
+  const html = `<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>لوحة التحكم — ${site.brand.name.ar}</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="/assets/img/favicon.ico">
+<link rel="stylesheet" href="/assets/css/styles.css">
+</head>
+<body class="admin">
+<div id="admin-app"><div class="admin-main"><div class="state" role="status">جارٍ التحميل…</div></div></div>
+<script src="/assets/js/admin.js" defer></script>
+<script src="/assets/js/admin-views.js" defer></script>
+</body>
+</html>`;
+  await mkdir(path.join(DIST, 'admin'), { recursive: true });
+  await writeFile(path.join(DIST, 'admin', 'index.html'), html, 'utf8');
+  written.push('admin/index.html');
+}
+
 /* ------------------------------------------------------------ sitemap --- */
 async function buildSeo() {
   const body = sitemapEntries.map((e) => {
@@ -201,7 +226,7 @@ async function buildAssets() {
   await writeFile(path.join(DIST, 'assets/css/styles.css'), css, 'utf8');
 
   await mkdir(path.join(DIST, 'assets/js'), { recursive: true });
-  for (const f of ['app.js', 'commerce.js', 'customizer.js', 'shop.js', 'admin.js']) {
+  for (const f of ['app.js', 'commerce.js', 'customizer.js', 'shop.js', 'admin.js', 'admin-views.js']) {
     if (existsSync(path.join('src/assets/js', f))) {
       await cp(path.join('src/assets/js', f), path.join(DIST, 'assets/js', f));
     }
@@ -223,6 +248,7 @@ await mkdir(DIST, { recursive: true });
 
 await buildPages();
 await buildRoot();
+await buildAdmin();
 await buildAssets();
 await buildSeo();
 

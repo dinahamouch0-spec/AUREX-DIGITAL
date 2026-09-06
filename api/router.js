@@ -9,6 +9,7 @@ import { clean, cleanMultiline, sniffImage, randomKey, validateCustomer } from '
 import { login, logout, requireAdmin, sessionFrom, sessionCookie, clearCookie,
          ensureAdmin, loginLocked, signPhoto, verifyPhotoSignature, json } from './_lib/auth.js';
 import { runRetention } from './_lib/retention.js';
+import { notifyNewOrder, notifyCustomer } from './_lib/mail.js';
 
 const PRODUCTION_STATUSES = ['new', 'designing', 'waiting_approval', 'revision_requested',
                              'approved', 'printing', 'ready', 'shipped', 'completed', 'cancelled'];
@@ -131,6 +132,17 @@ export async function router(request) {
       });
 
       if (result.error) return json({ error: result.error, issues: result.issues }, 409);
+
+      // The order is already stored. Notifications are best-effort and are
+      // deliberately not awaited into the response. Part 3 §43.
+      if (!result.replayed) {
+        const origin = new URL(request.url).origin;
+        Promise.allSettled([
+          notifyNewOrder(result.order, origin),
+          notifyCustomer(result.order),
+        ]).catch(() => {});
+      }
+
       return json({
         orderNumber: result.order.orderNumber,
         token: result.order.confirmToken,

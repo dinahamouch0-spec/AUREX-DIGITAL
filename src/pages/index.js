@@ -238,6 +238,7 @@ export function howPage(locale) {
       }),
       `<section class="section">
         <div class="wrap wrap--narrow">
+          <h2 class="sr-only">${esc(t.title)}</h2>
           <div class="flow">
             ${each(t.steps, (s, i) => `
             <article class="flow__item reveal">
