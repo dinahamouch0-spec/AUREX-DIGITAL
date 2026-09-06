@@ -105,6 +105,44 @@ configure those in Admin → Settings.
    **Settings** to fill in the WhatsApp number, Instagram URL, and business
    email — these were intentionally left blank rather than invented.
 
+## Deploying to Netlify
+
+`netlify.toml` is already in the repo (build command + the official
+`@netlify/plugin-nextjs` runtime), so Netlify auto-detects everything.
+
+1. Push this repo to GitHub, then on [app.netlify.com](https://app.netlify.com)
+   click **Add new site → Import an existing project**, pick this repo and
+   the `claude/website-build-ra9nu1` branch. Netlify reads `netlify.toml`
+   automatically — no build settings to fill in.
+2. **Database**: in the new site's dashboard, go to the **Netlify DB**
+   extension and enable it — it provisions a Postgres database for you (no
+   separate signup) and gives you a connection string. Copy that value into
+   a `DATABASE_URL` environment variable in **Site configuration →
+   Environment variables** (Netlify DB's own variable is named
+   `NETLIFY_DATABASE_URL` — Prisma needs it under the name `DATABASE_URL`).
+3. Add the rest of the environment variables from `.env.example`
+   (`ADMIN_SESSION_SECRET`, `ADMIN_SEED_EMAIL`, `ADMIN_SEED_PASSWORD`,
+   `NEXT_PUBLIC_BASE_URL` — use the `.netlify.app` URL Netlify gives you,
+   `STORAGE_*` for child photo storage, `CRON_SECRET`).
+4. Provision an S3-compatible bucket for child photos exactly as described
+   in step 4 of the Vercel instructions above (Cloudflare R2 is the
+   simplest — confirm it's private).
+5. Deploy. After it's live, run migrations + seed once, same as the Vercel
+   steps:
+   ```bash
+   DATABASE_URL="<netlify-db-connection-string>" npm run db:deploy
+   DATABASE_URL="<netlify-db-connection-string>" npm run db:seed
+   ```
+6. Log into `/admin/login` and fill in Settings, same as step 7 above.
+
+**Note on the cleanup cron job**: Netlify doesn't read `vercel.json`, so the
+hourly child-photo-retention sweep isn't automatically scheduled there yet.
+`/api/cron/cleanup-photos` still works as a normal endpoint — the simplest
+fix is a free external scheduler (e.g. [cron-job.org](https://cron-job.org))
+hitting it hourly with an `Authorization: Bearer <CRON_SECRET>` header.
+This doesn't block launch — no photos are ever exposed publicly regardless;
+it only delays when old ones get cleaned up.
+
 ## Project structure
 
 ```
