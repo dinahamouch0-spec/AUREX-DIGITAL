@@ -1,0 +1,285 @@
+{
+  "common": {
+    "brand": "Ya 7kayti",
+    "skipToContent": "Skip to content",
+    "loading": "Loading...",
+    "currency": "USD",
+    "startPersonalizing": "Start Personalizing",
+    "exploreProducts": "Explore Products",
+    "learnMore": "Learn more",
+    "back": "Back",
+    "next": "Next",
+    "save": "Save",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "remove": "Remove",
+    "add": "Add",
+    "close": "Close",
+    "required": "Required",
+    "optional": "Optional",
+    "uploaded": "Uploaded ✓",
+    "startingFrom": "Starting from"
+  },
+  "nav": {
+    "home": "Home",
+    "shop": "Shop",
+    "stories": "Stories",
+    "stickers": "Stickers",
+    "notebooks": "Notebooks",
+    "howItWorks": "How It Works",
+    "about": "About",
+    "faq": "FAQ",
+    "contact": "Contact",
+    "cart": "Cart",
+    "menu": "Menu",
+    "startPersonalizing": "Start Their Story"
+  },
+  "loader": {
+    "message": "Preparing the magic..."
+  },
+  "hero": {
+    "eyebrow": "Your Child Is the Hero ✨",
+    "headline": "Your Child. Their Story. Their World.",
+    "subheadline": "Choose a product, upload your child's photo, and tell us the world or character they love — we'll create something made especially for them.",
+    "primaryCta": "Start Their Story",
+    "secondaryCta": "Explore Products"
+  },
+  "howItWorks": {
+    "eyebrow": "How the Magic Works",
+    "title": "From idea to keepsake, in four simple steps",
+    "steps": [
+      {
+        "number": "01",
+        "title": "Choose",
+        "description": "Choose the story, stickers, notebook cover, or a future personalized product."
+      },
+      {
+        "number": "02",
+        "title": "Personalize",
+        "description": "Enter the information required for that specific product."
+      },
+      {
+        "number": "03",
+        "title": "Upload & Imagine",
+        "description": "Upload your child's photo and choose or request their favorite character, theme, or world."
+      },
+      {
+        "number": "04",
+        "title": "We Create & Deliver",
+        "description": "Ya 7kayti designs it, prepares it, and coordinates delivery with you."
+      }
+    ]
+  },
+  "featured": {
+    "eyebrow": "Most Loved",
+    "title": "Featured Products",
+    "customize": "Customize",
+    "empty": "Featured products will appear here soon."
+  },
+  "storiesSection": {
+    "eyebrow": "Personalized Stories",
+    "title": "Your child, the hero of their own story",
+    "description": "We turn your child into the hero of a beautifully printed story — their real photo, a world they choose. A keepsake they'll hold onto.",
+    "cta": "Explore Stories"
+  },
+  "stickersSection": {
+    "eyebrow": "Personalized Stickers",
+    "title": "Their name, their photo, their favorite world — everywhere",
+    "description": "Custom stickers for school notebooks, books, and belongings. A unique design for every child.",
+    "cta": "Create Their Stickers"
+  },
+  "notebooksSection": {
+    "eyebrow": "Personalized Notebook Covers",
+    "title": "A school notebook that carries their photo and their world",
+    "description": "A custom notebook cover made with your child's real photo, for every notebook they carry.",
+    "cta": "Personalize a Notebook"
+  },
+  "portfolio": {
+    "eyebrow": "Previous Creations",
+    "title": "Made With Love",
+    "description": "Approved showcase examples of real Ya 7kayti work.",
+    "empty": "Approved showcase creations will appear here soon."
+  },
+  "why": {
+    "eyebrow": "Why Ya 7kayti",
+    "title": "Because your child deserves something made just for them",
+    "pillars": [
+      { "title": "Made for Your Child", "description": "Not a mass-produced, emotionally generic product." },
+      { "title": "Their Photo, Their World", "description": "Personalization built around your child's real identity." },
+      { "title": "Created With Care", "description": "Every piece is designed individually." },
+      { "title": "Made to Keep", "description": "A meaningful physical memory, not just a product." },
+      { "title": "Arabic & English", "description": "Where supported by the product." }
+    ]
+  },
+  "moment": {
+    "line1": "Some gifts are opened once.",
+    "line2": "Some become part of childhood."
+  },
+  "reviews": {
+    "eyebrow": "Customer Reviews",
+    "title": "What parents are saying",
+    "empty": "No reviews published yet."
+  },
+  "faqSection": {
+    "eyebrow": "FAQ",
+    "title": "Have a question?",
+    "viewAll": "View all questions"
+  },
+  "finalCta": {
+    "title": "Ready to make your child the hero?",
+    "primary": "Start Personalizing",
+    "secondary": "Talk to Us on WhatsApp"
+  },
+  "footer": {
+    "tagline": "Your Child. Their Story. Their World.",
+    "shopHeading": "Shop",
+    "companyHeading": "Company",
+    "legalHeading": "Legal",
+    "followHeading": "Follow Us",
+    "privacy": "Privacy Policy",
+    "terms": "Terms",
+    "shippingPolicy": "Shipping Policy",
+    "rights": "All rights reserved"
+  },
+  "shop": {
+    "title": "Shop",
+    "subtitle": "Choose the product that fits your child",
+    "allCategories": "All",
+    "empty": "No products in this category yet.",
+    "loadError": "Couldn't load products. Please try again.",
+    "unavailable": "Currently unavailable"
+  },
+  "product": {
+    "startingFrom": "Starting from",
+    "productionTime": "Production time: {days} days",
+    "personalizeCta": "Personalize Now",
+    "relatedTitle": "You might also like",
+    "privacyNear": "We use your child's photo only to prepare your order and never use it for marketing without your separate permission.",
+    "notFound": "This product could not be found."
+  },
+  "customizer": {
+    "reviewTitle": "Review your item",
+    "total": "Total",
+    "quantity": "Quantity",
+    "photoUpload": "Child's Photo",
+    "photoUploadHint": "Tap to upload a clear photo of your child",
+    "replacePhoto": "Replace Photo",
+    "removePhoto": "Remove",
+    "uploading": "Uploading...",
+    "uploadFailed": "Upload failed. Please try again.",
+    "uploadTooLarge": "This image is too large.",
+    "uploadInvalidType": "Unsupported file type. Please upload an image (JPG, PNG, WEBP).",
+    "addToCart": "Add to Cart",
+    "updateCartItem": "Update Item",
+    "fieldRequired": "This field is required",
+    "invalidQuantity": "Invalid quantity",
+    "invalidOption": "This option is no longer available",
+    "priceUpdating": "Updating price..."
+  },
+  "cart": {
+    "title": "Your Cart",
+    "empty": "Your cart is empty right now.",
+    "emptyCta": "Explore Products",
+    "subtotal": "Subtotal",
+    "checkout": "Checkout",
+    "editItem": "Edit Customization",
+    "removeItem": "Remove",
+    "photoStatus": "Photo",
+    "itemUnavailable": "This product is no longer available. Please remove it to continue.",
+    "optionUnavailable": "A selected option is no longer available. Please update this item.",
+    "priceChanged": "The price of this item changed from {oldPrice} to {newPrice}. Please review before continuing."
+  },
+  "checkout": {
+    "title": "Checkout",
+    "customerInfo": "Customer Information",
+    "fullName": "Full Name",
+    "phone": "Phone / WhatsApp Number",
+    "email": "Email (optional)",
+    "deliveryInfo": "Delivery Information",
+    "country": "Country",
+    "city": "City / Region",
+    "address": "Full Address",
+    "addressNotes": "Additional directions (optional)",
+    "paymentMethod": "Payment Method",
+    "cod": "Cash on Delivery",
+    "whish": "Whish Money",
+    "whishHint": "We'll coordinate with you directly to confirm payment via Whish Money to {number}.",
+    "shippingLabel": "Shipping",
+    "shippingTbc": "To be confirmed",
+    "productsSubtotal": "Products Subtotal",
+    "reviewOrder": "Review Order",
+    "placeOrder": "Place Order",
+    "placingOrder": "Placing your order...",
+    "orderError": "Something went wrong while placing your order. Please try again.",
+    "staleItemsTitle": "Some items in your cart changed",
+    "guestNotice": "No account needed — checkout as a guest."
+  },
+  "confirmation": {
+    "title": "Your order is in! ✨",
+    "message": "We'll review your order and reach out to confirm payment, delivery, and next steps.",
+    "orderNumber": "Order Number",
+    "productsSubtotal": "Products Subtotal",
+    "shipping": "Shipping",
+    "paymentMethod": "Payment Method",
+    "continueWhatsApp": "Continue on WhatsApp",
+    "whatsappMessage": "Hi Ya 7kayti ✨ I placed order {orderNumber} and would like to follow up on the details.",
+    "notFound": "This order could not be found."
+  },
+  "howItWorksPage": {
+    "title": "How Ya 7kayti Works",
+    "subtitle": "From idea to your door, step by step",
+    "steps": [
+      { "title": "Choose a Product", "description": "A story, stickers, notebook cover, or a future personalized product." },
+      { "title": "Tell Us About Your Child", "description": "Their name, age, and what makes them them." },
+      { "title": "Upload Their Photo", "description": "A clear, recent photo of your child." },
+      { "title": "Choose Their Favorite World", "description": "A character, theme, or world your child loves." },
+      { "title": "Ya 7kayti Designs It", "description": "Our team designs the product with care." },
+      { "title": "We Coordinate Approval, Payment & Delivery", "description": "Usually through WhatsApp, so it stays easy for you." },
+      { "title": "It Gets Printed and Delivered", "description": "From design to a real keepsake in your child's hands." }
+    ],
+    "approvalNote": "Design review and approval may happen through WhatsApp."
+  },
+  "about": {
+    "title": "About Us",
+    "intro": "Ya 7kayti was born from a simple belief: every child deserves to be the hero of their own story.",
+    "philosophyTitle": "Our Philosophy",
+    "philosophy": "We believe personalized products for children carry value beyond the product itself — they're a memory, a gift, a feeling of belonging.",
+    "careTitle": "The Care Behind Every Product",
+    "care": "Every order is designed individually, to reflect your child's real personality.",
+    "contentPending": "More of the Ya 7kayti story will be added soon by the business owner."
+  },
+  "contact": {
+    "title": "Contact Us",
+    "subtitle": "We'd love to hear from you",
+    "whatsapp": "Message us on WhatsApp",
+    "instagram": "Follow us on Instagram",
+    "formName": "Name",
+    "formEmail": "Email",
+    "formMessage": "Your message",
+    "formSubmit": "Send"
+  },
+  "faqPage": {
+    "title": "Frequently Asked Questions",
+    "items": [
+      { "question": "How does personalization work?", "answer": "You choose a product, enter your child's details, upload their photo, and choose their favorite world or character. We design the product based on your choices." },
+      { "question": "What photo should I upload?", "answer": "A clear, recent photo of your child's face, with good lighting where possible." },
+      { "question": "Can I choose a character or theme?", "answer": "Yes — each product has its own customization options, and additional requests may be available." },
+      { "question": "How long does production take?", "answer": "Usually 2-5 days to design and prepare the product for print. This is production time only, not delivery time." },
+      { "question": "How is delivery handled?", "answer": "We reach out after your order to coordinate shipping and delivery details based on your location." },
+      { "question": "How do I pay?", "answer": "You can pay Cash on Delivery or via Whish Money — details are confirmed with you directly." },
+      { "question": "Will my child's photo be kept?", "answer": "We use the photo only to prepare your order, and it is deleted after the order is completed, per our privacy policy." },
+      { "question": "Can I request changes before printing?", "answer": "Yes — we review the design with you over WhatsApp before final printing." }
+    ]
+  },
+  "policies": {
+    "privacyTitle": "Privacy Policy",
+    "termsTitle": "Terms & Conditions",
+    "shippingTitle": "Shipping Policy",
+    "contentPending": "Full legal copy will be added soon by the business owner."
+  },
+  "errors": {
+    "generic": "Something went wrong. Please try again.",
+    "notFound": "Page not found.",
+    "unavailableProduct": "This product is currently unavailable."
+  }
+}

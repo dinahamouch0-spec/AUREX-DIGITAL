@@ -1,0 +1,507 @@
+// Ya 7kayti — data model
+// Generic, configuration-driven commerce schema. No product-type-specific tables:
+// Stories / Stickers / Notebooks are all just rows in Product + CustomizationField.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Locale {
+  ar
+  en
+}
+
+// ---------- Admin ----------
+
+model AdminUser {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  passwordHash String
+  name         String
+  active       Boolean   @default(true)
+  createdAt    DateTime  @default(now())
+  lastLoginAt  DateTime?
+
+  auditEntries AuditLogEntry[]
+
+  @@map("admin_users")
+}
+
+model LoginAttempt {
+  id        String   @id @default(cuid())
+  email     String
+  ip        String
+  success   Boolean
+  createdAt DateTime @default(now())
+
+  @@index([email, createdAt])
+  @@index([ip, createdAt])
+  @@map("login_attempts")
+}
+
+// ---------- Catalog ----------
+
+enum CategoryStatus {
+  active
+  archived
+}
+
+model Category {
+  id        String         @id @default(cuid())
+  slug      String         @unique
+  status    CategoryStatus @default(active)
+  sortOrder Int            @default(0)
+  imageUrl  String?
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+
+  translations CategoryTranslation[]
+  products     Product[]
+
+  @@map("categories")
+}
+
+model CategoryTranslation {
+  id          String   @id @default(cuid())
+  categoryId  String
+  locale      Locale
+  name        String
+  description String?
+
+  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  @@unique([categoryId, locale])
+  @@map("category_translations")
+}
+
+enum ProductStatus {
+  draft
+  active
+  archived
+  unavailable
+}
+
+enum PricingMode {
+  fixed
+  unit
+}
+
+model Product {
+  id             String        @id @default(cuid())
+  slug           String        @unique
+  categoryId     String
+  status         ProductStatus @default(draft)
+  featured       Boolean       @default(false)
+  pricingMode    PricingMode   @default(fixed)
+  basePriceCents Int? // used when pricingMode = fixed and no field overrides it
+  unitPriceCents Int? // used when pricingMode = unit and no field supplies a per-unit override
+  currency       String        @default("USD")
+  productionDays String        @default("2-5")
+  images         ProductImage[]
+  sortOrder      Int           @default(0)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  category            Category               @relation(fields: [categoryId], references: [id])
+  translations         ProductTranslation[]
+  customizationFields  CustomizationField[]
+  orderItems           OrderItem[]
+
+  @@map("products")
+}
+
+model ProductImage {
+  id        String  @id @default(cuid())
+  productId String
+  url       String
+  alt       String?
+  sortOrder Int     @default(0)
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("product_images")
+}
+
+model ProductTranslation {
+  id               String  @id @default(cuid())
+  productId        String
+  locale           Locale
+  name             String
+  shortDescription String?
+  description      String?
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@unique([productId, locale])
+  @@map("product_translations")
+}
+
+enum FieldType {
+  short_text
+  long_text
+  number
+  select
+  radio
+  checkbox
+  image_upload
+}
+
+// How a field participates in price calculation. Purely data-driven —
+// the pricing engine never checks a product "type", only these roles.
+enum PricingRole {
+  none
+  quantity // numeric value of this field multiplies the unit price
+  price_override // selected option's priceOverrideCents replaces the base/total price
+  price_unit // selected option's priceOverrideCents becomes the per-unit price
+  price_modifier // selected option's priceModifierCents is added on top of the total
+}
+
+model CustomizationField {
+  id           String      @id @default(cuid())
+  productId    String
+  key          String // stable internal key, e.g. "child_age_group"
+  type         FieldType
+  required     Boolean     @default(true)
+  active       Boolean     @default(true)
+  sortOrder    Int         @default(0)
+  pricingRole  PricingRole @default(none)
+  defaultValue String?
+
+  product      Product                          @relation(fields: [productId], references: [id], onDelete: Cascade)
+  translations CustomizationFieldTranslation[]
+  options      CustomizationOption[]
+
+  @@unique([productId, key])
+  @@map("customization_fields")
+}
+
+model CustomizationFieldTranslation {
+  id          String @id @default(cuid())
+  fieldId     String
+  locale      Locale
+  label       String
+  helpText    String?
+  placeholder String?
+
+  field CustomizationField @relation(fields: [fieldId], references: [id], onDelete: Cascade)
+
+  @@unique([fieldId, locale])
+  @@map("customization_field_translations")
+}
+
+model CustomizationOption {
+  id                 String  @id @default(cuid())
+  fieldId            String
+  key                String // stable internal key, e.g. "age_1_5"
+  active             Boolean @default(true)
+  sortOrder          Int     @default(0)
+  priceOverrideCents Int?
+  priceModifierCents Int?
+
+  field        CustomizationField                @relation(fields: [fieldId], references: [id], onDelete: Cascade)
+  translations CustomizationOptionTranslation[]
+
+  @@unique([fieldId, key])
+  @@map("customization_options")
+}
+
+model CustomizationOptionTranslation {
+  id       String @id @default(cuid())
+  optionId String
+  locale   Locale
+  label    String
+
+  option CustomizationOption @relation(fields: [optionId], references: [id], onDelete: Cascade)
+
+  @@unique([optionId, locale])
+  @@map("customization_option_translations")
+}
+
+// ---------- Uploads (private child photos) ----------
+
+enum UploadStatus {
+  temporary
+  attached
+  deleted
+}
+
+model Upload {
+  id           String       @id @default(cuid())
+  storageKey   String       @unique // key/path inside the private bucket
+  originalName String?
+  mimeType     String
+  sizeBytes    Int
+  status       UploadStatus @default(temporary)
+  orderItemId  String?      @unique
+  createdAt    DateTime     @default(now())
+  attachedAt   DateTime?
+  deleteAfter  DateTime? // scheduled deletion time (set on order completion)
+  deletedAt    DateTime?
+
+  orderItem OrderItem? @relation(fields: [orderItemId], references: [id])
+
+  @@index([status, createdAt])
+  @@index([deleteAfter])
+  @@map("uploads")
+}
+
+// ---------- Orders ----------
+
+enum PaymentMethod {
+  cod
+  whish
+}
+
+enum PaymentStatus {
+  pending
+  pending_verification
+  confirmed
+  cod
+  failed_rejected
+}
+
+enum ProductionStatus {
+  new
+  designing
+  waiting_approval
+  revision_requested
+  approved
+  printing
+  ready
+  shipped
+  completed
+  cancelled
+}
+
+model Order {
+  id                String            @id @default(cuid())
+  orderNumber       String            @unique // e.g. YK-1042
+  confirmationToken String            @unique // opaque token for the confirmation page; the order number alone is never authorization
+
+  customerName  String
+  phone         String
+  email         String?
+  country       String
+  city          String
+  address       String
+  addressNotes  String?
+
+  locale Locale
+
+  currency         String  @default("USD")
+  productsSubtotalCents Int
+  shippingCostCents     Int? // null = "to be confirmed"
+  finalTotalCents       Int? // null until shipping is confirmed
+
+  paymentMethod PaymentMethod
+  paymentStatus PaymentStatus @default(pending)
+
+  productionStatus ProductionStatus @default(new)
+
+  idempotencyKey String  @unique
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  completedAt DateTime?
+
+  items    OrderItem[]
+  timeline OrderTimelineEntry[]
+
+  @@index([createdAt])
+  @@index([productionStatus])
+  @@index([paymentStatus])
+  @@map("orders")
+}
+
+model OrderItem {
+  id      String @id @default(cuid())
+  orderId String
+
+  // Snapshots — immutable at time of purchase, never re-derived from live product data.
+  productId          String?
+  productNameSnapshot String
+  productSlugSnapshot String
+  imageUrlSnapshot    String?
+
+  quantity          Int
+  unitPriceCents    Int?
+  lineTotalCents    Int
+
+  createdAt DateTime @default(now())
+
+  order   Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+
+  answers CustomizationAnswer[]
+  upload  Upload?
+
+  @@map("order_items")
+}
+
+model CustomizationAnswer {
+  id          String  @id @default(cuid())
+  orderItemId String
+  fieldKey    String
+  labelSnapshot String
+  value       String? // text/number/json-encoded selection as string
+  optionLabelSnapshot String?
+
+  orderItem OrderItem @relation(fields: [orderItemId], references: [id], onDelete: Cascade)
+
+  @@map("customization_answers")
+}
+
+model OrderTimelineEntry {
+  id        String   @id @default(cuid())
+  orderId   String
+  event     String
+  actor     String? // admin email, or "system" / "customer"
+  createdAt DateTime @default(now())
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@map("order_timeline_entries")
+}
+
+// ---------- Content ----------
+
+model PortfolioItem {
+  id        String   @id @default(cuid())
+  imageUrl  String
+  published Boolean  @default(true)
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+
+  translations PortfolioItemTranslation[]
+
+  @@map("portfolio_items")
+}
+
+model PortfolioItemTranslation {
+  id      String @id @default(cuid())
+  itemId  String
+  locale  Locale
+  caption String
+
+  item PortfolioItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
+
+  @@unique([itemId, locale])
+  @@map("portfolio_item_translations")
+}
+
+model Review {
+  id          String   @id @default(cuid())
+  customerName String
+  rating      Int?
+  published   Boolean  @default(true)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+
+  translations ReviewTranslation[]
+
+  @@map("reviews")
+}
+
+model ReviewTranslation {
+  id       String @id @default(cuid())
+  reviewId String
+  locale   Locale
+  body     String
+
+  review Review @relation(fields: [reviewId], references: [id], onDelete: Cascade)
+
+  @@unique([reviewId, locale])
+  @@map("review_translations")
+}
+
+model FaqItem {
+  id        String   @id @default(cuid())
+  published Boolean  @default(true)
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+
+  translations FaqItemTranslation[]
+
+  @@map("faq_items")
+}
+
+model FaqItemTranslation {
+  id       String @id @default(cuid())
+  faqId    String
+  locale   Locale
+  question String
+  answer   String
+
+  faq FaqItem @relation(fields: [faqId], references: [id], onDelete: Cascade)
+
+  @@unique([faqId, locale])
+  @@map("faq_item_translations")
+}
+
+model HomepageContent {
+  id                 String  @id @default("singleton")
+  heroHeadlineAr      String?
+  heroHeadlineEn      String?
+  heroSubheadlineAr   String?
+  heroSubheadlineEn   String?
+  finalCtaHeadlineAr  String?
+  finalCtaHeadlineEn  String?
+  featuredProductIds  String[] @default([])
+  updatedAt          DateTime @updatedAt
+
+  @@map("homepage_content")
+}
+
+model BusinessSettings {
+  id                String   @id @default("singleton")
+  businessName      String   @default("Ya 7kayti")
+  logoUrl           String?
+  whatsappNumber    String   @default("")
+  instagramUrl      String?
+  whishNumber       String   @default("")
+  businessEmail     String?
+  adminNotifyEmail  String?
+  productionDays    String   @default("2-5")
+  photoRetentionHours Int    @default(24)
+  tempUploadRetentionHours Int @default(48)
+  updatedAt         DateTime @updatedAt
+
+  @@map("business_settings")
+}
+
+model WhatsappTemplate {
+  id     String @id @default(cuid())
+  key    String // e.g. "order_confirmation", "design_ready", "ready_shipping"
+  locale Locale
+  body   String
+
+  @@unique([key, locale])
+  @@map("whatsapp_templates")
+}
+
+model OrderCounter {
+  id    String @id @default("singleton")
+  value Int    @default(1000)
+
+  @@map("order_counters")
+}
+
+model AuditLogEntry {
+  id        String   @id @default(cuid())
+  actorId   String?
+  action    String
+  entity    String?
+  entityId  String?
+  metadata  Json?
+  createdAt DateTime @default(now())
+
+  actor AdminUser? @relation(fields: [actorId], references: [id])
+
+  @@index([createdAt])
+  @@map("audit_log_entries")
+}

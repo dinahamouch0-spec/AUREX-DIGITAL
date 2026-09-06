@@ -1,0 +1,133 @@
+@import "tailwindcss";
+
+:root {
+  /* === Ya 7kayti brand tokens (source of truth: logo + approved promo assets) === */
+  --color-ivory: #fffaf3;
+  --color-ivory-deep: #fdf3e7;
+  --color-blush: #fdebf1;
+  --color-blush-deep: #fbd9e6;
+  /* Darkened from the logo's lighter pink to meet WCAG AA contrast (4.5:1)
+     for white button text — #ec4899 only reached ~3.5:1. */
+  --color-pink: #c9257c;
+  --color-pink-deep: #b81c6e;
+  --color-pink-soft: #f472b6;
+  --color-purple: #7c3aed;
+  --color-purple-deep: #5b21b6;
+  --color-purple-soft: #a78bfa;
+  --color-navy: #241b4e;
+  --color-navy-soft: #423875;
+  --color-gold: #f5b942;
+  --color-gold-soft: #fcd980;
+  --color-sky: #cfe8fb;
+  --color-white: #ffffff;
+  --color-line: #f0e2d8;
+
+  --background: var(--color-ivory);
+  --foreground: var(--color-navy);
+
+  --radius-card: 1.25rem;
+  --radius-pill: 999px;
+
+  --shadow-soft: 0 10px 30px -12px rgba(124, 58, 237, 0.18);
+  --shadow-card: 0 6px 20px -8px rgba(36, 27, 78, 0.12);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-ivory: var(--color-ivory);
+  --color-ivory-deep: var(--color-ivory-deep);
+  --color-blush: var(--color-blush);
+  --color-blush-deep: var(--color-blush-deep);
+  --color-brand-pink: var(--color-pink);
+  --color-brand-pink-deep: var(--color-pink-deep);
+  --color-brand-pink-soft: var(--color-pink-soft);
+  --color-brand-purple: var(--color-purple);
+  --color-brand-purple-deep: var(--color-purple-deep);
+  --color-brand-purple-soft: var(--color-purple-soft);
+  --color-brand-navy: var(--color-navy);
+  --color-brand-navy-soft: var(--color-navy-soft);
+  --color-brand-gold: var(--color-gold);
+  --color-brand-gold-soft: var(--color-gold-soft);
+  --color-brand-sky: var(--color-sky);
+  --color-brand-line: var(--color-line);
+
+  --font-sans: var(--font-cairo);
+
+  --radius-card: var(--radius-card);
+  --radius-pill: var(--radius-pill);
+}
+
+* {
+  border-color: var(--color-line);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), "Cairo", system-ui, sans-serif;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Visible keyboard focus ring, brand-colored, works over any background */
+:focus-visible {
+  outline: 3px solid var(--color-pink);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Reusable star-sparkle keyframes for micro-magic moments */
+@keyframes ya-sparkle {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(0.85) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05) rotate(12deg);
+  }
+}
+
+@keyframes ya-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+.animate-ya-sparkle {
+  animation: ya-sparkle 2.2s ease-in-out infinite;
+}
+
+.animate-ya-float {
+  animation: ya-float 3.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-ya-sparkle,
+  .animate-ya-float {
+    animation: none;
+  }
+}
