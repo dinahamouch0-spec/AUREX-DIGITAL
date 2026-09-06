@@ -209,7 +209,7 @@ export function footer(locale) {
 }
 
 /* -------------------------------------------------------------- document -- */
-export function document_({ locale, title, description, path, current, body, ogImage }) {
+export function document_({ locale, title, description, path, current, body, ogImage, scripts = [] }) {
   const m = localeMeta[locale];
   return `<!doctype html>
 <html lang="${m.htmlLang}" dir="${m.dir}" class="no-js">
@@ -226,6 +226,7 @@ ${body}
 </main>
 ${footer(locale)}
 <script src="/assets/js/app.js" defer></script>
+${each(scripts, (s) => `<script src="${s}" defer></script>`)}
 </body>
 </html>`;
 }

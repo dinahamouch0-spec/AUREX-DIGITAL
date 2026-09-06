@@ -10,11 +10,12 @@ export const site = {
   },
 
   // --- Contact / operations -------------------------------------------------
-  // whish: supplied. whatsapp / instagram / email: CONTENT REQUIRED.
-  whish: '009613566434',
-  whatsapp: null,          // e.g. '9613566434' — digits only, no + or 00
-  instagram: null,         // e.g. 'https://instagram.com/ya7kayti'
-  email: null,             // business email for order notifications
+  // whish + whatsapp supplied (same number). instagram / email: CONTENT REQUIRED.
+  // These are overridden at runtime by Admin → Settings once saved.
+  whish: '+9613566434',
+  whatsapp: '9613566434',  // digits only, international format, no + or 00
+  instagram: null,         // CONTENT REQUIRED — e.g. 'https://instagram.com/ya7kayti'
+  email: null,             // CONTENT REQUIRED — business email for order notifications
 
   // --- Business rules -------------------------------------------------------
   currency: 'USD',

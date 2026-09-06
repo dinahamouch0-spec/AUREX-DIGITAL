@@ -93,8 +93,8 @@ export const products = [
           en: { label: "Child’s age", help: 'Age shapes the length and style of the story, and affects the price.', placeholder: '' },
         },
         options: [
-          { key: 'age_1_5',  sortOrder: 1, active: true, priceOverride: 20, t: { ar: 'من ١ إلى ٥ سنوات', en: '1–5 years' } },
-          { key: 'age_6_12', sortOrder: 2, active: true, priceOverride: 25, t: { ar: 'من ٦ إلى ١٢ سنة',  en: '6–12 years' } },
+          { key: 'age_1_5',  sortOrder: 1, active: true, priceOverride: 20, t: { ar: { label: 'من ١ إلى ٥ سنوات' }, en: { label: '1–5 years' } } },
+          { key: 'age_6_12', sortOrder: 2, active: true, priceOverride: 25, t: { ar: { label: 'من ٦ إلى ١٢ سنة' }, en: { label: '6–12 years' } } },
         ],
       },
       childName(2), childPhoto(3), theme(4), notes(5),
@@ -129,8 +129,8 @@ export const products = [
           en: { label: 'Design mode', help: 'How many different designs appear within one pack.', placeholder: '' },
         },
         options: [
-          { key: 'two_designs', sortOrder: 1, active: true, priceOverride: 3, t: { ar: 'تصميمان اثنان للباقة', en: '2 designs per pack' } },
-          { key: 'individual',  sortOrder: 2, active: true, priceOverride: 5, t: { ar: 'تصميم مختلف لكل ستيكر', en: 'Every sticker individually designed' } },
+          { key: 'two_designs', sortOrder: 1, active: true, priceOverride: 3, t: { ar: { label: 'تصميمان اثنان للباقة' }, en: { label: '2 designs per pack' } } },
+          { key: 'individual',  sortOrder: 2, active: true, priceOverride: 5, t: { ar: { label: 'تصميم مختلف لكل ستيكر' }, en: { label: 'Every sticker individually designed' } } },
         ],
       },
       childName(2), childPhoto(3), theme(4), notes(5),

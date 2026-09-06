@@ -117,6 +117,8 @@ export const copy = {
       terms: { title: 'الشروط والأحكام' },
       shipping: { title: 'سياسة الشحن والتوصيل' },
       cart: { title: 'السلة', empty: 'سلتك فارغة حاليًا.', browse: 'تصفّح المنتجات' },
+      checkout: { title: 'إتمام الطلب', lead: 'معلوماتكم وتفاصيل التوصيل وطريقة الدفع.' },
+      order: { title: 'تم استلام طلبك' },
       notFound: { title: 'الصفحة غير موجودة', lead: 'الرابط الذي فتحتموه غير متاح.', home: 'العودة للرئيسية' },
     },
     footer: {
@@ -246,6 +248,8 @@ export const copy = {
       terms: { title: 'Terms & Conditions' },
       shipping: { title: 'Shipping & Delivery Policy' },
       cart: { title: 'Cart', empty: 'Your cart is empty.', browse: 'Browse products' },
+      checkout: { title: 'Checkout', lead: 'Your details, delivery information and payment method.' },
+      order: { title: 'Order received' },
       notFound: { title: 'Page not found', lead: 'The link you opened isn’t available.', home: 'Back to home' },
     },
     footer: {

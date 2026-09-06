@@ -20,6 +20,8 @@ export const routes = {
   contact:   { path: 'contact',             changefreq: 'monthly', priority: 0.6 },
   faq:       { path: 'faq',                 changefreq: 'monthly', priority: 0.6 },
   cart:      { path: 'cart',                changefreq: 'never',   priority: 0.3, noindex: true },
+  checkout:  { path: 'checkout',            changefreq: 'never',   priority: 0.2, noindex: true },
+  order:     { path: 'order',               changefreq: 'never',   priority: 0.2, noindex: true },
   privacy:   { path: 'privacy-policy',      changefreq: 'yearly',  priority: 0.3 },
   terms:     { path: 'terms',               changefreq: 'yearly',  priority: 0.3 },
   shipping:  { path: 'shipping-policy',     changefreq: 'yearly',  priority: 0.3 },

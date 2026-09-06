@@ -151,16 +151,19 @@
               <div style="margin-block-start:var(--s-4)">
   <div class="privacy-note"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg><span>نستخدم صورة طفلك فقط لتجهيز طلبك، ولا ننشرها لأغراض تسويقية دون موافقتكم.</span></div></div>
 
-              <!-- Customization + add-to-cart container.
-                   Part 2 mounts the dynamic customizer here; Part 1 ships the
-                   shell and an honest state rather than a non-functional form. -->
+              <!-- The customizer renders here from this product's own field
+                   configuration. Without JS the checklist above still explains
+                   what is needed, and the WhatsApp route below still works. -->
               <div class="panel" id="customizer" data-product="personalized-notebook-cover">
-                <div class="note-inline"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg><span>التخصيص والطلب عبر الموقع قيد التجهيز. للطلب الآن تواصلوا معنا مباشرة.</span></div>
-                <div style="margin-block-start:var(--s-4);display:flex;gap:var(--s-3);flex-wrap:wrap">
-                  <a class="btn" href="/ar/contact/">تواصلوا معنا <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="arrow"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-                  <a class="btn btn--ghost" href="/ar/how-it-works/">كيف تتم</a>
-                </div>
+                <noscript>
+                  <div class="note-inline"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg><span>التخصيص والطلب عبر الموقع قيد التجهيز. للطلب الآن تواصلوا معنا مباشرة.</span></div>
+                </noscript>
               </div>
+              <noscript>
+                <div style="margin-block-start:var(--s-4);display:flex;gap:var(--s-3);flex-wrap:wrap">
+                  <a class="btn" href="https://wa.me/9613566434?text=%D9%85%D8%B1%D8%AD%D8%A8%D9%8B%D8%A7%20%D9%8A%D8%A7%20%D8%AD%D9%83%D8%A7%D9%8A%D8%AA%D9%8A%20%E2%9C%A8%20%D8%A3%D8%B1%D8%BA%D8%A8%20%D8%A8%D8%B7%D9%84%D8%A8%3A%20%D8%BA%D9%84%D8%A7%D9%81%20%D8%AF%D9%81%D8%AA%D8%B1%20%D9%85%D8%AE%D8%B5%D9%91%D8%B5" rel="noopener"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M17.5 14.4c-.3-.2-1.7-.9-2-1-.3-.1-.5-.1-.6.2l-.9 1c-.2.2-.3.2-.6.1a8 8 0 0 1-4-3.5c-.3-.5.3-.5.8-1.5.1-.2 0-.4 0-.5L9.4 7c-.2-.6-.5-.5-.7-.5h-.5a1 1 0 0 0-.8.4c-.3.3-1 1-1 2.5s1 2.9 1.2 3.1c.1.2 2 3.1 5 4.3 1.8.8 2.5.9 3.4.7.6-.1 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.4 0-.1-.2-.2-.5-.3z"/><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3.1.8.8-3-.2-.3A8.2 8.2 0 1 1 12 20.2z"/></svg> تواصلوا معنا عبر واتساب</a>
+                </div>
+              </noscript>
 
               <div style="margin-block-start:var(--s-4)"><div class="note-inline"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
     <span><strong style="color:var(--c-ink)">مدة التنفيذ عادةً من ٢ إلى ٥ أيام</strong><br>هذه مدة التنفيذ والتحضير. مدة التوصيل تُحدَّد وتُنسَّق معكم حسب موقعكم.</span>
@@ -234,7 +237,7 @@
       <p>اختاروا المنتج وابدأوا التخصيص — الباقي علينا.</p>
       <div class="cta-band__actions">
         <a class="btn btn--lg btn--white" href="/ar/shop/">ابدأ الآن <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false" class="arrow"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-        
+        <a class="btn btn--lg btn--ghost" href="https://wa.me/9613566434?text=%D9%85%D8%B1%D8%AD%D8%A8%D9%8B%D8%A7%20%D9%8A%D8%A7%20%D8%AD%D9%83%D8%A7%D9%8A%D8%AA%D9%8A%20%E2%9C%A8%20%D8%A3%D8%B1%D8%BA%D8%A8%20%D8%A8%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D9%81%D8%B3%D8%A7%D8%B1%20%D8%B9%D9%86%20%D9%85%D9%86%D8%AA%D8%AC%D8%A7%D8%AA%D9%83%D9%85." rel="noopener"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M17.5 14.4c-.3-.2-1.7-.9-2-1-.3-.1-.5-.1-.6.2l-.9 1c-.2.2-.3.2-.6.1a8 8 0 0 1-4-3.5c-.3-.5.3-.5.8-1.5.1-.2 0-.4 0-.5L9.4 7c-.2-.6-.5-.5-.7-.5h-.5a1 1 0 0 0-.8.4c-.3.3-1 1-1 2.5s1 2.9 1.2 3.1c.1.2 2 3.1 5 4.3 1.8.8 2.5.9 3.4.7.6-.1 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.4 0-.1-.2-.2-.5-.3z"/><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3.1.8.8-3-.2-.3A8.2 8.2 0 1 1 12 20.2z"/></svg> تواصلوا معنا عبر واتساب</a>
       </div>
     </div>
   </div>
@@ -274,7 +277,12 @@
           <li><a href="/ar/terms/">الشروط والأحكام</a></li>
           <li><a href="/ar/shipping-policy/">سياسة الشحن والتوصيل</a></li>
         </ul>
-        <p class="footer__note" style="margin-block-start:var(--s-5)">قنوات التواصل ستُضاف قريبًا.</p>
+        
+        <h2 style="margin-block-start:var(--s-5)">تابعونا</h2>
+        <div class="social">
+          <a href="https://wa.me/9613566434" rel="noopener" aria-label="WhatsApp"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M17.5 14.4c-.3-.2-1.7-.9-2-1-.3-.1-.5-.1-.6.2l-.9 1c-.2.2-.3.2-.6.1a8 8 0 0 1-4-3.5c-.3-.5.3-.5.8-1.5.1-.2 0-.4 0-.5L9.4 7c-.2-.6-.5-.5-.7-.5h-.5a1 1 0 0 0-.8.4c-.3.3-1 1-1 2.5s1 2.9 1.2 3.1c.1.2 2 3.1 5 4.3 1.8.8 2.5.9 3.4.7.6-.1 1.7-.7 1.9-1.4.2-.7.2-1.2.2-1.4 0-.1-.2-.2-.5-.3z"/><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3.1.8.8-3-.2-.3A8.2 8.2 0 1 1 12 20.2z"/></svg></a>
+          
+        </div>
       </div>
     </div>
 
@@ -285,5 +293,6 @@
   </div>
 </footer>
 <script src="/assets/js/app.js" defer></script>
+<script src="/assets/js/commerce.js" defer></script><script src="/assets/js/customizer.js" defer></script>
 </body>
 </html>

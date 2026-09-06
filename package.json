@@ -9,7 +9,12 @@
   "description": "Ya 7kayti — bilingual personalized children's products storefront",
   "scripts": {
     "build": "node build.mjs",
-    "dev": "node build.mjs && python3 -m http.server 8899 --directory dist",
-    "preview": "python3 -m http.server 8899 --directory dist"
+    "dev": "node build.mjs && node dev-server.mjs",
+    "serve": "node dev-server.mjs",
+    "images": "python3 scripts/build-images.py",
+    "test": "node tests/run.mjs"
+  },
+  "dependencies": {
+    "@netlify/blobs": "^8.1.0"
   }
 }

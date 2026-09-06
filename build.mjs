@@ -33,6 +33,7 @@ function render(locale, page) {
     path: page.path,
     current: page.current,
     ogImage: page.ogImage,
+    scripts: page.scripts || [],
     body: page.body,
   });
 }
@@ -51,6 +52,8 @@ async function buildPages() {
       P.contactPage(locale),
       P.faqPage(locale),
       P.cartPage(locale),
+      P.checkoutPage(locale),
+      P.orderPage(locale),
       P.policyPage('privacy', locale),
       P.policyPage('terms', locale),
       P.policyPage('shipping', locale),
@@ -182,7 +185,10 @@ Sitemap: ${site.baseUrl.replace(/\/$/, '')}/sitemap.xml
   Cache-Control: public, max-age=0, must-revalidate
 `, 'utf8');
 
-  written.push('sitemap.xml', 'robots.txt', '_redirects', '_headers');
+  // Keeps GitHub Pages from stripping the underscore-prefixed files.
+  await writeFile(path.join(DIST, '.nojekyll'), '', 'utf8');
+
+  written.push('sitemap.xml', 'robots.txt', '_redirects', '_headers', '.nojekyll');
 }
 
 /* ------------------------------------------------------------- assets --- */
@@ -195,7 +201,11 @@ async function buildAssets() {
   await writeFile(path.join(DIST, 'assets/css/styles.css'), css, 'utf8');
 
   await mkdir(path.join(DIST, 'assets/js'), { recursive: true });
-  await cp('src/assets/js/app.js', path.join(DIST, 'assets/js/app.js'));
+  for (const f of ['app.js', 'commerce.js', 'customizer.js', 'shop.js', 'admin.js']) {
+    if (existsSync(path.join('src/assets/js', f))) {
+      await cp(path.join('src/assets/js', f), path.join(DIST, 'assets/js', f));
+    }
+  }
 
   // Self-hosted brand fonts.
   await cp('src/assets/fonts', path.join(DIST, 'assets/fonts'), { recursive: true });

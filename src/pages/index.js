@@ -11,7 +11,7 @@ import { policies, publishedFaqs } from '../data/content.js';
 import { startingPrice } from '../lib/pricing.js';
 import {
   assetPicture, sectionHead, productGrid, emptyState, pageHero, crumbs,
-  priceDisplay, availabilityBadge, productionNote, privacyNote,
+  priceDisplay, availabilityBadge, productionNote, privacyNote, loadingState,
 } from '../components/ui.js';
 import {
   hero, howItWorks, featured, categoryFeature, creationsSection,
@@ -137,6 +137,7 @@ export function productPage(product, locale) {
     title: p.name,
     description: p.short,
     ogImage: `/assets/img/${product.asset}-1100.jpg`,
+    scripts: ['/assets/js/commerce.js', '/assets/js/customizer.js'],
     body: j(
       `<section class="section section--tight">
         <div class="wrap">
@@ -189,20 +190,21 @@ export function productPage(product, locale) {
 
               <div style="margin-block-start:var(--s-4)">${privacyNote(locale)}</div>
 
-              <!-- Customization + add-to-cart container.
-                   Part 2 mounts the dynamic customizer here; Part 1 ships the
-                   shell and an honest state rather than a non-functional form. -->
+              <!-- The customizer renders here from this product's own field
+                   configuration. Without JS the checklist above still explains
+                   what is needed, and the WhatsApp route below still works. -->
               <div class="panel" id="customizer" data-product="${esc(product.slug)}">
-                <div class="note-inline">${icons.info(18)}<span>${esc(t.soon)}</span></div>
+                <noscript>
+                  <div class="note-inline">${icons.info(18)}<span>${esc(t.soon)}</span></div>
+                </noscript>
+              </div>
+              <noscript>
                 <div style="margin-block-start:var(--s-4);display:flex;gap:var(--s-3);flex-wrap:wrap">
-                  ${waLink(locale === 'ar'
-                      ? `مرحبًا يا حكايتي ✨ أرغب بطلب: ${p.name}`
-                      : `Hello Ya 7kayti ✨ I'd like to order: ${p.name}`)
+                  ${waLink(locale === 'ar' ? `مرحبًا يا حكايتي ✨ أرغب بطلب: ${p.name}` : `Hello Ya 7kayti ✨ I'd like to order: ${p.name}`)
                     ? `<a class="btn" href="${waLink(locale === 'ar' ? `مرحبًا يا حكايتي ✨ أرغب بطلب: ${p.name}` : `Hello Ya 7kayti ✨ I'd like to order: ${p.name}`)}" rel="noopener">${icons.whatsapp(18)} ${esc(c.finalCta.secondary)}</a>`
                     : `<a class="btn" href="${url(locale, routes.contact.path)}">${esc(c.nav.contact)} ${icons.arrow(16)}</a>`}
-                  <a class="btn btn--ghost" href="${url(locale, routes.how.path)}">${esc(c.nav.how)}</a>
                 </div>
-              </div>
+              </noscript>
 
               <div style="margin-block-start:var(--s-4)">${productionNote(locale)}</div>
             </div>
@@ -361,6 +363,7 @@ export function cartPage(locale) {
   return {
     current: 'cart', path: routes.cart.path, title: t.title,
     description: metaFor('cart', locale),
+    scripts: ['/assets/js/commerce.js', '/assets/js/shop.js'],
     body: j(
       pageHero({
         title: t.title,
@@ -377,6 +380,50 @@ export function cartPage(locale) {
         </div>
       </section>`,
     ),
+  };
+}
+
+/* ============================== CHECKOUT ================================= */
+export function checkoutPage(locale) {
+  const c = copy[locale];
+  const t = c.pages.checkout;
+  return {
+    current: 'cart', path: routes.checkout.path, title: t.title,
+    description: metaFor('checkout', locale), noindex: true,
+    scripts: ['/assets/js/commerce.js', '/assets/js/shop.js'],
+    body: j(
+      pageHero({
+        title: t.title, lead: t.lead,
+        crumbItems: [
+          { label: c.nav.home, href: url(locale, '') },
+          { label: c.pages.cart.title, href: url(locale, routes.cart.path) },
+          { label: t.title },
+        ],
+      }),
+      `<section class="section">
+        <div class="wrap wrap--narrow">
+          <div data-checkout-root>
+            ${loadingState(c.common.loading)}
+          </div>
+        </div>
+      </section>`,
+    ),
+  };
+}
+
+/* ========================= ORDER CONFIRMATION ============================ */
+export function orderPage(locale) {
+  const c = copy[locale];
+  const t = c.pages.order;
+  return {
+    current: '', path: routes.order.path, title: t.title,
+    description: metaFor('order', locale), noindex: true,
+    scripts: ['/assets/js/commerce.js', '/assets/js/shop.js'],
+    body: `<section class="section">
+      <div class="wrap wrap--narrow">
+        <div data-confirm-root>${loadingState(c.common.loading)}</div>
+      </div>
+    </section>`,
   };
 }
 
@@ -411,6 +458,8 @@ function metaFor(kind, locale) {
       terms:    `شروط الطلب والتصميم والمراجعة والتعديل والأسعار والدفع في ${brand}، لمنتجات تُصنع خصيصًا لكل طفل.`,
       shipping: `مدة التنفيذ من ٢ إلى ٥ أيام، وكيف تُحدَّد تكلفة التوصيل ومدّته بالتنسيق معكم مباشرةً بعد تأكيد الطلب.`,
       cart:     `سلة الطلبات في ${brand} — راجعوا المنتجات التي اخترتموها لتخصيصها لطفلكم قبل إتمام الطلب.`,
+      checkout: `إتمام الطلب في ${brand}: معلومات التواصل والتوصيل وطريقة الدفع.`,
+      order:    `تفاصيل طلبك من ${brand}.`,
       notFound: `الصفحة التي تبحثون عنها غير متاحة. عودوا إلى الرئيسية لتصفّح منتجات ${brand} المخصّصة.`,
     },
     en: {
@@ -418,6 +467,8 @@ function metaFor(kind, locale) {
       terms:    `Ordering, design, review, changes, pricing and payment terms for ${brand} products, each made to order for one child.`,
       shipping: `Production takes 2–5 days, and how delivery cost and timing are agreed with you directly after your order is confirmed.`,
       cart:     `Your ${brand} cart — review the products you've chosen to personalize for your child before completing your order.`,
+      checkout: `Complete your ${brand} order: contact details, delivery and payment method.`,
+      order:    `Your ${brand} order details.`,
       notFound: `The page you’re looking for isn’t available. Head back home to browse ${brand} personalized products.`,
     },
   };
