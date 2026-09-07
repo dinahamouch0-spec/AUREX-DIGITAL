@@ -61,11 +61,12 @@
    which is why the lid is light rather than a modelled cap. */
 .opener { position: relative; display: grid; place-items: center; aspect-ratio: 1; }
 .opener__shot {
-  position: relative; z-index: 2; width: 100%;
+  /* Room for the lift, so opening never crops the lid against the frame. */
+  position: relative; z-index: 2; width: 94%;
   transform: translateZ(0) rotateX(0) scale(1);
   transition: transform 1100ms var(--ease-out);
 }
-.opener.open .opener__shot { transform: translateY(-4%) scale(1.04); }
+.opener.open .opener__shot { transform: translateY(-2.5%) scale(1.03); }
 .opener__burst {
   position: absolute; z-index: 1; width: 62%; aspect-ratio: 1; border-radius: 50%;
   background: radial-gradient(circle, var(--arc-glow), var(--arc) 32%, transparent 68%);

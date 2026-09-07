@@ -58,6 +58,7 @@
 .cline { display: grid; grid-template-columns: 76px 1fr auto; gap: var(--s-4); align-items: center; padding: var(--s-3); background: rgba(255,255,255,.015); }
 .cline img { width: 76px; height: 76px; object-fit: contain; background: linear-gradient(180deg,#F4F6F8,#DDE3E9); }
 .cline--stage img { background: var(--steel-950); }
+.cline .qty { width: max-content; }
 .cline__b { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--arc); }
 .cline__n { font-family: var(--font-display); font-weight: 600; }
 .cline__v { font-size: var(--step--1); color: var(--text-mute); }
@@ -73,7 +74,12 @@
 .cartempty a { color: var(--arc); text-decoration: underline; }
 
 /* ------------------------------------------------------------ checkout */
-.checkout { border: 0; padding: 0; background: transparent; max-width: 100%; }
+/* A dialog centres itself through `margin: auto`; setting max-width without
+   restoring it pins the box to the top-left corner. */
+.checkout {
+  border: 0; padding: 0; background: transparent;
+  max-width: 100%; max-height: 100%; margin: auto;
+}
 .checkout::backdrop { background: rgba(5,7,10,.82); backdrop-filter: blur(6px); }
 .checkout__box {
   position: relative; width: min(460px, 92vw); display: grid; gap: 7px; padding: var(--s-6);

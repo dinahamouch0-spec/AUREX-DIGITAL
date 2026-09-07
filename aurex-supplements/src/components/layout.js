@@ -93,8 +93,12 @@ ${canonical ? `<link rel="canonical" href="${esc(canonical)}">` : ''}
 <meta name="theme-color" content="#05070A">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="${FONTS}">
 <link rel="stylesheet" href="${css}">
+<!-- Fonts load without blocking. A stylesheet in the head also blocks every
+     script after it, so a slow font host would hold up the whole page, not
+     just its type. The body stack carries the page until they land. -->
+<link rel="stylesheet" href="${FONTS}" media="print" onload="this.media='all'">
+<noscript><link rel="stylesheet" href="${FONTS}"></noscript>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <script>document.documentElement.dataset.boot='1'</script>
 ${jsonLd ? `<script type="application/ld+json">${JSON.stringify(jsonLd)}</script>` : ''}

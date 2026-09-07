@@ -31,6 +31,11 @@ body::after {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
+/* A class that sets display beats the user agent's [hidden] rule, so a
+   panel meant to stay hidden until an order is placed showed up on arrival.
+   One declaration settles it for every such element on the site. */
+[hidden] { display: none !important; }
+
 img, svg, canvas { display: block; max-width: 100%; }
 img { height: auto; }
 

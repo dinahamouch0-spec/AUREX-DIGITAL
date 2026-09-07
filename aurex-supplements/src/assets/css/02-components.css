@@ -117,12 +117,20 @@
 }
 @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; } }
 
-/* Supplier shots arrive on white; a light plinth is honest about that rather
-   than knocking the product out badly. Stage shots already sit in our world. */
-.card__img:not(.card__img--stage) {
-  background: linear-gradient(180deg, #F4F6F8, #DDE3E9);
-  padding: 6%;
+/* Supplier shots arrive on their own white or grey ground. Painting the whole
+   tile that colour makes the shot's own background disappear into it; giving
+   the image a separate panel instead produced a box inside a box. Stage shots
+   already sit in our world and keep the dark plinth. */
+.card:not(.card--stage) .card__stage {
+  background: linear-gradient(180deg, #FBFCFD, #E4E9EE);
 }
+.card__img:not(.card__img--stage) {
+  width: 100%; height: 100%; object-fit: contain; padding: 7%;
+  mix-blend-mode: multiply;            /* merges the shot's own white ground */
+  filter: none;
+}
+.card:not(.card--stage) .card__stage::after { display: none; }
+.card:not(.card--stage):hover .card__img { transform: translateZ(46px) scale(1.04); }
 .card--stage .card__stage { background: radial-gradient(70% 70% at 50% 40%, #16202A, var(--steel-950) 76%); }
 .card__img--stage { width: 100%; height: 100%; }
 .card__flag { position: absolute; top: 10px; left: 10px; z-index: 1; }
