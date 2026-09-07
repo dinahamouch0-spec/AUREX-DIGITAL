@@ -5,3 +5,5 @@ package-lock.json
 .data/
 .data-test/
 ya7kayti-*.zip
+__pycache__/
+*.pyc
