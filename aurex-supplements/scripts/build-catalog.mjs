@@ -2,7 +2,8 @@
 /* Turns the priced CSV export into the storefront catalogue.
    102 source collections are noisy for navigation, so they fold into 11
    shopping groups here; the raw collections stay on the product as filters. */
-import { readFileSync, writeFileSync } from 'node:fs';
+import { readFileSync, writeFileSync, existsSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 
 const SRC = process.argv[2] || 'data/AUREX_priced.csv';
 
@@ -23,6 +24,44 @@ const GROUPS = [
 ];
 const groupOf = new Map();
 for (const [slug, , cols] of GROUPS) for (const c of cols) if (!groupOf.has(c)) groupOf.set(c, slug);
+
+
+/* --- the eighteen photographed stages, matched to catalogue products ----- */
+/* The brand column arrived from a longest-prefix pass over product titles,
+   which swallows a leading product word when the brand is short: "Dymatize
+   Iso 100" became the brand "Dymatize Iso". These are the nine it got wrong. */
+const BRAND_FIX = {
+  'Dymatize Iso': 'Dymatize',
+  'MuscleTech Amino': 'MuscleTech',
+  'MuscleTech Hydroxycut': 'MuscleTech',
+  'Scivation Xtend': 'Scivation',
+  'UBSA Creatine': 'UBSA',
+  'Vital Protein': 'Vital Proteins',
+  'Quest Protein': 'Quest Nutrition',
+  'Bpi Best': 'BPI Sports',
+  'Doctors BEST': "Doctor's Best",
+};
+
+const STAGE = [
+  ['01-dymatize-iso100',          'Dymatize Iso 100'],
+  ['02-muscletech-nitrotech',     'Muscletech Nitrotech Whey Gold'],
+  ['03-on-gold-standard',         'Optimum Nutrition Gold Standard'],
+  ['04-ubsa-creatine',            'UBSA Creatine Monohydrate'],
+  ['05-levrone-gold-creatine',    'Kevin Levrone Gold Creatine'],
+  ['06-abe-pre-workout',          'ABE Ultimate Pre Workouts'],
+  ['07-xtend-eaa',                'Scivation Xtend EAA'],
+  ['08-muscletech-amino-build',   'MuscleTech Amino Build'],
+  ['09-applied-amino-fuel',       'Applied Nutrition Amino Fuel'],
+  ['10-on-serious-mass',          'Optimum Nutrition Serious Mass'],
+  ['11-biotech-hyper-mass',       'Biotech Usa Hyper Mass'],
+  ['12-biotech-carbox',           'Biotech Usa Carbox'],
+  ['13-muscletech-hydroxycut',    'MuscleTech Hydroxycut Hardcore'],
+  ['14-bpi-cla-carnitine',        'Bpi Cla+l-Carnitine'],
+  ['15-vital-collagen-peptides',  'Vital Protein Collagen Peptides'],
+  ['16-now-omega3',               'Now Omega 3 Fish Oil'],
+  ['17-applied-zma',              'Applied Nutrition ZMA'],
+  ['18-on-tribulus',              'Optimum Nutrition Tribulus'],
+];
 
 /* --- CSV --------------------------------------------------------------- */
 function parseCsv(text) {
@@ -55,7 +94,7 @@ for (const r of rows) {
     const groups = [...new Set(cols.map((c) => groupOf.get(c)).filter(Boolean))];
     byProduct.set(id, {
       id, name: r.title, slug: slugify(r.title) + '-' + id.slice(-5),
-      brand: r.brand, collections: cols,
+      brand: BRAND_FIX[r.brand] || r.brand, collections: cols,
       groups: groups.length ? groups : ['vitamins'],
       image: r.image, variants: [],
     });
@@ -77,6 +116,21 @@ const products = [...byProduct.values()].map((p) => {
            available: p.variants.some((v) => v.available) };
 });
 
+/* Attach each photographed stage to its product. An unmatched entry is a
+   build error rather than a silent miss — a hero image that quietly stops
+   appearing is exactly the kind of regression nobody notices. */
+const unmatched = [];
+for (const [file, title] of STAGE) {
+  const hit = products.find((p) => p.name.toLowerCase() === title.toLowerCase())
+           || products.find((p) => p.name.toLowerCase().includes(title.toLowerCase()));
+  if (!hit) { unmatched.push(`${file} -> ${title}`); continue; }
+  hit.stage = file;
+}
+if (unmatched.length) {
+  console.error('\nUnmatched product stages:\n  ' + unmatched.join('\n  '));
+  process.exit(1);
+}
+
 const count = (fn) => products.reduce((n, p) => n + (fn(p) ? 1 : 0), 0);
 const groups = GROUPS.map(([slug, name]) => ({
   slug, name, count: count((p) => p.groups.includes(slug)),
@@ -87,9 +141,28 @@ for (const p of products) brandCount.set(p.brand, (brandCount.get(p.brand) || 0)
 const brands = [...brandCount].map(([name, count]) => ({ name, slug: slugify(name), count }))
   .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
 
+/* Point every product at our own copy of its supplier shot. Serving a shop
+   from someone else's CDN means a file they delete becomes a hole on our
+   shelf, so fetch-images.mjs pulls them in and this rewrites the paths.
+   A product whose local copy is missing keeps the remote URL rather than
+   rendering nothing. */
+let localised = 0;
+for (const p of products) {
+  if (!p.image) continue;
+  const ext = (p.image.split('?')[0].match(/\.(jpe?g|png|webp|avif)$/i)?.[1] || 'jpg').toLowerCase();
+  const stem = createHash('sha1').update(p.image).digest('hex').slice(0, 12);
+  if (existsSync(`src/assets/img/supplier/${stem}.webp`)) {
+    p.remote = p.image;
+    p.image = `/assets/img/supplier/${stem}.webp`;
+    p.thumb = `/assets/img/supplier/${stem}@350.webp`;
+    localised++;
+  }
+}
+
 const catalog = { currency: 'USD', generated: new Date().toISOString(), groups, brands, products };
 writeFileSync('src/data/catalog.json', JSON.stringify(catalog));
 
+console.log(`staged ${products.filter((p) => p.stage).length} of ${STAGE.length} · self-hosted images ${localised}/${products.length}`);
 console.log(`products ${products.length} | variants ${rows.length} | groups ${groups.length} | brands ${brands.length}`);
 console.log(`file ${(JSON.stringify(catalog).length / 1024 / 1024).toFixed(2)} MB`);
 for (const g of groups) console.log(`  ${String(g.count).padStart(4)}  ${g.name}`);

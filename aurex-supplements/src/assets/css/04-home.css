@@ -1,56 +1,75 @@
 /* ================================================================== hero */
-.hero { position: relative; min-height: 88vh; display: grid; align-items: center; overflow: hidden; }
+/* Copy first, then the ring as its own full-width band. Eighteen faces on a
+   cylinder need a radius wider than any column: w <= S / (1/tan(pi/n) + 1),
+   so squeezing the ring beside the headline puts the far faces through the
+   type. Given the width of the page it fits, and reads better besides. */
+.hero { position: relative; overflow: hidden; }
 .hero__grid {
   position: relative; z-index: 2;
-  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
-  gap: var(--s-7); align-items: center; padding-block: var(--s-9) var(--s-8);
+  padding-block: var(--s-6) var(--s-4);
 }
-@media (max-width: 980px) {
-  .hero { min-height: auto; }
-  .hero__grid { grid-template-columns: 1fr; gap: var(--s-6); padding-block: var(--s-7); }
-}
+@media (max-width: 980px) { .hero__grid { padding-block: var(--s-5) var(--s-3); } }
 
-.hero__copy { display: grid; gap: var(--s-5); max-width: 34ch; }
-.hero h1 { font-size: var(--step-5); font-weight: 700; letter-spacing: -0.035em; line-height: .94; }
+/* The copy and the ring share the first screen: the 3D is the point of the
+   page, so it must be in the frame at rest rather than a scroll away. */
+/* Centred, because the ring below it is symmetrical: a left-aligned column
+   left half the band with nothing over it. */
+.hero__copy {
+  display: grid; gap: var(--s-4); justify-items: center; text-align: center;
+  max-width: 66ch; margin-inline: auto;
+}
+.hero__copy .eyebrow { justify-content: center; }
+.hero__copy .eyebrow::after {
+  content: ''; width: 28px; height: 1px;
+  background: linear-gradient(270deg, transparent, var(--arc));
+}
+.hero h1 { font-size: var(--step-4); font-weight: 700; letter-spacing: -0.035em; line-height: .92; }
 .hero h1 span { display: block; }
 .hero h1 .lo { color: var(--chrome-500); font-weight: 500; }
-.hero__lede { font-size: var(--step-1); color: var(--text-dim); max-width: 40ch; }
-.hero__acts { display: flex; flex-wrap: wrap; gap: var(--s-3); }
+.hero__lede { font-size: var(--step-0); color: var(--text-dim); max-width: 52ch; }
+.hero__acts { display: flex; flex-wrap: wrap; gap: var(--s-3); justify-content: center; }
 
 /* Live catalogue figures — the shop's real scale, not marketing rounding. */
-.hero__stats { display: flex; flex-wrap: wrap; gap: var(--s-6); padding-top: var(--s-4); border-top: 1px solid var(--line); }
+.hero__stats { display: flex; flex-wrap: wrap; gap: var(--s-6); justify-content: center;
+  padding-top: var(--s-3); border-top: 1px solid var(--line); width: min(100%, 46ch); }
+.hero__stat { text-align: center; }
 .hero__stat b {
-  display: block; font-family: var(--font-display); font-size: var(--step-2);
+  display: block; font-family: var(--font-display); font-size: var(--step-1);
   font-weight: 700; color: var(--chrome-50); font-variant-numeric: tabular-nums; line-height: 1;
 }
 .hero__stat span { font-size: var(--step--1); letter-spacing: .14em; text-transform: uppercase; color: var(--text-mute); }
 
 /* --------------------------------------------------------- the 3D stage */
-.stage { position: relative; aspect-ratio: 1 / 1; width: 100%; }
-.stage canvas { width: 100% !important; height: 100% !important; display: block; }
+.stage {
+  position: relative; width: 100%;
+  height: clamp(240px, 28vw, 390px);
+  margin-bottom: var(--s-6);
+  overflow: hidden;                     /* far faces clip instead of spilling */
+}
 /* Floor glow under the carousel. */
 .stage::after {
-  content: ''; position: absolute; left: 8%; right: 8%; bottom: 12%; height: 90px; z-index: -1;
-  background: radial-gradient(50% 50% at 50% 50%, rgba(53,167,223,.26), transparent 70%);
-  filter: blur(28px);
+  content: ''; position: absolute; left: 20%; right: 20%; bottom: 8%; height: 90px; z-index: 0;
+  background: radial-gradient(50% 50% at 50% 50%, rgba(53,167,223,.24), transparent 70%);
+  filter: blur(30px); pointer-events: none;
 }
 .stage__fallback {
   position: absolute; inset: 0; display: grid; place-items: center; padding: var(--s-5);
   text-align: center; color: var(--text-mute); font-size: var(--step--1);
 }
 .stage__hint {
-  position: absolute; left: 50%; bottom: 4px; transform: translateX(-50%);
-  display: flex; align-items: center; gap: 8px;
-  font-family: var(--font-display); font-size: 11px; letter-spacing: .18em;
+  position: absolute; right: max(var(--gutter), 3vw); top: 12px; z-index: 3;
+  display: flex; align-items: center; gap: 7px; margin: 0; white-space: nowrap;
+  font-family: var(--font-display); font-size: 10.5px; letter-spacing: .18em;
   text-transform: uppercase; color: var(--chrome-600); pointer-events: none;
   opacity: 0; transition: opacity var(--t-slow);
 }
+.stage__hint svg { width: 15px; height: 15px; flex: none; }
 .stage.ready .stage__hint { opacity: 1; }
 
 /* The label that tracks the front-most product on the carousel. */
 .stage__label {
-  position: absolute; left: 50%; bottom: 8%; transform: translateX(-50%);
-  width: min(300px, 78%); text-align: center; pointer-events: none;
+  position: absolute; left: 50%; bottom: 2%; transform: translateX(-50%); z-index: 3;
+  width: min(340px, 78%); text-align: center; pointer-events: none;
   opacity: 0; transition: opacity var(--t-mid) var(--ease-out);
 }
 .stage.ready .stage__label { opacity: 1; }

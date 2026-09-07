@@ -4,7 +4,7 @@
   --btn-fg: var(--arc-ink);
   position: relative;
   display: inline-flex; align-items: center; justify-content: center; gap: var(--s-2);
-  padding: 14px 28px;
+  padding: 13px 22px; white-space: nowrap;
   font-family: var(--font-display); font-size: var(--step-0);
   font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
   background: var(--btn-bg); color: var(--btn-fg);
@@ -116,3 +116,13 @@
   transition: opacity var(--t-slow) var(--ease-out), transform var(--t-slow) var(--ease-out);
 }
 @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; } }
+
+/* Supplier shots arrive on white; a light plinth is honest about that rather
+   than knocking the product out badly. Stage shots already sit in our world. */
+.card__img:not(.card__img--stage) {
+  background: linear-gradient(180deg, #F4F6F8, #DDE3E9);
+  padding: 6%;
+}
+.card--stage .card__stage { background: radial-gradient(70% 70% at 50% 40%, #16202A, var(--steel-950) 76%); }
+.card__img--stage { width: 100%; height: 100%; }
+.card__flag { position: absolute; top: 10px; left: 10px; z-index: 1; }

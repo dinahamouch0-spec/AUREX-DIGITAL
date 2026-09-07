@@ -1,0 +1,85 @@
+/* ===========================================================================
+   The rotating product ring.
+   Each face is placed on a cylinder with rotateY(a) translateZ(r); the ring
+   turns as one element. --r is set in JS from the stage's measured width so
+   the radius scales with the viewport instead of being guessed here.
+   ========================================================================= */
+.stage {
+  perspective: 1400px;
+  perspective-origin: 50% 44%;
+  touch-action: pan-y;                 /* vertical scroll still belongs to the page */
+  user-select: none;
+  cursor: grab;
+}
+.stage.dragging { cursor: grabbing; }
+
+.ring {
+  /* Face width is derived from the count so the whole ring fits the band:
+     w = S / (1/tan(pi/n) + 1), computed in JS and set as --fw. */
+  position: absolute; inset: 0;
+  transform-style: preserve-3d;
+  transform: rotateX(-6deg) rotateY(var(--spin, 0deg));
+  will-change: transform;
+}
+
+.ring__face {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: var(--fw); aspect-ratio: 1;
+  margin: calc(var(--fw) / -2) 0 0 calc(var(--fw) / -2);
+  transform: rotateY(var(--a)) translateZ(var(--r, 300px));
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  /* Faces at the back read as further away, not merely smaller. */
+  opacity: var(--o, 1);
+  transition: opacity 260ms linear;
+}
+.ring__face img {
+  width: 100%; height: 100%; object-fit: contain;
+  filter: drop-shadow(0 26px 30px rgba(0,0,0,.6));
+  pointer-events: none;
+}
+.ring__face:focus-visible { outline: 2px solid var(--arc-bright); outline-offset: 6px; }
+
+/* The product at the front is the one the label names, so it is lifted. */
+.ring__face.is-front { --o: 1; }
+.ring__face.is-front img { filter: drop-shadow(0 30px 36px rgba(0,0,0,.7)) brightness(1.06); }
+
+/* Before the script measures and starts, show the first face flat and
+   centred: the page must read at rest, not as an empty box. */
+.stage:not(.ready) .ring { transform: none; }
+.stage:not(.ready) .ring__face { transform: none; opacity: 0; }
+.stage:not(.ready) .ring__face[data-i="0"] { opacity: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ring { transition: none !important; }
+}
+
+/* ---------------------------------------------------- the opening tub ---- */
+/* On a product page the stage image splits: the shot lifts and turns while a
+   burst of light opens behind it. Built from the one photograph we have,
+   which is why the lid is light rather than a modelled cap. */
+.opener { position: relative; display: grid; place-items: center; aspect-ratio: 1; }
+.opener__shot {
+  position: relative; z-index: 2; width: 100%;
+  transform: translateZ(0) rotateX(0) scale(1);
+  transition: transform 1100ms var(--ease-out);
+}
+.opener.open .opener__shot { transform: translateY(-4%) scale(1.04); }
+.opener__burst {
+  position: absolute; z-index: 1; width: 62%; aspect-ratio: 1; border-radius: 50%;
+  background: radial-gradient(circle, var(--arc-glow), var(--arc) 32%, transparent 68%);
+  opacity: 0; transform: scale(.3);
+  transition: opacity 900ms var(--ease-out), transform 1200ms var(--ease-out);
+}
+.opener.open .opener__burst { opacity: .5; transform: scale(1.25); }
+.opener__ring {
+  position: absolute; z-index: 1; width: 74%; aspect-ratio: 1; border-radius: 50%;
+  border: 1px solid var(--arc); opacity: 0; transform: scale(.6) rotateX(74deg);
+  transition: opacity 900ms var(--ease-out), transform 1400ms var(--ease-out);
+}
+.opener.open .opener__ring { opacity: .7; transform: scale(1.1) rotateX(74deg); }
+.opener__ring:nth-of-type(2) { width: 92%; transition-delay: 140ms; }
+@media (prefers-reduced-motion: reduce) {
+  .opener__shot, .opener__burst, .opener__ring { transition: none; }
+}
