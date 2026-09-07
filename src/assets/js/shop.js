@@ -1,6 +1,12 @@
 /* Cart, checkout and order confirmation. */
 (function () {
   'use strict';
+
+  /* Assets are content-hashed at build time; the page publishes the few that
+     are assembled here so a runtime URL still points at the right file. */
+  var ykAsset = function (p) {
+    return (window.YK_ASSETS && window.YK_ASSETS[p]) || p;
+  };
   if (!window.YK) return;
   var YK = window.YK, t = YK.t, esc = YK.esc, money = YK.money;
 
@@ -94,7 +100,7 @@
     return '<article class="cart-line' + (problem ? ' is-problem' : '') + '" data-line="' + esc(item.lineId) + '">'
       + '<div class="cart-line__media">'
       + (item.productAsset
-          ? '<img src="/assets/img/' + esc(item.productAsset) + '-480.webp" alt="" loading="lazy" width="480" height="320">'
+          ? '<img src="' + esc(ykAsset('/assets/img/' + item.productAsset + '-480.webp')) + '" alt="" loading="lazy" width="480" height="320">'
           : '')
       + '</div>'
       + '<div class="cart-line__body">'

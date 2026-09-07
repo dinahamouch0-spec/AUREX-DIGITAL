@@ -4,6 +4,7 @@ import { site, localeMeta, waLink } from '../data/site.js';
 import { copy } from '../data/copy.js';
 import { url, absUrl, routes, categoryPath } from '../lib/routes.js';
 import { activeCategories } from '../data/catalog.js';
+import { asset } from '../lib/assets.js';
 
 const other = (l) => (l === 'ar' ? 'en' : 'ar');
 
@@ -31,7 +32,7 @@ export function head({ locale, title, description, path, ogImage }) {
     `<meta property="og:title" content="${esc(full)}">`,
     `<meta property="og:description" content="${esc(description)}">`,
     `<meta property="og:url" content="${absUrl(locale, path)}">`,
-    `<meta property="og:image" content="${site.baseUrl}${og}">`,
+    `<meta property="og:image" content="${site.baseUrl}${asset(og)}">`,
     `<meta property="og:locale" content="${locale === 'ar' ? 'ar_AR' : 'en_US'}">`,
     `<meta name="twitter:card" content="summary_large_image">`,
     `<meta name="theme-color" content="#fffcf8">`,
@@ -40,11 +41,11 @@ export function head({ locale, title, description, path, ogImage }) {
     `<link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png">`,
     // Fonts are self-hosted: no third-party connection at render time.
     // Only the faces this locale actually needs are preloaded. Part 1 §34.
-    `<link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/fonts/BalooBhaijaan2-${locale === 'ar' ? 'arabic' : 'latin'}-${locale === 'ar' ? 'zYX9KUwuEqdVGqM8tPDdAA_Y-_bMAIRsdO_q' : 'zYX9KUwuEqdVGqM8tPDdAA_Y-_bMAIFsdA'}.woff2">`,
+    `<link rel="preload" as="font" type="font/woff2" crossorigin href="${asset(`/assets/fonts/BalooBhaijaan2-${locale === 'ar' ? 'arabic' : 'latin'}-${locale === 'ar' ? 'zYX9KUwuEqdVGqM8tPDdAA_Y-_bMAIRsdO_q' : 'zYX9KUwuEqdVGqM8tPDdAA_Y-_bMAIFsdA'}.woff2`)}">`,
     locale === 'ar'
-      ? `<link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/fonts/Cairo-arabic-SLXVc1nY6HkvangtZmpQdkhzfH5lkSscQyyS4J0.woff2">`
-      : `<link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/fonts/Nunito-latin-XRXV3I6Li01BKofINeaB.woff2">`,
-    `<link rel="stylesheet" href="/assets/css/styles.css">`,
+      ? `<link rel="preload" as="font" type="font/woff2" crossorigin href="${asset('/assets/fonts/Cairo-arabic-SLXVc1nY6HkvangtZmpQdkhzfH5lkSscQyyS4J0.woff2')}">`
+      : `<link rel="preload" as="font" type="font/woff2" crossorigin href="${asset('/assets/fonts/Nunito-latin-XRXV3I6Li01BKofINeaB.woff2')}">`,
+    `<link rel="stylesheet" href="${asset('/assets/css/styles.css')}">`,
   );
 }
 
@@ -56,7 +57,7 @@ export function loader(locale) {
     <div class="loader__sparks" aria-hidden="true">
       ${[1, 2, 3, 4].map(() => `<span class="loader__spark">${icons.sparkle(9)}</span>`).join('')}
     </div>
-    <img class="loader__mark" src="/assets/img/logo-mark-256.png" width="108" height="108" alt="" fetchpriority="high">
+    <img class="loader__mark" src="${asset('/assets/img/logo-mark-256.png')}" width="108" height="108" alt="" fetchpriority="high">
     <p class="loader__word">${esc(site.brand.name[locale])}</p>
     <span class="sr-only">${esc(copy[locale].common.loading)}</span>
   </div>
@@ -93,7 +94,7 @@ export function header(locale, current = '') {
 <header class="header" id="header">
   <div class="wrap header__bar">
     <a class="brand" href="${url(locale, '')}">
-      <img src="/assets/img/logo-mark-96.png" width="44" height="44"
+      <img src="${asset('/assets/img/logo-mark-96.png')}" width="44" height="44"
            alt="${esc(site.brand.name[locale])}" fetchpriority="high">
       <span class="brand__text">
         <span class="brand__name">${esc(site.brand.name[locale])}</span>
@@ -162,7 +163,7 @@ export function footer(locale) {
   <div class="wrap">
     <div class="footer__grid">
       <div class="footer__brand">
-        <img src="/assets/img/logo-mark-128.png" width="62" height="62" alt="" loading="lazy">
+        <img src="${asset('/assets/img/logo-mark-128.png')}" width="62" height="62" alt="" loading="lazy">
         <p class="footer__about">${esc(t.about)}</p>
       </div>
 
@@ -209,13 +210,14 @@ export function footer(locale) {
 }
 
 /* -------------------------------------------------------------- document -- */
-export function document_({ locale, title, description, path, current, body, ogImage, scripts = [] }) {
+export function document_({ locale, title, description, path, current, body, ogImage, scripts = [], assetMap = {} }) {
   const m = localeMeta[locale];
   return `<!doctype html>
 <html lang="${m.htmlLang}" dir="${m.dir}" class="no-js">
 <head>
 ${head({ locale, title, description, path, ogImage })}
-<script>document.documentElement.classList.remove('no-js');document.documentElement.classList.add('js');</script>
+<script>document.documentElement.classList.remove('no-js');document.documentElement.classList.add('js');
+window.YK_ASSETS=${JSON.stringify(assetMap)};</script>
 </head>
 <body>
 ${loader(locale)}
@@ -225,8 +227,8 @@ ${header(locale, current)}
 ${body}
 </main>
 ${footer(locale)}
-<script src="/assets/js/app.js" defer></script>
-${each(scripts, (s) => `<script src="${s}" defer></script>`)}
+<script src="${asset('/assets/js/app.js')}" defer></script>
+${each(scripts, (s) => `<script src="${asset(s)}" defer></script>`)}
 </body>
 </html>`;
 }

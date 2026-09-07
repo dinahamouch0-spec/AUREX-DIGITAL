@@ -4,6 +4,12 @@
 (function () {
   'use strict';
 
+  /* Assets are content-hashed at build time; the page publishes the few that
+     are assembled here so a runtime URL still points at the right file. */
+  var ykAsset = function (p) {
+    return (window.YK_ASSETS && window.YK_ASSETS[p]) || p;
+  };
+
   var app = document.getElementById('admin-app');
   if (!app) return;
 
@@ -167,7 +173,7 @@
   function renderLogin(notConfigured) {
     app.innerHTML =
       '<div class="login-wrap"><div class="login-card">'
-      + '<img src="/assets/img/logo-mark-128.png" alt="">'
+      + '<img src="' + ykAsset('/assets/img/logo-mark-128.png') + '" alt="">'
       + '<h1>' + esc(S.title) + '</h1>'
       + (notConfigured ? '<div class="alert alert--warn" style="text-align:start"><span>' + esc(S.notConfigured) + '</span></div>' : '')
       + '<form id="login-form">'
@@ -211,7 +217,7 @@
 
     return '<div class="admin-shell">'
       + '<aside class="admin-side">'
-      + '<div class="admin-brand"><img src="/assets/img/logo-mark-96.png" alt="">'
+      + '<div class="admin-brand"><img src="' + ykAsset('/assets/img/logo-mark-96.png') + '" alt="">'
       + '<span><strong>يا حكايتي</strong><span>لوحة التحكم</span></span></div>'
       + '<nav class="admin-nav">'
       + nav.map(function (n) {

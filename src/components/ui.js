@@ -4,6 +4,7 @@ import { copy } from '../data/copy.js';
 import { site, money } from '../data/site.js';
 import { url, productPath } from '../lib/routes.js';
 import { startingPrice } from '../lib/pricing.js';
+import { asset } from '../lib/assets.js';
 
 /**
  * Responsive picture for an approved promotional asset.
@@ -16,8 +17,8 @@ export function assetPicture(name, {
   const w = 1536, h = 1024;
   return `<picture>
   <source type="image/webp" sizes="${esc(sizes)}"
-          srcset="/assets/img/${name}-480.webp 480w, /assets/img/${name}-768.webp 768w, /assets/img/${name}-1100.webp 1100w, /assets/img/${name}-1536.webp 1536w">
-  <img src="/assets/img/${name}-1100.jpg" width="${w}" height="${h}"
+          srcset="${asset(`/assets/img/${name}-480.webp`)} 480w, ${asset(`/assets/img/${name}-768.webp`)} 768w, ${asset(`/assets/img/${name}-1100.webp`)} 1100w, ${asset(`/assets/img/${name}-1536.webp`)} 1536w">
+  <img src="${asset(`/assets/img/${name}-1100.jpg`)}" width="${w}" height="${h}"
        alt="${esc(alt)}" class="${esc(className)}"
        loading="${loading}" decoding="async"${fetchpriority ? ` fetchpriority="${fetchpriority}"` : ''}
        onerror="this.closest('picture')?.classList.add('is-failed')">
