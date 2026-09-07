@@ -1,0 +1,91 @@
+/* ===========================================================================
+   The section opening.
+
+   Entering a category, the page is there from the first frame. A tub stands
+   in the header, its lid lifts, light comes out, and the shelf below rises
+   out of it. Nothing covers the page and nothing has to be waited through.
+   ========================================================================= */
+.phead--stage .phead__in {
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 340px);
+  gap: var(--s-6); align-items: center;
+}
+@media (max-width: 820px) {
+  .phead--stage .phead__in { grid-template-columns: minmax(0, 1fr) 132px; gap: var(--s-4); }
+}
+.phead__copy { min-width: 0; }
+
+/* ------------------------------------------------------------------- tub */
+.tub {
+  position: relative; justify-self: end; width: 100%; aspect-ratio: 1;
+  display: grid; place-items: center; pointer-events: none;
+}
+.tub__shot {
+  position: relative; z-index: 2; width: 100%; height: auto;
+  filter: drop-shadow(0 26px 34px rgba(0,0,0,.62));
+}
+
+/* The lid: an ellipse of light sitting on the mouth. It reads as a seal
+   because it is exactly where a seal would be, not because it is drawn as
+   one — a modelled cap over a photograph of a different cap looks wrong. */
+.tub__lid {
+  position: absolute; z-index: 3; top: 20%; width: 46%; height: 7%;
+  border-radius: 50%;
+  background: linear-gradient(180deg, var(--arc-glow), var(--arc) 55%, transparent);
+  box-shadow: 0 0 26px 6px rgba(53,167,223,.55);
+  opacity: 0;
+}
+.tub__glow {
+  position: absolute; z-index: 1; top: 8%; width: 62%; aspect-ratio: 1; border-radius: 50%;
+  background: radial-gradient(circle, var(--arc-glow), var(--arc) 34%, transparent 68%);
+  opacity: 0; transform: scale(.3);
+}
+.tub__ring {
+  position: absolute; z-index: 1; top: 16%; width: 40%; aspect-ratio: 1; border-radius: 50%;
+  border: 1.5px solid var(--arc-bright);
+  opacity: 0; transform: scale(.4) rotateX(72deg);
+}
+
+/* --- the opening, played on cue ------------------------------------------ */
+.open .tub__shot  { animation: tub-settle 1100ms var(--ease-out) both; }
+.open .tub__lid   { animation: lid-off 1000ms cubic-bezier(.4,-0.3,.3,1) 120ms both; }
+.open .tub__glow  { animation: tub-glow 1300ms var(--ease-out) 260ms both; }
+.open .tub__ring  { animation: tub-ring 1400ms var(--ease-out) 300ms both; }
+.open .tub__ring:nth-of-type(2) { animation-delay: 480ms; }
+
+@keyframes tub-settle {
+  0%   { transform: translateY(6%) scale(.94); opacity: .4; }
+  60%  { transform: translateY(-1%) scale(1.02); opacity: 1; }
+  100% { transform: none; opacity: 1; }
+}
+@keyframes lid-off {
+  0%   { opacity: 0; transform: translateY(0) scale(.7); }
+  18%  { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateY(-260%) scale(1.5) rotateX(60deg); }
+}
+@keyframes tub-glow {
+  0%   { opacity: 0; transform: scale(.3); }
+  26%  { opacity: .8; transform: scale(.9); }
+  100% { opacity: 0; transform: scale(1.7); }
+}
+@keyframes tub-ring {
+  0%   { opacity: 0; transform: scale(.4) rotateX(72deg); }
+  20%  { opacity: .85; }
+  100% { opacity: 0; transform: scale(2.6) rotateX(72deg); }
+}
+
+/* --- the shelf rises out of the tub -------------------------------------- */
+/* Cards start where the tub is and travel to their place. Without the class
+   they simply sit in the grid, so the shelf is complete with no script. */
+.open .grid > .card {
+  animation: from-tub 900ms var(--ease-out) both;
+  animation-delay: calc(360ms + var(--i, 0) * 55ms);
+}
+@keyframes from-tub {
+  0%   { opacity: 0; transform: translate(var(--tx, 0), var(--ty, -120px)) scale(.6); }
+  100% { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .open .tub__shot, .open .tub__lid, .open .tub__glow,
+  .open .tub__ring, .open .grid > .card { animation: none; }
+}

@@ -7,7 +7,7 @@ import { product } from './product.js';
 import { cartPage, checkout } from './cartpage.js';
 import { admin } from './admin.js';
 import { search } from './search.js';
-import { intro } from './intro.js';
+import { sectionOpen } from './section-open.js';
 
 /* Header shadow, mobile nav, and the search overlay are page furniture; they
    work before the boot sequence finishes so a fast connection is not punished
@@ -40,4 +40,4 @@ search();
 
 /* The opening waits for the loader. Both are arrival moments and the loader
    sits above everything, so running them at once hid one behind the other. */
-boot().then((fullBoot) => { ring(); intro({ afterFullBoot: fullBoot }); });
+boot().then(() => { ring(); sectionOpen(); });

@@ -23,7 +23,7 @@ import { count } from './src/lib/format.js';
 
 const DIST = 'dist';
 const CSS_ORDER = ['00-tokens', '01-base', '02-components', '03-shell', '04-home',
-                   '05-ring', '06-shop', '07-product', '08-admin', '09-intro'];
+                   '05-ring', '06-shop', '07-product', '08-admin', '09-open'];
 
 const hash = (s) => createHash('sha256').update(s).digest('hex').slice(0, 8);
 

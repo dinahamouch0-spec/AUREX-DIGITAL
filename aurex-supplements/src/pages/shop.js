@@ -55,49 +55,30 @@ const controls = (list, activeGroup) => {
 </aside>`;
 };
 
-/* The category opening.
-
-   Landing on a section plays a short sequence: the seal breaks, light comes
-   out of the tub, and the section's own hero product rises through it before
-   the shelf appears. It is drawn from the one photograph we have of that
-   product — the lid is light rather than a modelled cap, because a cap we do
-   not have would only look like a cap we do not have.
-
-   It runs once per section per visit and any input skips it. A signature
-   moment on arrival is not worth a gate on the way back from a product. */
-const opening = (group, heroProduct) => {
-  if (!group) return '';
-  /* Snacks & Bars has no product shot of its own, so its own scene rises
-     instead. Better than the one section arriving in silence. */
-  const shot = heroProduct
-    ? `/assets/img/products/${heroProduct.stage}@500.webp`
-    : `/assets/img/groups/${group.slug}-card@360.webp`;
-  return `
-<div class="intro" id="intro" data-group="${group.slug}" aria-hidden="true">
-  <div class="intro__scene">
-    <span class="intro__flash"></span>
-    <span class="intro__ring"></span>
-    <span class="intro__ring"></span>
-    <span class="intro__ring"></span>
-    <span class="intro__seal">${chevron({ id: 'intro-' + group.slug })}</span>
-    <img class="intro__shot${heroProduct ? '' : ' intro__shot--scene'}" src="${shot}"
-         alt="" width="500" height="500" decoding="async">
-  </div>
-  <p class="intro__name">${esc(group.name)}</p>
-</div>`;
-};
-
 export const shop = ({ list, title, lede, activeGroup = null, hero = null, heroProduct = null }) => `
-${activeGroup ? opening(groups.find((g) => g.slug === activeGroup), heroProduct) : ''}
-<section class="phead${hero ? ' phead--art' : ''}"${hero ? ` style="--art:url('/assets/img/groups/${hero}.webp')"` : ''}>
-  <div class="wrap">
-    <nav class="crumbs" aria-label="Breadcrumb">
-      <a href="${routes.home()}">Home</a>${icons.chevron}
-      <a href="${routes.shop()}">Shop</a>
-      ${activeGroup ? `${icons.chevron}<span>${esc(title)}</span>` : ''}
-    </nav>
-    <h1 class="chrome">${esc(title)}</h1>
-    <p class="phead__lede">${esc(lede)}</p>
+<section class="phead${hero ? ' phead--art' : ''}${heroProduct ? ' phead--stage' : ''}"${hero ? ` style="--art:url('/assets/img/groups/${hero}.webp')"` : ''}>
+  <div class="wrap phead__in">
+    <div class="phead__copy">
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <a href="${routes.home()}">Home</a>${icons.chevron}
+        <a href="${routes.shop()}">Shop</a>
+        ${activeGroup ? `${icons.chevron}<span>${esc(title)}</span>` : ''}
+      </nav>
+      <h1 class="chrome">${esc(title)}</h1>
+      <p class="phead__lede">${esc(lede)}</p>
+    </div>
+    ${heroProduct ? `
+    <!-- The tub the section comes out of. It sits in the header, opens on
+         arrival, and the shelf below rises out of it. Nothing covers the
+         page while it happens. -->
+    <div class="tub" id="tub" aria-hidden="true">
+      <span class="tub__glow"></span>
+      <span class="tub__ring"></span>
+      <span class="tub__ring"></span>
+      <span class="tub__lid"></span>
+      <img class="tub__shot" src="/assets/img/products/${heroProduct.stage}.webp"
+           alt="" width="1000" height="1000" fetchpriority="high" decoding="async">
+    </div>` : ''}
   </div>
 </section>
 
