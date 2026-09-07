@@ -78,15 +78,20 @@ async function main() {
     active: 'shop', canonical: site.url + '/shop/',
   }));
 
-  /* Beauty & Wellness has no scene of its own yet. Rather than render a
-     broken header, a group without artwork borrows a sibling's — declared
-     here so the substitution is visible instead of being a missing file. */
-  const ART_FALLBACK = { beauty: 'vitamins' };
+  /* Every group has its own scene now. The map stays because a group added
+     without artwork should borrow a sibling's rather than render a broken
+     header — and the build reports which ones are borrowing. */
+  const ART_FALLBACK = {};
   const artFor = (slug) => {
     if (existsSync(`src/assets/img/groups/${slug}.webp`)) return slug;
     const alt = ART_FALLBACK[slug];
     return alt && existsSync(`src/assets/img/groups/${alt}.webp`) ? alt : null;
   };
+
+  const borrowed = groups.filter((g) => artFor(g.slug) && artFor(g.slug) !== g.slug);
+  const bare = groups.filter((g) => !artFor(g.slug));
+  if (borrowed.length) console.log('  artwork borrowed: ' + borrowed.map((g) => g.slug).join(', '));
+  if (bare.length) console.log('  no artwork: ' + bare.map((g) => g.slug).join(', '));
 
   for (const g of groups) {
     const list = inGroup(g.slug);

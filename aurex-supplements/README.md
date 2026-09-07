@@ -136,8 +136,6 @@ default, so clearing an override restores it.
 
 ## Known gaps
 
-- **Beauty & Wellness** (22 products) has no category scene; it falls back to
-  the vitamins artwork.
 - The eighteen product photographs carry generated label text that does not
   match the real packaging. Flagged before they were produced; the decision was
   to finish the set and revisit. Backgrounds and format are fixable here, the

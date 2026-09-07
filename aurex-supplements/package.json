@@ -11,6 +11,9 @@
     "dev": "node build.mjs && node dev-server.mjs",
     "check": "node scripts/check-dist.mjs"
   },
+  "dependencies": {
+    "@netlify/blobs": "^8.1.0"
+  },
   "devDependencies": {
     "esbuild": "^0.24.0"
   }
