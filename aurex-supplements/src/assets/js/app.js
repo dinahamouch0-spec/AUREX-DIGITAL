@@ -6,6 +6,7 @@ import { shop } from './shop.js';
 import { product } from './product.js';
 import { cartPage, checkout } from './cartpage.js';
 import { admin } from './admin.js';
+import { search } from './search.js';
 
 /* Header shadow, mobile nav, and the search overlay are page furniture; they
    work before the boot sequence finishes so a fast connection is not punished
@@ -34,5 +35,6 @@ product();
 cartPage();
 checkout();
 admin();
+search();
 
 boot().then(() => { ring(); });

@@ -147,6 +147,11 @@ async function main() {
       };
   await writeFile(path.join(DIST, 'assets/cart-index.json'), JSON.stringify(cartIndex));
 
+  /* --- search index: enough to draw a result, nothing more ---------------- */
+  await writeFile(path.join(DIST, 'assets/search-index.json'), JSON.stringify(
+    products.map((p) => [p.slug, p.name, p.brand, p.priceMin,
+                         p.stage ? `/assets/img/products/${p.stage}@500.webp` : (p.thumb || p.image)])));
+
   /* --- sitemap, robots, headers ------------------------------------------ */
   const urls = [
     '/', '/shop/', '/brands/',

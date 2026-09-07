@@ -12,6 +12,10 @@
   transition: transform var(--t-fast) var(--ease-out), filter var(--t-fast);
   will-change: transform;
 }
+/* An inline SVG with only a viewBox has no intrinsic size, so it grows to
+   whatever box it lands in. Sizing it against the button's own type keeps a
+   full-width button on a phone from rendering a giant arrow. */
+.btn svg { width: 1.15em; height: 1.15em; flex: none; }
 .btn:hover { filter: brightness(1.12); transform: translateY(-2px); }
 .btn:active { transform: translateY(0); }
 .btn[disabled] { opacity: .45; pointer-events: none; }

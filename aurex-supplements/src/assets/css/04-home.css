@@ -133,3 +133,28 @@
 .trust svg { width: 22px; height: 22px; color: var(--arc); }
 .trust b { font-family: var(--font-display); font-size: var(--step-0); font-weight: 600; }
 .trust p { font-size: var(--step--1); color: var(--text-mute); }
+
+/* ------------------------------------------------------------- phones --- */
+/* The desktop scale is set for a 1440 canvas; on a 390 screen the same
+   headline eats the fold and pushes the ring out of sight. These pull the
+   whole hero back so the copy and the products share the first screen here
+   too, which is the point of the page. */
+@media (max-width: 560px) {
+  .hero__grid { padding-block: var(--s-3) var(--s-2); }
+  .hero__copy { gap: var(--s-3); }
+  .hero h1 { font-size: clamp(1.95rem, 9.4vw, 2.7rem); }
+  .hero__lede { font-size: var(--step--1); max-width: 32ch; }
+  .hero__acts { width: 100%; }
+  .hero__acts .btn { flex: 1; padding: 12px 14px; font-size: var(--step--1); }
+  .hero__stats {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--s-2);
+    width: 100%; padding-top: var(--s-3);
+  }
+  .hero__stat b { font-size: var(--step-0); }
+  .hero__stat span { font-size: 9.5px; letter-spacing: .1em; }
+  .stage { height: clamp(230px, 62vw, 300px); margin-bottom: var(--s-5); }
+  .stage__hint { display: none; }        /* the gesture is discoverable by touch */
+  .sec { padding-block: var(--s-7); }
+  .sec__hd { margin-bottom: var(--s-4); }
+  .group { min-height: 128px; }
+}

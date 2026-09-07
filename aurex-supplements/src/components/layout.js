@@ -108,6 +108,18 @@ ${jsonLd ? `<script type="application/ld+json">${JSON.stringify(jsonLd)}</script
 ${boot()}
 ${header(active)}
 <main id="main">${body}</main>
+<dialog class="searchdlg" id="search-dlg" aria-label="Search products">
+  <div class="searchdlg__box">
+    <div class="searchdlg__bar">
+      ${icons.search}
+      <input type="search" id="search-q" placeholder="Search products or brands…"
+             autocomplete="off" aria-label="Search products or brands">
+      <span class="searchdlg__n" id="search-n"></span>
+      <button type="button" id="search-close" aria-label="Close search">${icons.close}</button>
+    </div>
+    <div class="searchdlg__out" id="search-out"></div>
+  </div>
+</dialog>
 ${footer()}
 <script>window.AUREX_MOTION=${JSON.stringify(motion)}</script>
 <script src="${js}" defer></script>

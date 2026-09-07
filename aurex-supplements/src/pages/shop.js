@@ -42,7 +42,7 @@ const controls = (list, activeGroup) => {
   <div class="fgroup">
     <h3>Price</h3>
     <div class="frange">
-      <label>Max <b id="f-price-v">any</b></label>
+      <label for="f-price">Max <b id="f-price-v">any</b></label>
       <input type="range" id="f-price" min="0" max="200" step="5" value="200">
     </div>
   </div>
