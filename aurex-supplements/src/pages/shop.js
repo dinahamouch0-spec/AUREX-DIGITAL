@@ -1,6 +1,7 @@
 import { routes } from '../lib/routes.js';
 import { esc, count } from '../lib/format.js';
 import { products, groups, brands } from '../lib/catalog.js';
+import { chevron } from '../components/mark.js';
 import { card } from '../components/product-card.js';
 import { icons } from '../components/icons.js';
 
@@ -54,7 +55,40 @@ const controls = (list, activeGroup) => {
 </aside>`;
 };
 
-export const shop = ({ list, title, lede, activeGroup = null, hero = null }) => `
+/* The category opening.
+
+   Landing on a section plays a short sequence: the seal breaks, light comes
+   out of the tub, and the section's own hero product rises through it before
+   the shelf appears. It is drawn from the one photograph we have of that
+   product — the lid is light rather than a modelled cap, because a cap we do
+   not have would only look like a cap we do not have.
+
+   It runs once per section per visit and any input skips it. A signature
+   moment on arrival is not worth a gate on the way back from a product. */
+const opening = (group, heroProduct) => {
+  if (!group) return '';
+  /* Snacks & Bars has no product shot of its own, so its own scene rises
+     instead. Better than the one section arriving in silence. */
+  const shot = heroProduct
+    ? `/assets/img/products/${heroProduct.stage}@500.webp`
+    : `/assets/img/groups/${group.slug}-card@360.webp`;
+  return `
+<div class="intro" id="intro" data-group="${group.slug}" aria-hidden="true">
+  <div class="intro__scene">
+    <span class="intro__flash"></span>
+    <span class="intro__ring"></span>
+    <span class="intro__ring"></span>
+    <span class="intro__ring"></span>
+    <span class="intro__seal">${chevron({ id: 'intro-' + group.slug })}</span>
+    <img class="intro__shot${heroProduct ? '' : ' intro__shot--scene'}" src="${shot}"
+         alt="" width="500" height="500" decoding="async">
+  </div>
+  <p class="intro__name">${esc(group.name)}</p>
+</div>`;
+};
+
+export const shop = ({ list, title, lede, activeGroup = null, hero = null, heroProduct = null }) => `
+${activeGroup ? opening(groups.find((g) => g.slug === activeGroup), heroProduct) : ''}
 <section class="phead${hero ? ' phead--art' : ''}"${hero ? ` style="--art:url('/assets/img/groups/${hero}.webp')"` : ''}>
   <div class="wrap">
     <nav class="crumbs" aria-label="Breadcrumb">

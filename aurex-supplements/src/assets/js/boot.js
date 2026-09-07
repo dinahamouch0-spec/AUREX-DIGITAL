@@ -20,10 +20,12 @@ export function boot() {
   const el = document.getElementById('boot');
   if (!el) return Promise.resolve();
 
+  /* Resolves with whether the full sequence actually ran, so a caller can
+     tell a cold arrival from a page-to-page move. */
   if (alreadyBooted()) {
     el.remove();
     document.documentElement.dataset.boot = '0';
-    return Promise.resolve();
+    return Promise.resolve(false);
   }
 
   const pct = document.getElementById('boot-pct');
@@ -43,7 +45,7 @@ export function boot() {
       document.documentElement.dataset.boot = '0';
       el.addEventListener('transitionend', () => el.remove(), { once: true });
       setTimeout(() => el.remove(), 900);
-      done();
+      done(true);
     };
     raf = requestAnimationFrame(tick);
   });

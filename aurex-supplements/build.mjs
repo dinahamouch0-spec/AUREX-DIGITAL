@@ -23,7 +23,7 @@ import { count } from './src/lib/format.js';
 
 const DIST = 'dist';
 const CSS_ORDER = ['00-tokens', '01-base', '02-components', '03-shell', '04-home',
-                   '05-ring', '06-shop', '07-product', '08-admin'];
+                   '05-ring', '06-shop', '07-product', '08-admin', '09-intro'];
 
 const hash = (s) => createHash('sha256').update(s).digest('hex').slice(0, 8);
 
@@ -99,6 +99,8 @@ async function main() {
       title: `${g.name} — ${site.name} Supplements`,
       description: `${count(list.length)} ${g.name.toLowerCase()} products, priced in ${site.currency}.`,
       body: shop({ list, title: g.name, activeGroup: g.slug, hero: artFor(g.slug),
+                   heroProduct: list.filter((p) => p.stage)
+                                    .sort((a, b) => b.priceMax - a.priceMax)[0] || null,
                    lede: `${count(list.length)} products.` }),
       active: g.slug, canonical: `${site.url}/shop/${g.slug}/`,
     }));

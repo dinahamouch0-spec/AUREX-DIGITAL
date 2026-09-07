@@ -1,0 +1,110 @@
+/* ===========================================================================
+   The category opening.
+
+   Reads as a tub being opened: the seal breaks and lifts, light escapes from
+   inside, rings push out across the surface, and the section's hero product
+   rises through the light. The whole thing is 1.5s and any input ends it.
+   ========================================================================= */
+.intro {
+  position: fixed; inset: 0; z-index: 200;
+  display: grid; place-content: center; justify-items: center; gap: var(--s-5);
+  background: var(--void);
+  /* Nothing animates until .play. The boot loader sits at z-index 999, so an
+     opening that started on its own ran to completion behind it and was over
+     before the loader lifted. The script hands this class over once the boot
+     sequence is done, which also makes the two read as one arrival. */
+  opacity: 1;
+}
+.intro.play { animation: intro-out 520ms var(--ease-out) 1500ms forwards; }
+.intro[data-done] { display: none; }
+@keyframes intro-out { to { opacity: 0; visibility: hidden; } }
+
+.intro__scene {
+  position: relative; display: grid; place-items: center;
+  width: min(340px, 62vw); aspect-ratio: 1;
+}
+
+/* --- the seal: the mark sits over the mouth, then breaks and lifts away --- */
+.intro__seal {
+  position: absolute; z-index: 4; width: 34%;
+  transform-origin: 50% 120%;
+}
+.intro__seal svg { width: 100%; height: auto; filter: drop-shadow(0 0 20px rgba(53,167,223,.6)); }
+@keyframes seal-lift {
+  0%   { transform: translateY(0) rotateX(0) scale(1); opacity: 1; }
+  35%  { transform: translateY(-6%) rotateX(-14deg) scale(1.04); opacity: 1; }
+  100% { transform: translateY(-140%) rotateX(-72deg) scale(.7); opacity: 0; }
+}
+
+/* --- the light that was inside ------------------------------------------- */
+.intro__flash {
+  position: absolute; z-index: 1; width: 74%; aspect-ratio: 1; border-radius: 50%;
+  background: radial-gradient(circle, var(--arc-glow) 0%, var(--arc) 26%, transparent 66%);
+  opacity: 0; transform: scale(.15);
+}
+@keyframes flash {
+  0%   { opacity: 0; transform: scale(.15); }
+  22%  { opacity: .85; transform: scale(.85); }
+  100% { opacity: .12; transform: scale(1.5); }
+}
+
+/* --- rings pushing out across the surface -------------------------------- */
+.intro__ring {
+  position: absolute; z-index: 2; width: 46%; aspect-ratio: 1; border-radius: 50%;
+  border: 1.5px solid var(--arc-bright);
+  opacity: 0; transform: scale(.3) rotateX(70deg);
+}
+@keyframes ring {
+  0%   { opacity: 0;  transform: scale(.3) rotateX(70deg); }
+  18%  { opacity: .9; }
+  100% { opacity: 0;  transform: scale(2.3) rotateX(70deg); }
+}
+
+/* --- the product rises through it ---------------------------------------- */
+.intro__shot {
+  position: relative; z-index: 3; width: 100%; height: auto;
+  opacity: 0; transform: translateY(26%) scale(.82);
+  filter: drop-shadow(0 30px 40px rgba(0,0,0,.7));
+}
+@keyframes rise {
+  0%   { opacity: 0; transform: translateY(26%) scale(.82); }
+  55%  { opacity: 1; }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.intro__name {
+  font-family: var(--font-display); font-size: var(--step-2); font-weight: 700;
+  letter-spacing: .16em; text-transform: uppercase; text-align: center;
+  background: var(--chrome-face);
+  -webkit-background-clip: text; background-clip: text;
+  color: transparent; -webkit-text-fill-color: transparent;
+  opacity: 0; transform: translateY(10px);
+}
+@keyframes name-in { to { opacity: 1; transform: none; } }
+
+/* Skipping is instant: the sequence should never stand between someone and
+   the shelf they asked for. */
+.intro.skip { animation: intro-out 220ms var(--ease-out) forwards; }
+
+@media (prefers-reduced-motion: reduce) {
+  .intro { animation: intro-out 200ms linear forwards; }
+  .intro__seal, .intro__flash, .intro__ring, .intro__shot, .intro__name { animation: none; opacity: 1; transform: none; }
+}
+
+/* --- the sequence, played on cue ----------------------------------------- */
+.intro.play .intro__seal  { animation: seal-lift 900ms cubic-bezier(.5,-0.4,.3,1) 180ms forwards; }
+.intro.play .intro__flash { animation: flash 1200ms var(--ease-out) 520ms forwards; }
+.intro.play .intro__shot  { animation: rise 1100ms var(--ease-out) 620ms forwards; }
+.intro.play .intro__name  { animation: name-in 700ms var(--ease-out) 900ms forwards; }
+.intro.play .intro__ring  { animation: ring 1300ms var(--ease-out) forwards; }
+.intro.play .intro__ring:nth-of-type(2) { animation-delay: 560ms; }
+.intro.play .intro__ring:nth-of-type(3) { animation-delay: 700ms; }
+.intro.play .intro__ring:nth-of-type(4) { animation-delay: 840ms; }
+
+/* A section whose opening shows its scene rather than a single product: the
+   frame keeps it from reading as a stray photograph mid-animation. */
+.intro__shot--scene {
+  border-radius: 2px;
+  box-shadow: 0 0 0 1px rgba(53,167,223,.35), 0 30px 50px rgba(0,0,0,.7);
+  clip-path: polygon(12px 0, 100% 0, 100% calc(100% - 12px), calc(100% - 12px) 100%, 0 100%, 0 12px);
+}
