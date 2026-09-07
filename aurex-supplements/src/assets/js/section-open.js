@@ -46,5 +46,5 @@ export function sectionOpen() {
       c.style.removeProperty('--ty');
       c.style.removeProperty('--i');
     });
-  }, 2200);
+  }, 4200);   // the tub clears at 2.9s; this is after the whole sequence
 }
