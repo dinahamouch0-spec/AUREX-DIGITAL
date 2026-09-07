@@ -1,0 +1,118 @@
+/* ------------------------------------------------------------------ button */
+.btn {
+  --btn-bg: var(--arc);
+  --btn-fg: var(--arc-ink);
+  position: relative;
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--s-2);
+  padding: 14px 28px;
+  font-family: var(--font-display); font-size: var(--step-0);
+  font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+  background: var(--btn-bg); color: var(--btn-fg);
+  clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+  transition: transform var(--t-fast) var(--ease-out), filter var(--t-fast);
+  will-change: transform;
+}
+.btn:hover { filter: brightness(1.12); transform: translateY(-2px); }
+.btn:active { transform: translateY(0); }
+.btn[disabled] { opacity: .45; pointer-events: none; }
+
+.btn--ghost {
+  --btn-bg: transparent; --btn-fg: var(--chrome-100);
+  box-shadow: inset 0 0 0 1px var(--line-bright);
+}
+.btn--ghost:hover { --btn-fg: var(--arc-glow); box-shadow: inset 0 0 0 1px var(--arc); }
+
+.btn--steel { --btn-bg: var(--steel-800); --btn-fg: var(--chrome-100); }
+
+/* -------------------------------------------------------------------- card */
+.panel {
+  background: linear-gradient(168deg, var(--steel-900), var(--steel-950));
+  box-shadow: inset 0 0 0 1px var(--line), var(--lift-1);
+}
+
+/* ------------------------------------------------------------------ pills */
+.tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 3px 10px;
+  font-family: var(--font-display); font-size: 11px; font-weight: 600;
+  letter-spacing: .12em; text-transform: uppercase;
+  color: var(--arc-glow);
+  background: rgba(53,167,223,.10);
+  box-shadow: inset 0 0 0 1px rgba(53,167,223,.28);
+}
+.tag--out { color: var(--chrome-500); background: rgba(255,255,255,.03); box-shadow: inset 0 0 0 1px var(--line); }
+.tag--save { color: var(--ok); background: rgba(52,211,153,.10); box-shadow: inset 0 0 0 1px rgba(52,211,153,.30); }
+
+/* ------------------------------------------------------------ product card */
+.card {
+  position: relative;
+  display: flex; flex-direction: column;
+  background: linear-gradient(170deg, var(--steel-900) 0%, var(--steel-950) 100%);
+  box-shadow: inset 0 0 0 1px var(--line);
+  transition: box-shadow var(--t-mid) var(--ease-out);
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+.card:hover { box-shadow: inset 0 0 0 1px var(--line-bright), var(--lift-2); }
+.card:focus-within { box-shadow: inset 0 0 0 1px var(--arc), var(--glow); }
+
+/* The blue rake of light that crosses the mark, on hover. */
+.card::after {
+  content: ''; position: absolute; inset: 0; pointer-events: none; opacity: 0;
+  background: linear-gradient(105deg, transparent 32%, rgba(206,244,255,.09) 47%, transparent 60%);
+  transition: opacity var(--t-mid) var(--ease-out);
+}
+.card:hover::after { opacity: 1; }
+
+.card__stage {
+  position: relative; aspect-ratio: 1; overflow: hidden;
+  background: radial-gradient(65% 65% at 50% 42%, #1B2733, var(--steel-950) 72%);
+  display: grid; place-items: center;
+}
+.card__img {
+  width: 78%; height: 78%; object-fit: contain;
+  transform: translateZ(38px) scale(.96);
+  transition: transform var(--t-mid) var(--ease-out), filter var(--t-mid);
+  filter: drop-shadow(0 18px 22px rgba(0,0,0,.55));
+}
+.card:hover .card__img { transform: translateZ(58px) scale(1.05); }
+
+/* Floor reflection — the products sit on a surface, not in a void. */
+.card__stage::after {
+  content: ''; position: absolute; left: 12%; right: 12%; bottom: 6%; height: 12px;
+  background: radial-gradient(50% 100% at 50% 0, rgba(53,167,223,.30), transparent 72%);
+  filter: blur(5px);
+}
+
+.card__body { padding: var(--s-4) var(--s-4) var(--s-5); display: grid; gap: 6px; }
+.card__brand {
+  font-family: var(--font-display); font-size: 11px; font-weight: 600;
+  letter-spacing: .16em; text-transform: uppercase; color: var(--arc);
+}
+.card__name {
+  font-family: var(--font-display); font-size: var(--step-0); font-weight: 600;
+  line-height: 1.25; color: var(--chrome-100);
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.card__foot { display: flex; align-items: baseline; gap: var(--s-2); margin-top: var(--s-2); }
+.card__price {
+  font-family: var(--font-display); font-size: var(--step-1); font-weight: 700;
+  color: var(--chrome-50); font-variant-numeric: tabular-nums;
+}
+.card__from { font-size: var(--step--1); color: var(--text-mute); }
+.card__link { position: absolute; inset: 0; z-index: 2; }
+
+/* ------------------------------------------------------------------- grid */
+.grid {
+  display: grid; gap: var(--s-4);
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+}
+@media (max-width: 520px) { .grid { grid-template-columns: repeat(2, 1fr); gap: var(--s-3); } }
+
+/* --------------------------------------------------------- reveal on scroll */
+.reveal { opacity: 0; transform: translateY(26px); }
+.reveal.in {
+  opacity: 1; transform: none;
+  transition: opacity var(--t-slow) var(--ease-out), transform var(--t-slow) var(--ease-out);
+}
+@media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; } }

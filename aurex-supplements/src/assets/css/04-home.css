@@ -1,0 +1,116 @@
+/* ================================================================== hero */
+.hero { position: relative; min-height: 88vh; display: grid; align-items: center; overflow: hidden; }
+.hero__grid {
+  position: relative; z-index: 2;
+  display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+  gap: var(--s-7); align-items: center; padding-block: var(--s-9) var(--s-8);
+}
+@media (max-width: 980px) {
+  .hero { min-height: auto; }
+  .hero__grid { grid-template-columns: 1fr; gap: var(--s-6); padding-block: var(--s-7); }
+}
+
+.hero__copy { display: grid; gap: var(--s-5); max-width: 34ch; }
+.hero h1 { font-size: var(--step-5); font-weight: 700; letter-spacing: -0.035em; line-height: .94; }
+.hero h1 span { display: block; }
+.hero h1 .lo { color: var(--chrome-500); font-weight: 500; }
+.hero__lede { font-size: var(--step-1); color: var(--text-dim); max-width: 40ch; }
+.hero__acts { display: flex; flex-wrap: wrap; gap: var(--s-3); }
+
+/* Live catalogue figures — the shop's real scale, not marketing rounding. */
+.hero__stats { display: flex; flex-wrap: wrap; gap: var(--s-6); padding-top: var(--s-4); border-top: 1px solid var(--line); }
+.hero__stat b {
+  display: block; font-family: var(--font-display); font-size: var(--step-2);
+  font-weight: 700; color: var(--chrome-50); font-variant-numeric: tabular-nums; line-height: 1;
+}
+.hero__stat span { font-size: var(--step--1); letter-spacing: .14em; text-transform: uppercase; color: var(--text-mute); }
+
+/* --------------------------------------------------------- the 3D stage */
+.stage { position: relative; aspect-ratio: 1 / 1; width: 100%; }
+.stage canvas { width: 100% !important; height: 100% !important; display: block; }
+/* Floor glow under the carousel. */
+.stage::after {
+  content: ''; position: absolute; left: 8%; right: 8%; bottom: 12%; height: 90px; z-index: -1;
+  background: radial-gradient(50% 50% at 50% 50%, rgba(53,167,223,.26), transparent 70%);
+  filter: blur(28px);
+}
+.stage__fallback {
+  position: absolute; inset: 0; display: grid; place-items: center; padding: var(--s-5);
+  text-align: center; color: var(--text-mute); font-size: var(--step--1);
+}
+.stage__hint {
+  position: absolute; left: 50%; bottom: 4px; transform: translateX(-50%);
+  display: flex; align-items: center; gap: 8px;
+  font-family: var(--font-display); font-size: 11px; letter-spacing: .18em;
+  text-transform: uppercase; color: var(--chrome-600); pointer-events: none;
+  opacity: 0; transition: opacity var(--t-slow);
+}
+.stage.ready .stage__hint { opacity: 1; }
+
+/* The label that tracks the front-most product on the carousel. */
+.stage__label {
+  position: absolute; left: 50%; bottom: 8%; transform: translateX(-50%);
+  width: min(300px, 78%); text-align: center; pointer-events: none;
+  opacity: 0; transition: opacity var(--t-mid) var(--ease-out);
+}
+.stage.ready .stage__label { opacity: 1; }
+.stage__label b {
+  display: block; font-family: var(--font-display); font-size: var(--step-0);
+  font-weight: 600; color: var(--chrome-50);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.stage__label i {
+  font-style: normal; font-family: var(--font-display); font-size: 11px;
+  letter-spacing: .16em; text-transform: uppercase; color: var(--arc);
+}
+
+/* ============================================================== sections */
+.sec { padding-block: var(--s-9); }
+.sec__hd { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: var(--s-4); margin-bottom: var(--s-6); }
+.sec__hd h2 { max-width: 20ch; }
+.sec__hd p { color: var(--text-dim); max-width: 46ch; margin-top: var(--s-2); }
+
+/* --------------------------------------------------------- category rail */
+.groups { display: grid; gap: var(--s-3); grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); }
+.group {
+  position: relative; display: grid; align-content: end; gap: 2px;
+  min-height: 168px; padding: var(--s-4);
+  background: linear-gradient(165deg, var(--steel-850), var(--steel-950));
+  box-shadow: inset 0 0 0 1px var(--line);
+  overflow: hidden; isolation: isolate;
+  transition: box-shadow var(--t-mid) var(--ease-out);
+}
+.group:hover { box-shadow: inset 0 0 0 1px var(--arc), var(--glow); }
+/* Each group carries the chevron from the mark, scaled up as a watermark. */
+.group__mark {
+  position: absolute; right: -18%; top: -22%; width: 74%; z-index: -1;
+  opacity: .07; transform: rotate(8deg);
+  transition: opacity var(--t-mid) var(--ease-out), transform var(--t-slow) var(--ease-out);
+}
+.group:hover .group__mark { opacity: .16; transform: rotate(0) scale(1.08); }
+.group b { font-family: var(--font-display); font-size: var(--step-1); font-weight: 600; }
+.group span { font-size: var(--step--1); color: var(--text-mute); font-variant-numeric: tabular-nums; }
+
+/* ---------------------------------------------------------- brand ticker */
+.ticker { overflow: hidden; padding-block: var(--s-6); border-block: 1px solid var(--line);
+          -webkit-mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent);
+                  mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent); }
+.ticker__row { display: flex; gap: var(--s-8); width: max-content; animation: slide 46s linear infinite; }
+.ticker:hover .ticker__row { animation-play-state: paused; }
+@keyframes slide { to { transform: translateX(-50%); } }
+.ticker__row b {
+  font-family: var(--font-display); font-size: var(--step-1); font-weight: 600;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--chrome-600);
+  white-space: nowrap; transition: color var(--t-fast);
+}
+.ticker__row b:hover { color: var(--arc-glow); }
+@media (prefers-reduced-motion: reduce) {
+  .ticker__row { animation: none; flex-wrap: wrap; width: auto; justify-content: center; gap: var(--s-5); }
+}
+
+/* ------------------------------------------------------------- trust row */
+.trust { display: grid; gap: var(--s-4); grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); }
+.trust div { display: grid; gap: 6px; padding: var(--s-5); background: rgba(255,255,255,.015); box-shadow: inset 0 0 0 1px var(--line); }
+.trust svg { width: 22px; height: 22px; color: var(--arc); }
+.trust b { font-family: var(--font-display); font-size: var(--step-0); font-weight: 600; }
+.trust p { font-size: var(--step--1); color: var(--text-mute); }

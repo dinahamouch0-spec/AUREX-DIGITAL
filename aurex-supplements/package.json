@@ -1,0 +1,15 @@
+{
+  "name": "aurex-supplements",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "AUREX Supplements — storefront, 3D product stage and admin dashboard",
+  "scripts": {
+    "catalog": "node scripts/build-catalog.mjs",
+    "build": "node build.mjs",
+    "dev": "node build.mjs && node dev-server.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "^0.24.0"
+  }
+}
