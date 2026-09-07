@@ -4,14 +4,16 @@
    and emits sitemap.xml / robots.txt / _redirects. No runtime dependencies —
    the output is pure static files. */
 
-import { mkdir, writeFile, rm, cp, readdir, readFile } from 'node:fs/promises';
+import { mkdir, writeFile, rm, cp, readdir, readFile, rename } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import path from 'node:path';
 
 import { site, localeMeta } from './src/data/site.js';
 import { url, absUrl, routes, categoryPath, productPath } from './src/lib/routes.js';
 import { activeCategories, activeProducts, categoryBySlug } from './src/data/catalog.js';
 import { document_ } from './src/components/layout.js';
+import { setManifest, asset } from './src/lib/assets.js';
 import * as P from './src/pages/index.js';
 
 const DIST = 'dist';
@@ -34,6 +36,7 @@ function render(locale, page) {
     current: page.current,
     ogImage: page.ogImage,
     scripts: page.scripts || [],
+    assetMap: runtimeManifest(),
     body: page.body,
   });
 }
@@ -113,7 +116,7 @@ async function buildRoot() {
 </head>
 <body>
   <div>
-    <img src="/assets/img/logo-mark-256.png" alt="${site.brand.name.en}">
+    <img src="${asset('/assets/img/logo-mark-256.png')}" alt="${site.brand.name.en}">
     <p>${site.brand.name.ar} · ${site.brand.name.en}</p>
     <a href="/ar/">العربية</a><a class="alt" href="/en/">English</a>
   </div>
@@ -142,12 +145,13 @@ async function buildAdmin() {
 <title>لوحة التحكم — ${site.brand.name.ar}</title>
 <meta name="robots" content="noindex, nofollow">
 <link rel="icon" href="/assets/img/favicon.ico">
-<link rel="stylesheet" href="/assets/css/styles.css">
+<link rel="stylesheet" href="${asset('/assets/css/styles.css')}">
 </head>
 <body class="admin">
 <div id="admin-app"><div class="admin-main"><div class="state" role="status">جارٍ التحميل…</div></div></div>
-<script src="/assets/js/admin.js" defer></script>
-<script src="/assets/js/admin-views.js" defer></script>
+<script>window.YK_ASSETS=${JSON.stringify(runtimeManifest())};</script>
+<script src="${asset('/assets/js/admin.js')}" defer></script>
+<script src="${asset('/assets/js/admin-views.js')}" defer></script>
 </body>
 </html>`;
   await mkdir(path.join(DIST, 'admin'), { recursive: true });
@@ -201,13 +205,35 @@ Sitemap: ${site.baseUrl.replace(/\/$/, '')}/sitemap.xml
 /en/*   /en/404/index.html   404
 `, 'utf8');
 
-  // Long-cache immutable assets, no-cache HTML.
+  // HTML always revalidates, so a deploy reaches people immediately. Assets
+  // may be cached forever precisely because their filenames carry a content
+  // hash — change a file and its URL changes with it. A stable filename plus
+  // `immutable` would mean an update could never reach a returning browser.
   await writeFile(path.join(DIST, '_headers'),
-`/assets/*
+`/*
+  Cache-Control: public, max-age=0, must-revalidate
+
+/assets/css/*
   Cache-Control: public, max-age=31536000, immutable
 
-/*.html
-  Cache-Control: public, max-age=0, must-revalidate
+/assets/js/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/assets/img/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Favicons ship under fixed names, so they revalidate daily instead.
+/assets/img/favicon.ico
+  Cache-Control: public, max-age=86400
+
+/assets/img/favicon-32.png
+  Cache-Control: public, max-age=86400
+
+/assets/img/apple-touch-icon.png
+  Cache-Control: public, max-age=86400
 `, 'utf8');
 
   // Keeps GitHub Pages from stripping the underscore-prefixed files.
@@ -217,28 +243,66 @@ Sitemap: ${site.baseUrl.replace(/\/$/, '')}/sitemap.xml
 }
 
 /* ------------------------------------------------------------- assets --- */
-async function buildAssets() {
-  // One concatenated stylesheet, in numeric filename order.
-  const cssDir = 'src/assets/css';
-  const files = (await readdir(cssDir)).filter((f) => f.endsWith('.css')).sort();
-  const css = (await Promise.all(files.map((f) => readFile(path.join(cssDir, f), 'utf8')))).join('\n');
-  await mkdir(path.join(DIST, 'assets/css'), { recursive: true });
-  await writeFile(path.join(DIST, 'assets/css/styles.css'), css, 'utf8');
+/* Assets are content-hashed so the immutable one-year cache is actually
+   truthful: change a file and its URL changes with it, so a returning visitor
+   always gets the new one. Without this, a stable filename plus `immutable`
+   means an update can never reach a browser that has already cached it. */
 
-  await mkdir(path.join(DIST, 'assets/js'), { recursive: true });
-  for (const f of ['app.js', 'commerce.js', 'customizer.js', 'shop.js', 'admin.js', 'admin-views.js']) {
-    if (existsSync(path.join('src/assets/js', f))) {
-      await cp(path.join('src/assets/js', f), path.join(DIST, 'assets/js', f));
-    }
+const hash8 = (buf) => createHash('sha256').update(buf).digest('hex').slice(0, 8);
+const manifest = {};
+
+/** Copy a file into dist under a hashed name and record the mapping. */
+async function emitHashed(srcPath, destDir, name, contents) {
+  const buf = contents ?? await readFile(srcPath);
+  const ext = path.extname(name);
+  const base = name.slice(0, -ext.length);
+  const hashed = `${base}.${hash8(buf)}${ext}`;
+  await mkdir(path.join(DIST, destDir), { recursive: true });
+  await writeFile(path.join(DIST, destDir, hashed), buf);
+  manifest[`/${destDir}/${name}`] = `/${destDir}/${hashed}`;
+  return hashed;
+}
+
+async function buildAssets() {
+  // 1. Fonts and images first: the stylesheet points at them.
+  for (const f of await readdir('src/assets/fonts')) {
+    await emitHashed(path.join('src/assets/fonts', f), 'assets/fonts', f);
+  }
+  for (const f of await readdir('src/assets/img/out')) {
+    await emitHashed(path.join('src/assets/img/out', f), 'assets/img', f);
   }
 
-  // Self-hosted brand fonts.
-  await cp('src/assets/fonts', path.join(DIST, 'assets/fonts'), { recursive: true });
+  // 2. One stylesheet, with its font URLs rewritten to the hashed names.
+  const cssDir = 'src/assets/css';
+  const files = (await readdir(cssDir)).filter((f) => f.endsWith('.css')).sort();
+  let css = (await Promise.all(files.map((f) => readFile(path.join(cssDir, f), 'utf8')))).join('\n');
+  css = css.replace(/\/assets\/(fonts|img)\/([^)"'\s]+)/g,
+                    (m) => manifest[m] || m);
+  await emitHashed(null, 'assets/css', 'styles.css', Buffer.from(css, 'utf8'));
 
-  // Only the generated image variants ship — never the multi-megabyte sources.
-  await cp('src/assets/img/out', path.join(DIST, 'assets/img'), { recursive: true });
+  // 3. Client scripts.
+  for (const f of ['app.js', 'commerce.js', 'customizer.js', 'shop.js', 'admin.js', 'admin-views.js']) {
+    const src = path.join('src/assets/js', f);
+    if (existsSync(src)) await emitHashed(src, 'assets/js', f);
+  }
 
-  written.push('assets/css/styles.css', 'assets/js/app.js', 'assets/img/*', 'assets/fonts/*');
+  // Favicons are requested by fixed names from the browser and from other
+  // tools, so they also ship unhashed alongside the hashed copies.
+  for (const f of ['favicon.ico', 'favicon-32.png', 'apple-touch-icon.png']) {
+    const src = path.join('src/assets/img/out', f);
+    if (existsSync(src)) await cp(src, path.join(DIST, 'assets/img', f));
+  }
+
+  setManifest(manifest);
+  written.push(`assets (${Object.keys(manifest).length} hashed)`);
+}
+
+/* A few asset URLs are assembled in the browser (cart thumbnails, the admin
+   logo) and so cannot be resolved at build time. Those entries — and only
+   those — are published to the page so the client can resolve them too. */
+function runtimeManifest() {
+  const wanted = (k) => /-480\.webp$/.test(k) || /logo-mark-(96|128)\.png$/.test(k);
+  return Object.fromEntries(Object.entries(manifest).filter(([k]) => wanted(k)));
 }
 
 /* ---------------------------------------------------------------- main --- */
@@ -246,10 +310,10 @@ const t0 = Date.now();
 if (existsSync(DIST)) await rm(DIST, { recursive: true });
 await mkdir(DIST, { recursive: true });
 
+await buildAssets();   // first: pages reference the hashed filenames
 await buildPages();
 await buildRoot();
 await buildAdmin();
-await buildAssets();
 await buildSeo();
 
 const htmlCount = written.filter((w) => w.endsWith('.html')).length;

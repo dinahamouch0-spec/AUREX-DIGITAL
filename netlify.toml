@@ -8,6 +8,9 @@
   # The API and the storefront build share these modules.
   included_files = ["api/**", "src/data/**", "src/lib/**"]
 
+# Asset filenames are content-hashed by the build, so an immutable cache is
+# truthful here: changed content means a changed URL. dist/_headers carries the
+# finer-grained rules, including HTML revalidation.
 [[headers]]
   for = "/assets/*"
   [headers.values]
