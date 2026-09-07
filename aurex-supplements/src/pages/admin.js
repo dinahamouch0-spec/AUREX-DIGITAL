@@ -30,6 +30,7 @@ export const adminPage = () => {
       <nav class="aside__nav">
         <button data-view="overview" class="is-on">${icons.bolt} Overview</button>
         <button data-view="products">${icons.filter} Products</button>
+        <button data-view="prices">${icons.bolt} Prices</button>
         <button data-view="orders">${icons.cart} Orders</button>
         <button data-view="settings">${icons.shield} Settings</button>
       </nav>
@@ -70,18 +71,51 @@ export const adminPage = () => {
         <p class="ahint">Editing writes through the API and takes effect on the next deploy of the catalogue.</p>
       </section>
 
+      <section class="aview" data-view="prices" hidden>
+        <h2 class="chrome">Prices</h2>
+        <p class="ahint">A change here applies to the next order placed &mdash; no
+          redeploy. Clear a row to fall back to the listed price.</p>
+        <div class="atools">
+          <input type="search" id="pr-q" placeholder="Find a product&hellip;">
+          <label class="fcheck"><input type="checkbox" id="pr-only"><span>Changed only</span></label>
+          <span class="atools__n" id="pr-n"></span>
+        </div>
+        <div class="atable-wrap"><table class="atable" id="pr-table">
+          <thead><tr><th>Product</th><th>Option</th><th class="r">Listed</th>
+            <th class="r">Selling</th><th></th></tr></thead>
+          <tbody></tbody>
+        </table></div>
+      </section>
+
       <section class="aview" data-view="orders" hidden>
         <h2 class="chrome">Orders</h2>
-        <div id="orders">Loading…</div>
+        <div class="atools">
+          <select id="o-status">
+            <option value="">All statuses</option>
+            <option value="new">New</option><option value="packing">Packing</option>
+            <option value="sent">Sent</option><option value="done">Done</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+          <span class="atools__n" id="o-n"></span>
+        </div>
+        <div id="orders">Loading&hellip;</div>
       </section>
 
       <section class="aview" data-view="settings" hidden>
         <h2 class="chrome">Settings</h2>
         <div class="apanel">
           <h3>Store</h3>
-          <p class="ahint">Currency, delivery and contact details are served by the API
-            so they can change without a redeploy.</p>
-          <div id="settings">Loading…</div>
+          <p class="ahint">Served by the API, so these change without a redeploy.</p>
+          <form id="settings-form" class="aform">
+            <label for="set-delivery">Delivery note</label>
+            <textarea id="set-delivery" name="deliveryNote" rows="2" maxlength="400"></textarea>
+            <label for="set-phone">Phone</label>
+            <input id="set-phone" name="phone" maxlength="40">
+            <label for="set-whatsapp">WhatsApp</label>
+            <input id="set-whatsapp" name="whatsapp" maxlength="40">
+            <button class="btn" type="submit">Save</button>
+            <span class="status" id="set-status"></span>
+          </form>
         </div>
       </section>
     </div>

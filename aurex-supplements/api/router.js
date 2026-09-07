@@ -6,7 +6,8 @@
 import catalog from '../src/data/catalog.json' with { type: 'json' };
 import { signIn, signOut, currentSession, cookieHeader, clearCookie } from './_lib/auth.js';
 import { validateOrder } from './_lib/validate.js';
-import { priceOrder, placeOrder, listOrders, setStatus } from './_lib/orders.js';
+import { priceOrder, placeOrder, listOrders, setStatus, priceList,
+         invalidateOverrides } from './_lib/orders.js';
 import { get, set } from './_lib/store.js';
 
 const json = (body, status = 200, headers = {}) =>
@@ -44,7 +45,7 @@ export async function route(req) {
     const clean = (Array.isArray(lines) ? lines : []).slice(0, 60)
       .map((l) => ({ variantId: String(l?.variantId ?? ''), qty: Math.min(99, Math.max(1, Math.floor(Number(l?.qty)) || 0)) }))
       .filter((l) => l.variantId && l.qty);
-    return json(priceOrder(clean));
+    return json(await priceOrder(clean));
   }
 
   if (path === 'order' && method === 'POST') {
@@ -98,6 +99,27 @@ export async function route(req) {
     }
 
     if (path === 'admin/orders' && method === 'GET') return json({ orders: await listOrders() });
+
+    if (path === 'admin/prices' && method === 'GET') return json({ prices: await priceList() });
+
+    /* A price change is one variant at a time and bounded: no negative
+       prices, nothing above a sane ceiling, and a null clears the override
+       back to the listed price. */
+    if (path === 'admin/prices' && method === 'PATCH') {
+      const { variantId, price } = await body();
+      if (!variantId) return json({ error: 'variantId is required' }, 400);
+      const map = { ...((await get('price-overrides')) || {}) };
+      if (price === null) delete map[variantId];
+      else {
+        const n = Number(price);
+        if (!Number.isFinite(n) || n < 0.5 || n > 2000)
+          return json({ error: 'A price must be between $0.50 and $2000.' }, 400);
+        map[variantId] = Math.round(n * 100) / 100;
+      }
+      await set('price-overrides', map);
+      invalidateOverrides();
+      return json({ ok: true, overrides: Object.keys(map).length });
+    }
 
     if (path.startsWith('admin/orders/') && method === 'PATCH') {
       const number = path.split('/')[2];

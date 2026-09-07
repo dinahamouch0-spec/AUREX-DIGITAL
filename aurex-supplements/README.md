@@ -118,6 +118,22 @@ photographed, cropped above the repeated logo with faded edges, rather than cut
 out: segmentation kept the glass triangle behind each product, and a tighter
 crop started clipping the products themselves.
 
+## The dashboard
+
+`/admin/`, behind `ADMIN_PASSWORD`.
+
+| View | What it does |
+|---|---|
+| Overview | Orders today, total, revenue, the last eight |
+| Products | Searchable list of all 488, filterable by category |
+| **Prices** | Change what any variant sells for. Applies to the next order — no redeploy |
+| Orders | Every order with customer, address and lines; status moves new → packing → sent → done |
+| Settings | Delivery note, phone, WhatsApp |
+
+A price change is stored as an override against the listed price, read by the
+API when it prices an order. The listed price in `AUREX_priced.csv` stays the
+default, so clearing an override restores it.
+
 ## Known gaps
 
 - **Beauty & Wellness** (22 products) has no category scene; it falls back to
@@ -126,5 +142,7 @@ crop started clipping the products themselves.
   match the real packaging. Flagged before they were produced; the decision was
   to finish the set and revisit. Backgrounds and format are fixable here, the
   label text is not — those images need regenerating.
-- Admin is read-only over products so far: it lists and searches the catalogue
-  but does not yet write back to it. Orders and settings do persist.
+- Admin changes prices, order status and settings. It does not yet add or
+  remove products — those still come from the CSV and a rebuild.
+- Delivery is quoted by phone rather than calculated; there is no online
+  payment step, by design for launch.
