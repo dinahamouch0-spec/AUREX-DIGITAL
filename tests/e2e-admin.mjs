@@ -137,10 +137,25 @@ ok('cleanup runs on demand', await p.$('.toast')!==null);
 console.log('\nMobile admin (Part 3 §57)');
 const m=await b.newContext({viewport:{width:390,height:844},storageState:await ctx.storageState()});
 const mp=await m.newPage();
-await mp.goto(B+'/admin/#/orders',{waitUntil:'networkidle'});
-await mp.waitForSelector('.admin-table',{timeout:8000});
-const ov=await mp.evaluate(()=>document.documentElement.scrollWidth-document.documentElement.clientWidth);
-ok('no horizontal overflow on phone', ov<=1, 'overflow '+ov+'px');
+// Page scroll width alone is not enough: the layout sets overflow-x hidden, so
+// content wider than the screen is clipped silently instead of scrolling.
+// Measure the elements themselves, ignoring panes that scroll inside themselves.
+for (const [name,hash,sel] of [['overview','#/','.tiles'],['orders','#/orders','.admin-table'],
+                               ['products','#/products','.admin-table'],['settings','#/settings','#s_wa']]) {
+  await mp.goto(B+'/admin/'+hash,{waitUntil:'networkidle'});
+  await mp.waitForSelector(sel,{timeout:8000});
+  await mp.waitForTimeout(500);
+  const r=await mp.evaluate(()=>{
+    const de=document.documentElement;
+    const spilling=[...document.querySelectorAll('body *')]
+      .filter(e=>e.getBoundingClientRect().width>de.clientWidth+1)
+      .filter(e=>{const st=getComputedStyle(e);return st.overflowX!=='auto'&&st.overflowX!=='scroll';})
+      .map(e=>String(e.className).slice(0,30));
+    return {ov:de.scrollWidth-de.clientWidth, spilling};
+  });
+  ok(`${name}: nothing spills past the screen`, r.ov<=1 && r.spilling.length===0,
+     `overflow ${r.ov}px, spilling: ${JSON.stringify(r.spilling.slice(0,3))}`);
+}
 await m.close();
 
 await b.close();

@@ -8,10 +8,18 @@
 .admin-shell { display: grid; grid-template-columns: 1fr; min-block-size: 100vh; }
 @media (min-width: 980px) { .admin-shell { grid-template-columns: 248px 1fr; } }
 
+/* Grid and flex children default to min-width:auto, so they refuse to shrink
+   below their content and silently overflow a narrow screen. The page hides
+   the overflow, so the result is clipped content rather than a scrollbar.
+   Every track that can hold wide content (a table, a status row) gets an
+   explicit zero minimum so it shrinks and scrolls inside itself instead. */
+.admin-shell > * { min-inline-size: 0; }
+
 /* ------------------------------------------------------------- sidebar -- */
 .admin-side {
   background: var(--c-ink); color: #cfceE4;
   padding: var(--s-5); display: flex; flex-direction: column; gap: var(--s-5);
+  min-inline-size: 0;
 }
 @media (min-width: 980px) { .admin-side { position: sticky; inset-block-start: 0; block-size: 100vh; overflow-y: auto; } }
 
@@ -20,7 +28,7 @@
 .admin-brand strong { color: #fff; font-family: var(--font-display); font-size: 1rem; }
 .admin-brand span { display: block; font-size: .68rem; color: #8785a8; }
 
-.admin-nav { display: flex; flex-direction: column; gap: 2px; }
+.admin-nav { display: flex; flex-direction: column; gap: 2px; min-inline-size: 0; }
 .admin-nav a {
   display: flex; align-items: center; gap: var(--s-3);
   padding: .7rem .9rem; border-radius: var(--r-md);
@@ -45,14 +53,14 @@
 
 @media (max-width: 979px) {
   .admin-side { flex-direction: row; align-items: center; gap: var(--s-3); padding: var(--s-3) var(--s-4); flex-wrap: wrap; }
-  .admin-nav { flex-direction: row; overflow-x: auto; gap: var(--s-2); flex: 1 1 100%; scrollbar-width: none; }
+  .admin-nav { flex-direction: row; overflow-x: auto; gap: var(--s-2); flex: 1 1 100%; scrollbar-width: none; min-inline-size: 0; }
   .admin-nav::-webkit-scrollbar { display: none; }
   .admin-nav a { white-space: nowrap; padding-inline: .8rem; }
   .admin-side__foot { flex-direction: row; gap: var(--s-4); margin: 0; }
 }
 
 /* ---------------------------------------------------------------- main -- */
-.admin-main { padding: var(--s-6) var(--gutter) var(--s-9); min-inline-size: 0; }
+.admin-main { padding: var(--s-6) var(--gutter) var(--s-9); min-inline-size: 0; max-inline-size: 100%; }
 .admin-head {
   display: flex; align-items: flex-start; justify-content: space-between;
   gap: var(--s-4); flex-wrap: wrap; margin-block-end: var(--s-6);
@@ -61,7 +69,8 @@
 .admin-head p { color: var(--c-ink-faint); font-size: var(--t-sm); margin: var(--s-1) 0 0; }
 
 /* ---------------------------------------------------------------- tiles -- */
-.tiles { display: grid; gap: var(--s-3); grid-template-columns: repeat(2, 1fr); margin-block-end: var(--s-6); }
+.tiles { display: grid; gap: var(--s-3); grid-template-columns: repeat(2, 1fr); margin-block-end: var(--s-6); min-inline-size: 0; }
+.tiles > * { min-inline-size: 0; }
 @media (min-width: 700px) { .tiles { grid-template-columns: repeat(3, 1fr); } }
 @media (min-width: 1200px) { .tiles { grid-template-columns: repeat(6, 1fr); } }
 .tile {
@@ -75,7 +84,11 @@ a.tile:hover { border-color: var(--c-pink-cta); }
 .tile--alert .tile__n { color: var(--c-pink-deep); }
 
 /* ---------------------------------------------------------------- table -- */
-.table-wrap { overflow-x: auto; border-radius: var(--r-md); border: 1px solid var(--c-border); background: var(--c-surface); }
+.table-wrap {
+  overflow-x: auto; -webkit-overflow-scrolling: touch;
+  border-radius: var(--r-md); border: 1px solid var(--c-border);
+  background: var(--c-surface); max-inline-size: 100%;
+}
 table.admin-table { inline-size: 100%; border-collapse: collapse; font-size: var(--t-sm); min-inline-size: 720px; }
 .admin-table th, .admin-table td { padding: .8rem 1rem; text-align: start; border-block-end: 1px solid var(--c-border); }
 .admin-table th { background: var(--c-bg-alt); font-weight: 700; color: var(--c-ink); white-space: nowrap; font-size: var(--t-xs); }
@@ -91,8 +104,18 @@ table.admin-table { inline-size: 100%; border-collapse: collapse; font-size: var
   }
   .admin-table thead { display: none; }
   .admin-table tr { border-block-end: 1px solid var(--c-border); padding: var(--s-3); }
-  .admin-table td { border: 0; padding: .25rem 0; display: flex; justify-content: space-between; gap: var(--s-3); }
-  .admin-table td::before { content: attr(data-label); font-size: var(--t-xs); color: var(--c-ink-faint); font-weight: 700; }
+  .admin-table td {
+    border: 0; padding: .3rem 0; display: flex; gap: var(--s-3);
+    justify-content: space-between; align-items: baseline;
+    flex-wrap: wrap; min-inline-size: 0; overflow-wrap: anywhere;
+  }
+  .admin-table td::before {
+    content: attr(data-label); flex: 0 0 auto;
+    font-size: var(--t-xs); color: var(--c-ink-faint); font-weight: 700;
+  }
+  /* The action cell has no label, so let its button use the full row. */
+  .admin-table td:last-child { padding-block-start: var(--s-3); }
+  .admin-table td:last-child .btn { inline-size: 100%; }
 }
 
 /* --------------------------------------------------------------- status -- */
@@ -122,6 +145,7 @@ table.admin-table { inline-size: 100%; border-collapse: collapse; font-size: var
 .apanel {
   background: var(--c-surface); border: 1px solid var(--c-border);
   border-radius: var(--r-lg); padding: var(--s-5); margin-block-end: var(--s-5);
+  min-inline-size: 0; max-inline-size: 100%;
 }
 .apanel > h2 {
   font-size: 1.05rem; margin-block-end: var(--s-4);
@@ -129,16 +153,19 @@ table.admin-table { inline-size: 100%; border-collapse: collapse; font-size: var
 }
 .apanel__hint { font-size: var(--t-xs); color: var(--c-ink-faint); font-weight: 400; font-family: var(--font-body); }
 
-.grid2 { display: grid; gap: var(--s-4); grid-template-columns: 1fr; }
+.grid2 { display: grid; gap: var(--s-4); grid-template-columns: 1fr; min-inline-size: 0; }
+.grid2 > * { min-inline-size: 0; }
 @media (min-width: 760px) { .grid2 { grid-template-columns: 1fr 1fr; } }
-.grid-detail { display: grid; gap: var(--s-5); grid-template-columns: 1fr; }
+.grid-detail { display: grid; gap: var(--s-5); grid-template-columns: 1fr; min-inline-size: 0; }
+.grid-detail > * { min-inline-size: 0; }
 @media (min-width: 1080px) { .grid-detail { grid-template-columns: 1.35fr 1fr; align-items: start; } }
 
 .kv { display: grid; gap: var(--s-2); }
 .kv > div { display: flex; justify-content: space-between; gap: var(--s-4); padding-block: .3rem; font-size: var(--t-sm); border-block-end: 1px dashed var(--c-border); }
 .kv > div:last-child { border: 0; }
 .kv dt { color: var(--c-ink-faint); margin: 0; }
-.kv dd { color: var(--c-ink); font-weight: 600; margin: 0; text-align: end; word-break: break-word; }
+.kv dd { color: var(--c-ink); font-weight: 600; margin: 0; text-align: end; overflow-wrap: anywhere; min-inline-size: 0; }
+.kv > div { min-inline-size: 0; }
 
 /* ---------------------------------------------------------- order item -- */
 .oitem {
