@@ -4,4 +4,7 @@ package-lock.json
 *.log
 .data/
 .data-test/
+# Generated archives: the deliverable zips and the skills pack are all built
+# from tracked sources, so they are handed over rather than committed.
 ya7kayti-*.zip
+claude-design-skills.zip
