@@ -90,25 +90,49 @@
 .sec__hd p { color: var(--text-dim); max-width: 46ch; margin-top: var(--s-2); }
 
 /* --------------------------------------------------------- category rail */
-.groups { display: grid; gap: var(--s-3); grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); }
+/* A fixed 4:3 keeps one crop working at every width. Left free, these ran
+   1.15:1 on a desktop and 2.80:1 on a phone, and no single image survives
+   that spread without cutting the products out of the frame. */
+.groups { display: grid; gap: var(--s-3); grid-template-columns: repeat(auto-fit, minmax(248px, 1fr)); }
 .group {
   position: relative; display: grid; align-content: end; gap: 2px;
-  min-height: 168px; padding: var(--s-4);
-  background: linear-gradient(165deg, var(--steel-850), var(--steel-950));
+  aspect-ratio: 4 / 3; padding: var(--s-4);
+  background: var(--steel-950);
   box-shadow: inset 0 0 0 1px var(--line);
   overflow: hidden; isolation: isolate;
   transition: box-shadow var(--t-mid) var(--ease-out);
 }
 .group:hover { box-shadow: inset 0 0 0 1px var(--arc), var(--glow); }
-/* Each group carries the chevron from the mark, scaled up as a watermark. */
-.group__mark {
-  position: absolute; right: -18%; top: -22%; width: 74%; z-index: -1;
-  opacity: .07; transform: rotate(8deg);
-  transition: opacity var(--t-mid) var(--ease-out), transform var(--t-slow) var(--ease-out);
+
+.group__art {
+  position: absolute; inset: 0; z-index: -2;
+  width: 100%; height: 100%; object-fit: cover;
+  transform: scale(1.02);
+  transition: transform 900ms var(--ease-out), filter var(--t-mid);
+  filter: saturate(.9);
 }
-.group:hover .group__mark { opacity: .16; transform: rotate(0) scale(1.08); }
-.group b { font-family: var(--font-display); font-size: var(--step-1); font-weight: 600; }
-.group span { font-size: var(--step--1); color: var(--text-mute); font-variant-numeric: tabular-nums; }
+.group:hover .group__art { transform: scale(1.09); filter: saturate(1.1) brightness(1.06); }
+
+/* The scenes are busy and the label has to stay readable over any of them,
+   so the type sits on its own gradient rather than trusting the artwork. */
+/* Weighted to the bottom third, where the label sits — a two-line name like
+   "Carbs & Performance" has to stay readable over a pale scene as well as a
+   dark one, and the artwork is not going to cooperate on its own. */
+.group::after {
+  content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  background: linear-gradient(178deg,
+    rgba(5,7,10,.22) 0%, rgba(5,7,10,.06) 30%,
+    rgba(5,7,10,.60) 60%, rgba(5,7,10,.90) 82%, rgba(5,7,10,.97) 100%);
+}
+.group b {
+  font-family: var(--font-display); font-size: var(--step-1); font-weight: 600;
+  line-height: 1.12; text-wrap: balance;
+  text-shadow: 0 1px 14px rgba(0,0,0,.85);
+}
+.group span {
+  font-size: var(--step--1); color: var(--chrome-400); font-variant-numeric: tabular-nums;
+  text-shadow: 0 1px 8px rgba(0,0,0,.7);
+}
 
 /* ---------------------------------------------------------- brand ticker */
 .ticker { overflow: hidden; padding-block: var(--s-6); border-block: 1px solid var(--line);
@@ -156,5 +180,10 @@
   .stage__hint { display: none; }        /* the gesture is discoverable by touch */
   .sec { padding-block: var(--s-7); }
   .sec__hd { margin-bottom: var(--s-4); }
-  .group { min-height: 128px; }
+  /* Two across on a phone: one across made a 2.8:1 letterbox that no crop
+     of a product scene fits, and eleven full-width bands is a long scroll. */
+  .groups { grid-template-columns: 1fr 1fr; gap: var(--s-2); }
+  .group { padding: var(--s-3); }
+  .group b { font-size: var(--step-0); }
+  .group span { font-size: 11px; }
 }

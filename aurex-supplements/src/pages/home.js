@@ -3,7 +3,6 @@ import { routes } from '../lib/routes.js';
 import { esc, count, priceRange } from '../lib/format.js';
 import { products, groups, brands, catalog } from '../lib/catalog.js';
 import { icons } from '../components/icons.js';
-import { chevron } from '../components/mark.js';
 import { card } from '../components/product-card.js';
 
 /* The ring. Each product sits on its own face of a cylinder, placed by
@@ -70,9 +69,13 @@ export const home = () => {
     <a class="btn btn--ghost" href="${routes.shop()}">All ${count(products.length)} products</a>
   </div>
   <div class="groups">
-    ${groups.map((g) => `
+    ${groups.map((g, i) => `
     <a class="group reveal" href="${routes.group(g.slug)}">
-      ${chevron({ id: 'g-' + g.slug, cls: 'group__mark' })}
+      <img class="group__art" src="/assets/img/groups/${g.slug}-card@360.webp"
+           srcset="/assets/img/groups/${g.slug}-card@360.webp 360w,
+                   /assets/img/groups/${g.slug}-card.webp 640w"
+           sizes="(max-width: 560px) 46vw, (max-width: 1000px) 30vw, 210px"
+           alt="" width="640" height="480" loading="${i < 4 ? 'eager' : 'lazy'}" decoding="async">
       <b>${esc(g.name)}</b>
       <span>${count(g.count)} products</span>
     </a>`).join('')}
