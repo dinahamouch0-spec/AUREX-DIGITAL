@@ -52,6 +52,19 @@ netlify/functions/api.mjs    mounts the router at /api/*
 build.mjs                    renders all 609 routes
 ```
 
+## The phone number
+
+One place: `contact` in `src/data/site.js`. It carries three forms — what a
+phone dials, the digits-only form `wa.me` needs, and what a person reads — so
+changing the number changes it everywhere: the footer, the product page, the
+checkout dialog and the confirmation.
+
+The WhatsApp link on a product page carries the product name, brand and price,
+so the shop's first reply is not "which one?".
+
+The admin Settings view holds its own phone and WhatsApp values, served by the
+API. Those are for anything read at runtime; the site chrome uses `site.js`.
+
 ## Changing prices
 
 Prices live in `data/AUREX_priced.csv`. Edit that, then:

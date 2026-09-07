@@ -19,8 +19,8 @@ const json = (body, status = 200, headers = {}) =>
 const DEFAULT_SETTINGS = {
   currency: 'USD',
   deliveryNote: 'Delivery is quoted per area and confirmed by phone.',
-  phone: '',
-  whatsapp: '',
+  phone: '+961 76 906 738',
+  whatsapp: '96176906738',
 };
 
 export async function route(req) {

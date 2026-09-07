@@ -1,4 +1,5 @@
 import { routes } from '../lib/routes.js';
+import { site, whatsapp } from '../data/site.js';
 import { esc, count } from '../lib/format.js';
 import { brands, byBrand } from '../lib/catalog.js';
 import { icons } from '../components/icons.js';
@@ -50,7 +51,8 @@ export const cartPage = () => `
     <form class="checkout__box" id="checkout-form" method="dialog">
       <button class="checkout__x" type="button" id="co-close" aria-label="Close">${icons.close}</button>
       <h2 class="chrome">Where is it going?</h2>
-      <p class="ahint">We confirm stock and delivery by phone before anything ships.</p>
+      <p class="ahint">We confirm stock and delivery by phone before anything ships &mdash;
+        from <b style="color:var(--chrome-300)">${site.contact.display}</b>.</p>
 
       <label for="co-name">Name</label>
       <input id="co-name" name="name" autocomplete="name" required maxlength="120">
@@ -76,9 +78,13 @@ export const cartPage = () => `
 
   <section class="placed" id="placed" hidden>
     <h2 class="chrome">Order placed</h2>
-    <p>Your reference is <b id="placed-num" class="num"></b>. Keep it — we use it
-       when we call to confirm.</p>
-    <a class="btn" href="${routes.shop()}">Keep shopping</a>
+    <p>Your reference is <b id="placed-num" class="num"></b>. Keep it &mdash; we use it
+       when we call to confirm, from ${site.contact.display}.</p>
+    <div style="display:flex;gap:var(--s-3);flex-wrap:wrap;justify-content:center">
+      <a class="btn" href="${routes.shop()}">Keep shopping</a>
+      <a class="btn btn--wa" id="placed-wa" href="${whatsapp('')}" target="_blank" rel="noopener">
+        ${icons.whatsapp} <span>Message us</span></a>
+    </div>
   </section>
 </div>`;
 

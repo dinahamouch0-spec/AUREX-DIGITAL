@@ -1,4 +1,4 @@
-import { site, motion } from '../data/site.js';
+import { site, motion, whatsapp } from '../data/site.js';
 import { routes } from '../lib/routes.js';
 import { esc } from '../lib/format.js';
 import { chevron, barbell } from './mark.js';
@@ -65,8 +65,13 @@ const footer = () => `
           <li><a href="${routes.brands()}">All brands</a></li></ul>
       </div>
       <div>
-        <h4>Help</h4>
+        <h4>Talk to us</h4>
         <ul>
+          <li><a class="ftr__ct" href="tel:${site.contact.dial}">
+            ${icons.phone}<span>${site.contact.display}</span></a></li>
+          <li><a class="ftr__ct ftr__ct--wa" href="${whatsapp(`Hi ${site.name}, I have a question.`)}"
+                 target="_blank" rel="noopener">
+            ${icons.whatsapp}<span>WhatsApp</span></a></li>
           <li><a href="${routes.cart()}">Your cart</a></li>
           <li><a href="${routes.shop()}">Everything</a></li>
         </ul>

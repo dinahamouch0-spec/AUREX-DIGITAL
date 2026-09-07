@@ -1,4 +1,4 @@
-import { site } from '../data/site.js';
+import { site, whatsapp } from '../data/site.js';
 import { routes } from '../lib/routes.js';
 import { esc, money, moneyShort, count } from '../lib/format.js';
 import { groups, inGroup } from '../lib/catalog.js';
@@ -87,10 +87,20 @@ export const product = (p) => {
         </button>
       </div>
 
+      <!-- Ordering by message is how a lot of Lebanon actually buys, so it is
+           a real second path, not a fallback. The link carries the product so
+           the shop's first reply is not "which one?". -->
+      <a class="btn btn--wa" href="${whatsapp(
+          `Hi ${site.name}, I would like to order:\n${p.name} — ${p.brand}\n${moneyShort(p.priceMin)}`)}"
+         target="_blank" rel="noopener">
+        ${icons.whatsapp} <span>Order on WhatsApp</span>
+      </a>
+
       <ul class="pfacts">
         <li>${icons.shield}<span>Authentic stock, sourced through the brand</span></li>
         <li>${icons.truck}<span>Delivered across Lebanon</span></li>
         <li>${icons.globe}<span>Priced in ${site.currency}</span></li>
+        <li>${icons.phone}<span>Questions? <a href="tel:${site.contact.dial}">${site.contact.display}</a></span></li>
       </ul>
     </div>
   </div>
