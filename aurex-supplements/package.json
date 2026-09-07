@@ -6,8 +6,10 @@
   "description": "AUREX Supplements — storefront, 3D product stage and admin dashboard",
   "scripts": {
     "catalog": "node scripts/build-catalog.mjs",
-    "build": "node build.mjs",
-    "dev": "node build.mjs && node dev-server.mjs"
+    "build": "node build.mjs && node scripts/check-dist.mjs",
+    "build:fast": "node build.mjs",
+    "dev": "node build.mjs && node dev-server.mjs",
+    "check": "node scripts/check-dist.mjs"
   },
   "devDependencies": {
     "esbuild": "^0.24.0"

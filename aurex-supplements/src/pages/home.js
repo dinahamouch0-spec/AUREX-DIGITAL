@@ -17,7 +17,8 @@ const ring = (items) => {
   <div class="ring" id="ring" style="--faces:${items.length}">
     ${items.map((p, i) => `
     <a class="ring__face" href="${routes.product(p.slug)}" data-i="${i}"
-       style="--a:${(i * step).toFixed(3)}deg" aria-label="${esc(p.name)}">
+       style="--a:${(i * step).toFixed(3)}deg" aria-label="${esc(p.name)}"
+       data-name="${esc(p.name)}" data-meta="${esc(p.brand)} &middot; ${esc(priceRange(p))}">
       <img src="/assets/img/products/${p.stage}@500.webp" alt="" loading="${i < 3 ? 'eager' : 'lazy'}"
            width="500" height="500" decoding="async">
     </a>`).join('')}

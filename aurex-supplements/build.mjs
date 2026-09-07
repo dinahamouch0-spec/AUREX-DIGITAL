@@ -78,12 +78,22 @@ async function main() {
     active: 'shop', canonical: site.url + '/shop/',
   }));
 
+  /* Beauty & Wellness has no scene of its own yet. Rather than render a
+     broken header, a group without artwork borrows a sibling's — declared
+     here so the substitution is visible instead of being a missing file. */
+  const ART_FALLBACK = { beauty: 'vitamins' };
+  const artFor = (slug) => {
+    if (existsSync(`src/assets/img/groups/${slug}.webp`)) return slug;
+    const alt = ART_FALLBACK[slug];
+    return alt && existsSync(`src/assets/img/groups/${alt}.webp`) ? alt : null;
+  };
+
   for (const g of groups) {
     const list = inGroup(g.slug);
     await page(`shop/${g.slug}`, shell({
       title: `${g.name} — ${site.name} Supplements`,
       description: `${count(list.length)} ${g.name.toLowerCase()} products, priced in ${site.currency}.`,
-      body: shop({ list, title: g.name, activeGroup: g.slug, hero: g.slug,
+      body: shop({ list, title: g.name, activeGroup: g.slug, hero: artFor(g.slug),
                    lede: `${count(list.length)} products.` }),
       active: g.slug, canonical: `${site.url}/shop/${g.slug}/`,
     }));
@@ -126,8 +136,13 @@ async function main() {
     title: `Not found — ${site.name}`, description: 'Page not found.', body: notFound() }));
 
   /* --- static assets ----------------------------------------------------- */
-  await cp('src/assets/img', path.join(DIST, 'assets/img'), { recursive: true });
-  await rm(path.join(DIST, 'assets/img/products/_incoming'), { recursive: true, force: true });
+  /* Ship only what a browser asks for. The category PNGs and the staged
+     originals are sources for the WebP the pages actually reference; copying
+     them too put 21 MB of unreachable files on the CDN. */
+  await cp('src/assets/img', path.join(DIST, 'assets/img'), {
+    recursive: true,
+    filter: (src) => !/_incoming|\.png$/.test(src) || /favicon/.test(src),
+  });
 
   await writeFile(path.join(DIST, 'favicon.svg'),
     `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 92">

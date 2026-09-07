@@ -17,7 +17,10 @@ export function ring() {
   const DRIFT = reduced ? 0 : -0.055;      // degrees per frame, anticlockwise
   const nameEl = document.getElementById('stage-name');
   const metaEl = document.getElementById('stage-meta');
-  const meta = faces.map((f) => f.getAttribute('aria-label') || '');
+  /* Each face carries its own name and meta. Deriving them from one string
+     meant a parse that could half-succeed, leaving the previous product's
+     brand and price under a new product's name. */
+  const label = faces.map((f) => [f.dataset.name || '', f.dataset.meta || '']);
 
   let spin = 0, vel = DRIFT, front = -1, dragging = false, lastX = 0, lastT = 0;
 
@@ -48,9 +51,9 @@ export function ring() {
       faces[front]?.classList.remove('is-front');
       faces[best].classList.add('is-front');
       front = best;
-      const [name, rest] = (meta[best] || '').split(' — ');
-      if (nameEl) nameEl.textContent = name || '';
-      if (metaEl && rest) metaEl.textContent = rest;
+      const [name, meta] = label[best];
+      if (nameEl) nameEl.textContent = name;
+      if (metaEl) metaEl.innerHTML = meta;
     }
   };
 
