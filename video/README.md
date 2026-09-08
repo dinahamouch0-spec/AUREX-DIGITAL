@@ -42,15 +42,19 @@ follow.
 
 ## What is real and what is a slot
 
-- **The presenter is an illustration**, `src/ya7kayti/Girl.tsx` — flat vector in
-  the brand palette, blinking on her own schedule with her mouth driven by the
-  caption track. She is drawn rather than filmed on purpose: a shop selling
-  personalised products for children should not put a real child's face in an ad
-  it did not shoot. To use real footage instead, drop a clip in `public/` and
-  render it with `<OffthreadVideo>` in place of `<Presenter>`.
-- **There is no voiceover.** The captions deliver the lines. To add a real
-  voice, record `public/audio/vo.mp3` and set the composition's `voiceover` prop
-  to `"audio/vo.mp3"` — the music ducks to 35% on its own.
+- **The presenter is either filmed or drawn.** Drop footage at
+  `public/video/clip.mp4` and set the `presenterClip` prop to `"video/clip.mp4"`:
+  she opens full-frame, rounds into the corner medallion as the product
+  arrives, her own audio becomes the voice, and the music ducks to 30% under
+  her. With `presenterClip` left `null` the illustrated girl in
+  `src/ya7kayti/Girl.tsx` presents instead — flat vector in the brand palette,
+  blinking on her own schedule with her mouth driven by the caption track.
+  `presenterFocus` sets where the crop holds, e.g. `"50% 30%"` for a high face.
+  Source footage is git-ignored; it lives on the machine that renders.
+- **The voice comes from the footage, or from a recording.** With no filmed
+  clip and no `voiceover`, the captions carry the lines on their own. To add a
+  voice without footage, record `public/audio/vo.mp3` and set the `voiceover`
+  prop to `"audio/vo.mp3"`.
 - **The music is original.** `scripts/make-music.mjs` synthesises it sample by
   sample — marimba over a soft pad, glockenspiel, brushed shaker, F major at
   96 BPM — so nothing here is licensed from anyone. Edit the arrangement at the

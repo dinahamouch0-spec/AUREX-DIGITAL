@@ -8,3 +8,6 @@ out
 
 # The lossless music master; theme.mp3 is what ships.
 public/audio/*.wav
+
+# Source footage is dropped in locally, not committed.
+public/video/*.mp4

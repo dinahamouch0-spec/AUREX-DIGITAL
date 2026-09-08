@@ -1,5 +1,13 @@
 import React from "react";
-import { AbsoluteFill, Audio, interpolate, Sequence, staticFile, useCurrentFrame } from "remotion";
+import {
+  AbsoluteFill,
+  Audio,
+  interpolate,
+  OffthreadVideo,
+  Sequence,
+  staticFile,
+  useCurrentFrame,
+} from "remotion";
 import { Backdrop, Bokeh, Grain, Progress, Watermark } from "./atoms";
 import { Captions } from "./Captions";
 import { Girl } from "./Girl";
@@ -9,37 +17,48 @@ import { color, DISSOLVE, DURATION_IN_FRAMES } from "./theme";
 import "./fonts";
 
 export type ReelProps = {
-  /** Music bed volume, 0–1. Drop to ~0.2 once a real voiceover is added. */
+  /** Music bed volume, 0–1. It ducks on its own under a voice. */
   musicVolume: number;
   /**
    * Optional voiceover in public/, e.g. "audio/vo.mp3". With one supplied the
-   * music ducks automatically and the girl still mouths the caption track.
+   * music ducks and the illustrated girl mouths the caption track.
    */
   voiceover: string | null;
+  /**
+   * Footage of a real presenter in public/, e.g. "video/clip.mp4". With one
+   * supplied she replaces the illustration: the clip opens full-frame and
+   * shrinks into the corner medallion as the product arrives, and its own
+   * audio is the voice. Leave null to use the illustration.
+   */
+  presenterClip: string | null;
+  /** Where to hold the crop of that footage, e.g. "50% 30%" for a high face. */
+  presenterFocus: string;
 };
 
+/** The frames over which the presenter moves from full-frame to medallion. */
+const SETTLE: [number, number] = [92, 120];
+
 /**
- * Presenter medallion. She starts as a full-frame portrait, then settles into
- * a corner badge for the rest of the reel — one continuous character rather
- * than a face that appears and disappears between cuts.
+ * The presenter. Filmed or drawn, she follows the same path: she opens the
+ * reel large and settles into a corner badge as the product arrives, so there
+ * is one continuous speaker rather than a face that appears between cuts.
  */
-const Presenter: React.FC = () => {
+const Presenter: React.FC<{ clip: string | null; focus: string }> = ({ clip, focus }) => {
   const frame = useCurrentFrame();
 
-  const size = interpolate(frame, [92, 120], [560, 244], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp",
-  });
-  // She settles into the lower left, below the book and clear of the captions,
-  // so she never covers the child's name printed on the cover.
-  const cx = interpolate(frame, [92, 120], [540, 152], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp",
-  });
-  const cy = interpolate(frame, [92, 120], [720, 1272], {
-    extrapolateLeft: "clamp",
-    extrapolateRight: "clamp",
-  });
+  const at = (a: number, b: number) =>
+    interpolate(frame, SETTLE, [a, b], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
+
+  // Footage opens filling the frame and rounds itself into the badge; the
+  // illustration opens as a large medallion, since a square crop of a drawing
+  // has nothing in the corners worth showing.
+  const width = clip ? at(1080, 244) : at(560, 244);
+  const height = clip ? at(1920, 244) : at(560, 244);
+  const left = clip ? at(0, 30) : at(540 - 280, 30);
+  const top = clip ? at(0, 1150) : at(720 - 280, 1150);
+  const radius = clip ? at(0, 122) : at(280, 122);
+  const ring = at(clip ? 0 : 12, 5);
+
   const opacity =
     interpolate(frame, [0, 12], [0, 1], { extrapolateRight: "clamp" }) *
     interpolate(frame, [scenes.outro.from, scenes.outro.from + 26], [1, 0], {
@@ -57,28 +76,35 @@ const Presenter: React.FC = () => {
     <div
       style={{
         position: "absolute",
-        left: cx - size / 2,
-        top: cy - size / 2,
-        width: size,
-        height: size,
-        borderRadius: "50%",
+        left,
+        top,
+        width,
+        height,
+        borderRadius: radius,
         overflow: "hidden",
         opacity,
         background: `linear-gradient(160deg, ${color.blush}, ${color.blushDeep})`,
-        boxShadow: `0 0 0 ${size * 0.022}px #fff, 0 10px 26px ${color.ink}1c, 0 30px 70px ${color.ink}22`,
+        boxShadow: `0 0 0 ${ring}px #fff, 0 10px 26px ${color.ink}1c, 0 30px 70px ${color.ink}22`,
       }}
     >
-      <Girl
-        speaking={isSpeaking(frame)}
-        excitement={excitement}
-        style={{
-          position: "absolute",
-          left: -size * 0.075,
-          top: -size * 0.19,
-          width: size * 1.15,
-          height: size * 1.457,
-        }}
-      />
+      {clip ? (
+        <OffthreadVideo
+          src={staticFile(clip)}
+          style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: focus }}
+        />
+      ) : (
+        <Girl
+          speaking={isSpeaking(frame)}
+          excitement={excitement}
+          style={{
+            position: "absolute",
+            left: -width * 0.075,
+            top: -width * 0.19,
+            width: width * 1.15,
+            height: width * 1.457,
+          }}
+        />
+      )}
     </div>
   );
 };
@@ -92,7 +118,12 @@ const Vignette: React.FC = () => (
   />
 );
 
-export const Reel: React.FC<ReelProps> = ({ musicVolume, voiceover }) => (
+export const Reel: React.FC<ReelProps> = ({
+  musicVolume,
+  voiceover,
+  presenterClip,
+  presenterFocus,
+}) => (
   <AbsoluteFill style={{ backgroundColor: color.bg }}>
     <Backdrop />
     <Bokeh />
@@ -125,7 +156,7 @@ export const Reel: React.FC<ReelProps> = ({ musicVolume, voiceover }) => (
     </Sequence>
 
     <Vignette />
-    <Presenter />
+    <Presenter clip={presenterClip} focus={presenterFocus} />
     <Captions />
     <Grain />
     <Watermark />
@@ -134,7 +165,7 @@ export const Reel: React.FC<ReelProps> = ({ musicVolume, voiceover }) => (
     <Audio
       src={staticFile("audio/theme.mp3")}
       volume={(f) =>
-        (voiceover ? musicVolume * 0.35 : musicVolume) *
+        (voiceover || presenterClip ? musicVolume * 0.3 : musicVolume) *
         interpolate(f, [0, 24], [0, 1], { extrapolateRight: "clamp" }) *
         interpolate(f, [DURATION_IN_FRAMES - 46, DURATION_IN_FRAMES], [1, 0], {
           extrapolateLeft: "clamp",
