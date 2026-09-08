@@ -7,6 +7,7 @@
   "private": true,
   "dependencies": {
     "@remotion/cli": "4.0.522",
+    "@remotion/fonts": "^4.0.522",
     "@remotion/zod-types": "4.0.522",
     "react": "19.2.3",
     "react-dom": "19.2.3",
@@ -25,7 +26,9 @@
     "dev": "remotion studio",
     "build": "remotion bundle",
     "upgrade": "remotion upgrade",
-    "lint": "eslint src && tsc"
+    "lint": "eslint src && tsc",
+    "music": "node scripts/make-music.mjs",
+    "render": "remotion render Ya7kaytiReel out/ya7kayti-reel.mp4"
   },
   "sideEffects": [
     "*.css"

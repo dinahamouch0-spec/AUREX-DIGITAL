@@ -173,7 +173,7 @@ src/
   components/ · pages/                            static page generation
   assets/  css/ · js/ · fonts/ · img/
 tests/     run.mjs · audit.mjs · e2e-*.mjs · all.mjs
-video/     Remotion project for promo video — separate build, see video/README.md
+video/     Remotion promo reel — separate build, see video/README.md
 ```
 
 `src/lib/pricing.js` is pure and is imported by both the browser and the
