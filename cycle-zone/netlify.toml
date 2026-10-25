@@ -1,4 +1,3 @@
 [build]
-  base = "cycle-zone"
   publish = "."
   command = ""
