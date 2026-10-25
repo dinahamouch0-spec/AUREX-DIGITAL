@@ -21,9 +21,9 @@ window.CZ = {
   },
 
   bikeCategories: {
-    scooter: { ar: 'سكوتر', en: 'Scooter' },
-    maxi: { ar: 'ماكسي سكوتر', en: 'Maxi Scooter' },
-    electric: { ar: 'كهرباء', en: 'Electric' }
+    scooter: { ar: 'كلاسيك', en: 'Classic' },
+    maxi: { ar: 'ماكسي', en: 'Maxi' },
+    electric: { ar: 'كهربائية', en: 'Electric' }
   },
 
   bikes: [
@@ -37,8 +37,8 @@ window.CZ = {
       featured: true,
       badge: { ar: 'الأقوى', en: 'Flagship' },
       desc: {
-        ar: 'ماكسي سكوتر بمحرك 180cc مبرّد بالماء، فرامل ABS أمامية وخلفية، نظام تحكم بالجر TCS وعداد TFT رقمي.',
-        en: '180cc water-cooled maxi scooter with front & rear ABS, traction control and a full TFT dash.'
+        ar: 'دراجة نارية ماكسي بمحرك 180cc مبرّد بالماء، فرامل ABS أمامية وخلفية، نظام تحكم بالجر TCS وعداد TFT رقمي.',
+        en: '180cc water-cooled maxi motorcycle with front & rear ABS, traction control and a full TFT dash.'
       },
       specs: [
         { ar: 'محرك 180cc بـ 4 صمامات، مبرّد بالماء', en: '180cc 4-valve water cooled' },
@@ -61,8 +61,8 @@ window.CZ = {
       price: 800,
       badge: { ar: 'عرض خاص', en: 'Special offer' },
       desc: {
-        ar: 'سكوتر عملي بتصميم 2026 وإضاءة LED كاملة — بسعر عرض خاص.',
-        en: 'A practical everyday scooter with 2026 styling and full LED lighting — at a special price.'
+        ar: 'دراجة نارية عملية بتصميم 2026 وإضاءة LED كاملة — بسعر عرض خاص.',
+        en: 'A practical everyday motorcycle with 2026 styling and full LED lighting — at a special price.'
       },
       specs: [
         { ar: 'مقعد رياضي', en: 'Aftermarket sport seat' },
@@ -79,8 +79,8 @@ window.CZ = {
       price: null,
       badge: null,
       desc: {
-        ar: 'سكوتر أحمر لافت بإضاءة LED حديثة ومقعد رياضي.',
-        en: 'A head-turning red scooter with modern LED lighting and a sport seat.'
+        ar: 'دراجة نارية حمرا لافتة بإضاءة LED حديثة ومقعد رياضي.',
+        en: 'A head-turning red motorcycle with modern LED lighting and a sport seat.'
       },
       specs: [
         { ar: 'مقعد رياضي', en: 'Aftermarket sport seat' },
@@ -97,8 +97,8 @@ window.CZ = {
       price: null,
       badge: { ar: 'جديد', en: 'New' },
       desc: {
-        ar: 'بنفسجي مطفي مع جنوط فسفورية — سكوتر بشخصية.',
-        en: 'Matte purple with neon rims — a scooter with personality.'
+        ar: 'بنفسجي مطفي مع جنوط فسفورية — دراجة بشخصية.',
+        en: 'Matte purple with neon rims — a bike with personality.'
       },
       specs: [
         { ar: 'مقعد رياضي', en: 'Aftermarket sport seat' },
@@ -108,15 +108,15 @@ window.CZ = {
     },
     {
       id: 'adventure-maxi',
-      name: { ar: 'ماكسي سكوتر أدفنتشر', en: 'Adventure Maxi' },
+      name: { ar: 'ماكسي أدفنتشر', en: 'Adventure Maxi' },
       year: 2026,
       category: 'maxi',
       image: 'assets/img/maxi-adventure.webp',
       price: null,
       badge: null,
       desc: {
-        ar: 'ماكسي سكوتر رمادي مطفي بزجاج أمامي عالي وإضاءة LED حادة — للمشاوير الطويلة.',
-        en: 'Matte grey maxi scooter with a tall windshield and sharp LED lights — built for longer rides.'
+        ar: 'دراجة نارية ماكسي رمادي مطفي بزجاج أمامي عالي وإضاءة LED حادة — للمشاوير الطويلة.',
+        en: 'Matte grey maxi motorcycle with a tall windshield and sharp LED lights — built for longer rides.'
       },
       specs: [
         { ar: 'زجاج أمامي عالي', en: 'Tall windshield' },
@@ -124,54 +124,20 @@ window.CZ = {
       ]
     },
     {
-      id: 'sport-maxi-red',
-      name: { ar: 'ماكسي سكوتر رياضي', en: 'Sport Maxi' },
-      year: 2026,
-      category: 'maxi',
-      image: 'assets/img/maxi-red-led.webp',
-      price: null,
-      badge: null,
-      desc: {
-        ar: 'أحمر رياضي مع زجاج أمامي وإشارات LED متتابعة.',
-        en: 'Sporty red with a windshield and sequential LED turn signals.'
-      },
-      specs: [
-        { ar: 'زجاج أمامي', en: 'Windshield' },
-        { ar: 'إشارات LED', en: 'LED turn signals' }
-      ]
-    },
-    {
       id: 'electric-white',
-      name: { ar: 'سكوتر كهرباء', en: 'Electric Scooter' },
+      name: { ar: 'دراجة نارية كهربائية', en: 'Electric Motorcycle' },
       year: 2026,
       category: 'electric',
       image: 'assets/img/electric-white.webp',
       price: null,
       badge: { ar: 'كهرباء', en: 'Electric' },
       desc: {
-        ar: 'سكوتر كهربائي أبيض — بلا بنزين، بلا صوت، وبمصروف أقل.',
-        en: 'White electric scooter — no fuel, no noise, lower running costs.'
+        ar: 'دراجة نارية كهربائية بيضا — بلا بنزين، بلا صوت، وبمصروف أقل.',
+        en: 'White electric motorcycle — no fuel, no noise, lower running costs.'
       },
       specs: [
         { ar: 'محرك كهربائي', en: 'Electric motor' },
         { ar: 'إشارات LED', en: 'LED turn signals' },
-        { ar: 'واقيات يد', en: 'Hand guards' }
-      ]
-    },
-    {
-      id: 'silver-led',
-      name: { ar: 'سكوتر فضي LED', en: 'Silver LED Scooter' },
-      year: 2026,
-      category: 'scooter',
-      image: 'assets/img/silver-led.webp',
-      price: null,
-      badge: null,
-      desc: {
-        ar: 'فضي أنيق مع شريط إضاءة LED أزرق وواقيات يد.',
-        en: 'Sleek silver with a blue LED light strip and hand guards.'
-      },
-      specs: [
-        { ar: 'شريط LED', en: 'LED light strip' },
         { ar: 'واقيات يد', en: 'Hand guards' }
       ]
     }
@@ -203,7 +169,7 @@ window.CZ = {
       desc: { ar: 'راحة أكبر للراكب الخلفي.', en: 'More comfort for your passenger.' } },
     { id: 'body-panels', category: 'comfort', icon: 'panel', price: null,
       name: { ar: 'قطع هيكل وفيرينغ', en: 'Body panels & fairings' },
-      desc: { ar: 'قطع هيكل بألوان متعددة لتجديد شكل الموتسيكل.', en: 'Coloured body panels to refresh your bike’s look.' } },
+      desc: { ar: 'قطع هيكل بألوان متعددة لتجديد شكل الدراجة.', en: 'Coloured body panels to refresh your bike’s look.' } },
     { id: 'led', category: 'lighting', icon: 'bulb', price: null,
       name: { ar: 'إضاءة وإشارات LED', en: 'LED lights & turn signals' },
       desc: { ar: 'إضاءة LED 2026 وإشارات متتابعة.', en: '2026 LED lighting and sequential turn signals.' } },
