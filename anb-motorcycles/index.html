@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ANB Motorcycles</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="ANB Motorcycles, A.N. Boukather: exclusive distributor of Vespa, Aprilia, Moto Guzzi, Bajaj, KTM, Husqvarna and Stromer in Lebanon. Showroom, riding gear and service center in Jdeideh.">
+<meta name="theme-color" content="#0B0B0D">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,500;0,600;0,700;1,700&family=Barlow:wght@400;500;600&family=Big+Shoulders+Display:wght@700;800;900&family=Mr+Dafoe&display=swap">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<a class="skip" href="#models">Skip to models</a>
+
+<!-- ============================== NAV ============================== -->
+<header class="nav" id="nav">
+  <div class="nav__inner wrap">
+    <a class="logo" href="#top" aria-label="ANB Motorcycles home">
+      <span class="logo__script">AnB</span>
+      <span class="logo__word">Motorcycles<small>A.N. Boukather</small></span>
+    </a>
+    <nav class="nav__links" id="navLinks" aria-label="Main">
+      <a href="#brands">Brands</a>
+      <a href="#models">Models</a>
+      <a href="#offers">Offers</a>
+      <a href="#gear">Gear</a>
+      <a href="#service">Service</a>
+      <a href="#visit">Visit</a>
+    </nav>
+    <a class="btn btn--red btn--sm nav__cta magnetic" data-wa="Hi ANB Motorcycles, I'd like some information." href="https://wa.me/96170500100">
+      <svg aria-hidden="true" viewBox="0 0 24 24"><use href="#i-wa"/></svg><span>WhatsApp</span>
+    </a>
+    <button class="nav__burger" id="burger" aria-expanded="false" aria-controls="navLinks" aria-label="Open menu"><span></span><span></span></button>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- ============================== HERO ============================== -->
+<section class="hero" aria-labelledby="heroTitle">
+  <canvas class="hero__lines" id="speedLines" aria-hidden="true"></canvas>
+  <div class="hero__ghost" aria-hidden="true"><span>READY TO RIDE · READY TO RIDE · READY TO RIDE ·&nbsp;</span><span>READY TO RIDE · READY TO RIDE · READY TO RIDE ·&nbsp;</span></div>
+
+  <div class="hero__grid wrap">
+    <div class="hero__copy">
+      <p class="eyebrow"><span class="dot"></span>Exclusive distributor · Jdeideh, Lebanon</p>
+      <h1 class="hero__title" id="heroTitle">
+        <span class="line">Seven brands.</span>
+        <span class="line">One <em>throttle.</em></span>
+      </h1>
+      <p class="hero__lede">Vespa, Aprilia, Moto Guzzi, Bajaj, KTM, Husqvarna and Stromer. New bikes, genuine parts, riding gear and a full workshop under one roof.</p>
+      <div class="hero__ctas">
+        <a class="btn btn--red magnetic" href="#models">Explore models <svg aria-hidden="true" viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
+        <a class="btn btn--ghost magnetic" data-wa="Hi ANB Motorcycles, I'd like to book a test ride." href="https://wa.me/96170500100"><svg aria-hidden="true" viewBox="0 0 24 24"><use href="#i-wa"/></svg>Book a test ride</a>
+      </div>
+    </div>
+
+    <div class="hero__stage" id="heroStage">
+      <div class="hero__frame">
+        <img class="is-on" src="img/duke390.webp" alt="KTM 390 Duke in the ANB showroom" data-name="KTM 390 Duke" data-tag="Naked · 399 cc" width="923" height="1355" fetchpriority="high">
+        <img src="img/g-srgt-rider.webp" alt="Rider on an Aprilia SR GT 200 in the mountains" data-name="Aprilia SR GT 200" data-tag="Urban adventure" width="305" height="345" loading="lazy">
+        <img src="img/g-dominar-moto.webp" alt="Bajaj Dominar with top case at speed" data-name="Bajaj Dominar" data-tag="Touring" width="304" height="406" loading="lazy">
+        <img src="img/vespa-matt.webp" alt="Matte grey Vespa in the showroom" data-name="Vespa" data-tag="Italian icon" width="923" height="1130" loading="lazy">
+        <img src="img/g-ktm-sx.webp" alt="KTM SX motocross bike on display" data-name="KTM SX" data-tag="Motocross" width="305" height="348" loading="lazy">
+      </div>
+      <div class="plate" aria-live="polite">
+        <span class="plate__num" id="plateNum">01</span>
+        <span class="plate__body"><b id="plateName">KTM 390 Duke</b><i id="plateTag">Naked · 399 cc</i></span>
+      </div>
+      <div class="hero__bars" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+    </div>
+  </div>
+
+  <!-- dashboard cluster -->
+  <div class="cluster wrap" aria-label="ANB in numbers">
+    <div class="cluster__cell"><b data-count="7">7</b><span>Brands, exclusive in Lebanon</span></div>
+    <div class="cluster__cell"><b data-count="24.5" data-dec="1" data-suffix="K">24.5K</b><span>Riders follow us</span></div>
+    <div class="cluster__cell"><b data-count="1499" data-prefix="$">$1499</b><span>Aprilia SR 150 2026, VAT incl.</span></div>
+    <div class="cluster__cell"><b data-count="25" data-suffix="%">25%</b><span>Off parts with every service</span></div>
+  </div>
+</section>
+
+<!-- ============================== MARQUEE ============================== -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee__track" id="marquee">
+    <span>Vespa</span><i>✕</i><span>Aprilia</span><i>✕</i><span>Moto Guzzi</span><i>✕</i><span>Bajaj</span><i>✕</i><span>KTM</span><i>✕</i><span>Husqvarna</span><i>✕</i><span>Stromer</span><i>✕</i>
+    <span>Vespa</span><i>✕</i><span>Aprilia</span><i>✕</i><span>Moto Guzzi</span><i>✕</i><span>Bajaj</span><i>✕</i><span>KTM</span><i>✕</i><span>Husqvarna</span><i>✕</i><span>Stromer</span><i>✕</i>
+  </div>
+</div>
+
+<!-- ============================== BRANDS ============================== -->
+<section class="sec brands" id="brands" aria-labelledby="brandsTitle">
+  <div class="wrap">
+    <div class="sec__head">
+      <p class="eyebrow">The line-up</p>
+      <h2 id="brandsTitle" class="sec__title reveal">Pick your <em>tribe.</em></h2>
+      <p class="sec__lede reveal">Every brand here comes through ANB as the official channel, with manufacturer warranty, genuine parts and trained technicians.</p>
+    </div>
+    <ul class="brandgrid" role="list">
+      <li class="brand reveal" style="--b:#00A3AD"><span class="brand__no">01</span><h3>Vespa</h3><p>The Italian icon since 1946. GTS, Primavera, Sprint, 946.</p></li>
+      <li class="brand reveal" style="--b:#E10A2A"><span class="brand__no">02</span><h3>Aprilia</h3><p>Racing DNA for daily riding. SR 150 and the new SR GT 200.</p></li>
+      <li class="brand reveal" style="--b:#B8964F"><span class="brand__no">03</span><h3>Moto Guzzi</h3><p>Built in Mandello del Lario since 1921.</p></li>
+      <li class="brand reveal" style="--b:#1F6FEB"><span class="brand__no">04</span><h3>Bajaj</h3><p>Dominar, Pulsar, Boxer and the RE three-wheeler.</p></li>
+      <li class="brand reveal" style="--b:#FF6A13"><span class="brand__no">05</span><h3>KTM</h3><p>Ready to race. Duke, Adventure and SX motocross.</p></li>
+      <li class="brand reveal" style="--b:#4F6FA8"><span class="brand__no">06</span><h3>Husqvarna</h3><p>Pioneering motorcycles since 1903.</p></li>
+      <li class="brand reveal" style="--b:#E8452C"><span class="brand__no">07</span><h3>Stromer</h3><p>Swiss speed pedelecs for the city commute.</p></li>
+      <li class="brand brand--cta reveal"><h3>Not sure?</h3><p>Tell us how you ride and we'll match you to a bike.</p><a class="btn btn--red btn--sm" data-wa="Hi ANB, help me choose a bike. I mostly ride: " href="https://wa.me/96170500100">Ask an advisor</a></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============================== MODELS ============================== -->
+<section class="models" id="models" aria-labelledby="modelsTitle">
+  <div class="models__pin">
+    <div class="wrap models__head">
+      <div>
+        <p class="eyebrow">Showroom floor</p>
+        <h2 id="modelsTitle" class="sec__title">On the <em>floor</em> now.</h2>
+      </div>
+      <div class="chips" role="group" aria-label="Filter by brand">
+        <button class="chip is-on" data-filter="all" aria-pressed="true">All</button>
+        <button class="chip" data-filter="aprilia" aria-pressed="false">Aprilia</button>
+        <button class="chip" data-filter="vespa" aria-pressed="false">Vespa</button>
+        <button class="chip" data-filter="ktm" aria-pressed="false">KTM</button>
+        <button class="chip" data-filter="bajaj" aria-pressed="false">Bajaj</button>
+      </div>
+    </div>
+
+    <div class="rail" id="rail">
+      <div class="rail__track" id="railTrack">
+        <article class="bike" data-brand="aprilia">
+          <div class="bike__img"><img src="img/g-srgt-side.webp" alt="Aprilia SR 150 2026 side view" width="304" height="348" loading="lazy"></div>
+          <div class="bike__body">
+            <span class="tag" style="--b:#E10A2A">Aprilia</span>
+            <h3>SR 150 2026</h3>
+            <p>Sporty edge, daily reliability. 2-year manufacturer warranty, unlimited mileage.</p>
+            <div class="bike__foot"><span class="price">$1,499<small>incl. VAT</small></span><a class="btn btn--line btn--sm" data-wa="Hi ANB, I'm interested in the Aprilia SR 150 2026 ($1,499)." href="https://wa.me/96170500100">Reserve</a></div>
+          </div>
+        </article>
+        <article class="bike" data-brand="aprilia">
+          <div class="bike__img"><img src="img/g-srgt-red.webp" alt="Aprilia SR GT 200 in black and red" width="304" height="348" loading="lazy"></div>
+          <div class="bike__body">
+            <span class="tag" style="--b:#E10A2A">Aprilia</span>
+            <h3>SR GT 200</h3>
+            <p>Adventure-styled scooter with ABS, full LED, TFT dash and 14" wheels. Trade-in welcome.</p>
+            <div class="bike__foot"><span class="price price--ask">Free registration</span><a class="btn btn--line btn--sm" data-wa="Hi ANB, I'd like the price of the Aprilia SR GT 200." href="https://wa.me/96170500100">Get price</a></div>
+          </div>
+        </article>
+        <article class="bike" data-brand="vespa">
+          <div class="bike__img"><img src="img/g-vespa-gts.webp" alt="Vespa GTS with windscreen and rack" width="306" height="406" loading="lazy"></div>
+          <div class="bike__body">
+            <span class="tag" style="--b:#00A3AD">Vespa</span>
+            <h3>GTS 310</h3>
+            <p>Super, Supersport and Supertech. The fastest Vespa, with accessories bundles.</p>
+            <div class="bike__foot"><span class="price price--ask">Ask for price</span><a class="btn btn--line btn--sm" data-wa="Hi ANB, I'd like the price of the Vespa GTS 310." href="https://wa.me/96170500100">Get price</a></div>
+          </div>
+        </article>
+        <article class="bike" data-brand="vespa">
+          <div class="bike__img"><img src="img/g-vespa-946.webp" alt="White Vespa 946 on a Beirut street" width="305" height="388" loading="lazy"></div>
+          <div class="bike__body">
+            <span class="tag" style="--b:#00A3AD">Vespa</span>
+            <h3>946</h3>
+            <p>A heritage of Italian craftsmanship. The collector's Vespa.</p>
+            <div class="bike__foot"><span class="price price--ask">Ask for price</span><a class="btn btn--line btn--sm" data-wa="Hi ANB, I'd like information about the Vespa 946." href="https://wa.me/96170500100">Get price</a></div>
+          </div>
+        </article>
+        <article class="bike" data-brand="vespa">
+          <div class="bike__img"><img src="img/g-vespa-green.webp" alt="Mint green Vespa Primavera by a pool" width="306" height="406" loading="lazy"></div>
+          <div class="bike__body">
+            <span class="tag" style="--b:#00A3AD">Vespa</span>
+            <h3>Primavera</h3>
+            <p>Light, nimble and made for the city. Ask about matte and new colours.</p>
+            <div class="bike__foot"><span class="price price--ask">Ask for price</span><a class="btn btn--line btn--sm" data-wa="Hi ANB, I'd like the price of the Vespa Primavera." href="https://wa.me/96170500100">Get price</a></div>
+          </div>
+        </article>
+        <article class="bike" data-brand="ktm">
+          <div class="bike__img"><img src="img/duke390.webp" alt="KTM 390 Duke in orange and black" width="923" height="1355" loading="lazy"></div>
+          <div class="bike__body">
+            <span class="tag" style="--b:#FF6A13">KTM</span>
+            <h3>390 Duke</h3>
+            <p>The corner rocket. Light chassis, sharp LED face, serious attitude.</p>
+            <div class="bike__foot"><span class="price price--ask">Ask for price</span><a class="btn btn--line btn--sm" data-wa="Hi ANB, I'd like the price of the KTM 390 Duke." href="https://wa.me/96170500100">Get price</a></div>
+          </div>
+        </article>
+        <article class="bike" data-brand="ktm">
+          <div class="bike__img"><img src="img/g-ktm790r.webp" alt="Pre-owned KTM 790 Adventure R 2019" width="305" height="343" loading="lazy"></div>
+          <div class="bike__body">
+            <span class="tag" style="--b:#FF6A13">KTM · Pre-owned</span>
+            <h3>790 Adventure R</h3>
+            <p>2019, checked by our workshop. Rally-bred and ready for the trail.</p>
+            <div class="bike__foot"><span class="price price--ask">Pre-owned</span><a class="btn btn--line btn--sm" data-wa="Hi ANB, is the pre-owned KTM 790 Adventure R 2019 still available?" href="https://wa.me/96170500100">Check</a></div>
+          </div>
+        </article>
+        <article class="bike" data-brand="ktm">
+          <div class="bike__img"><img src="img/g-ktm-sx.webp" alt="KTM SX motocross bike with number 2" width="305" height="348" loading="lazy"></div>
+          <div class="bike__body">
+            <span class="tag" style="--b:#FF6A13">KTM</span>
+            <h3>SX Motocross</h3>
+            <p>Track-ready dirt bikes, plus the full Acerbis motocross kit to match.</p>
+            <div class="bike__foot"><span class="price price--ask">Ask for price</span><a class="btn btn--line btn--sm" data-wa="Hi ANB, I'd like information about KTM SX motocross bikes." href="https://wa.me/96170500100">Get price</a></div>
+          </div>
+        </article>
+        <article class="bike" data-brand="bajaj">
+          <div class="bike__img"><img src="img/g-dominar-moto.webp" alt="Bajaj Dominar with luggage at speed" width="304" height="406" loading="lazy"></div>
+          <div class="bike__body">
+            <span class="tag" style="--b:#1F6FEB">Bajaj</span>
+            <h3>Dominar</h3>
+            <p>Long-distance tourer. 1-year warranty and 1-year free maintenance up to 7,000 km.</p>
+            <div class="bike__foot"><span class="price price--ask">Ask for price</span><a class="btn btn--line btn--sm" data-wa="Hi ANB, I'd like the price of the Bajaj Dominar." href="https://wa.me/96170500100">Get price</a></div>
+          </div>
+        </article>
+        <article class="bike" data-brand="bajaj">
+          <div class="bike__img"><img src="img/g-pulsar-trees.webp" alt="Bajaj Pulsar parked among pine trees" width="304" height="406" loading="lazy"></div>
+          <div class="bike__body">
+            <span class="tag" style="--b:#1F6FEB">Bajaj</span>
+            <h3>Pulsar N160 · NS200</h3>
+            <p>Street naked with punch. Same warranty and free-maintenance offer.</p>
+            <div class="bike__foot"><span class="price price--ask">Ask for price</span><a class="btn btn--line btn--sm" data-wa="Hi ANB, I'd like the price of the Bajaj Pulsar N160 / NS200." href="https://wa.me/96170500100">Get price</a></div>
+          </div>
+        </article>
+        <article class="bike" data-brand="bajaj">
+          <div class="bike__img"><img src="img/bajaj-boxer.webp" alt="White Bajaj Boxer 150 by the sea" width="923" height="940" loading="lazy"></div>
+          <div class="bike__body">
+            <span class="tag" style="--b:#1F6FEB">Bajaj</span>
+            <h3>Boxer 150</h3>
+            <p>150 cc workhorse. Rack, crash bars, low running costs.</p>
+            <div class="bike__foot"><span class="price price--ask">Ask for price</span><a class="btn btn--line btn--sm" data-wa="Hi ANB, I'd like the price of the Bajaj Boxer 150." href="https://wa.me/96170500100">Get price</a></div>
+          </div>
+        </article>
+        <article class="bike" data-brand="bajaj">
+          <div class="bike__img"><img src="img/g-tuktuk.webp" alt="Red Bajaj RE three-wheeler by the sea" width="304" height="348" loading="lazy"></div>
+          <div class="bike__body">
+            <span class="tag" style="--b:#1F6FEB">Bajaj</span>
+            <h3>RE Three-wheeler</h3>
+            <p>A business on three wheels. In red and yellow, parts in stock.</p>
+            <div class="bike__foot"><span class="price price--ask">Ask for price</span><a class="btn btn--line btn--sm" data-wa="Hi ANB, I'd like the price of the Bajaj RE three-wheeler." href="https://wa.me/96170500100">Get price</a></div>
+          </div>
+        </article>
+        <div class="bike bike--end">
+          <p class="bike__endtitle">Can't see<br>your bike?</p>
+          <p>Moto Guzzi, Husqvarna, Stromer and more arrive regularly.</p>
+          <a class="btn btn--red magnetic" data-wa="Hi ANB, I'm looking for a specific model: " href="https://wa.me/96170500100">Ask what's in stock</a>
+        </div>
+      </div>
+    </div>
+    <div class="wrap rail__progress" aria-hidden="true"><i id="railBar"></i></div>
+  </div>
+</section>
+
+<!-- ============================== OFFERS ============================== -->
+<section class="sec offers" id="offers" aria-labelledby="offersTitle">
+  <div class="offers__stripe" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="sec__head">
+      <p class="eyebrow">Pit board</p>
+      <h2 id="offersTitle" class="sec__title reveal">Offers on <em>now.</em></h2>
+    </div>
+    <div class="offergrid">
+      <article class="offer offer--hero reveal">
+        <img src="img/g-sr150-warehouse.webp" alt="Aprilia SR 150 2026 poster: daily reliability with a sporty edge" width="305" height="407" loading="lazy">
+        <div class="offer__body">
+          <span class="offer__kicker">Aprilia SR 150 2026</span>
+          <p class="offer__big">$1,499</p>
+          <p>Including VAT. Strong performance, solid reliability, 2-year warranty.</p>
+          <a class="btn btn--red btn--sm" data-wa="Hi ANB, I want the Aprilia SR 150 2026 at $1,499." href="https://wa.me/96170500100">Get yours</a>
+        </div>
+      </article>
+      <article class="offer reveal">
+        <span class="offer__kicker">Aprilia SR GT 200</span>
+        <p class="offer__mid">Take the ride.<br>Get the package.</p>
+        <ul class="ticks"><li>Phone holder</li><li>Cover</li><li>Disc lock</li><li>Free maintenance</li><li>Free registration</li></ul>
+      </article>
+      <article class="offer reveal">
+        <span class="offer__kicker">Bajaj Dominar · Pulsar N160 · NS200</span>
+        <p class="offer__mid">1 year warranty<br>+ free maintenance</p>
+        <p>Free maintenance for the first year, up to 7,000 km.</p>
+      </article>
+      <article class="offer offer--red reveal">
+        <span class="offer__kicker">Workshop · Vespa · Aprilia · Bajaj</span>
+        <p class="offer__big">25% off</p>
+        <p>Spare parts with every service, plus special discounted labor rates.</p>
+      </article>
+      <article class="offer reveal">
+        <span class="offer__kicker">Trade-in</span>
+        <p class="offer__mid">Bring your bike.<br>Ride out on a new one.</p>
+        <p>Trade-in is available on the SR GT 200. We value your bike in the shop.</p>
+      </article>
+    </div>
+    <p class="fine">Offers run for limited periods. Confirm availability on WhatsApp before you visit.</p>
+  </div>
+</section>
+
+<!-- ============================== GEAR ============================== -->
+<section class="sec gear" id="gear" aria-labelledby="gearTitle">
+  <div class="wrap">
+    <div class="sec__head sec__head--row">
+      <div>
+        <p class="eyebrow">Gear wall</p>
+        <h2 id="gearTitle" class="sec__title reveal">Suit up <em>properly.</em></h2>
+      </div>
+      <ul class="gearbrands" role="list" aria-label="Gear brands">
+        <li>Acerbis</li><li>Shoei</li><li>Shark</li><li>Oxford</li>
+      </ul>
+    </div>
+    <div class="bento">
+      <a class="tile tile--xl tilt" href="https://wa.me/96170500100" data-wa="Hi ANB, I'm looking for a helmet. My size is: ">
+        <img src="img/shoei-blue.webp" alt="Blue and white Shoei premium helmet" width="923" height="1506" loading="lazy">
+        <span class="tile__cap"><b>Helmets</b><i>Shoei · Shark · Acerbis. ECE 22.06, every size fitted in store.</i></span>
+      </a>
+      <a class="tile tilt" href="https://wa.me/96170500100" data-wa="Hi ANB, I'm interested in riding jackets.">
+        <img src="img/jackets-four.webp" alt="Acerbis riding jackets in white, black and grey" width="862" height="2090" loading="lazy">
+        <span class="tile__cap"><b>Jackets</b><i>Summer mesh and all-season Acerbis.</i></span>
+      </a>
+      <a class="tile tilt" href="https://wa.me/96170500100" data-wa="Hi ANB, I'm interested in the motocross collection.">
+        <img src="img/mx-wall.webp" alt="Acerbis motocross jerseys, pants and boots on the orange wall" width="923" height="1226" loading="lazy">
+        <span class="tile__cap"><b>Motocross</b><i>Jerseys, pants, boots, helmets.</i></span>
+      </a>
+      <a class="tile tilt" href="https://wa.me/96170500100" data-wa="Hi ANB, I'm interested in riding shoes and boots.">
+        <img src="img/acerbis-waterproof.webp" alt="Black waterproof Acerbis riding shoe" width="862" height="1430" loading="lazy">
+        <span class="tile__cap"><b>Boots &amp; shoes</b><i>Waterproof, off-road and street.</i></span>
+      </a>
+      <a class="tile tilt" href="https://wa.me/96170500100" data-wa="Hi ANB, I'm interested in an Oxford alarm disc lock.">
+        <img src="img/disc-locks.webp" alt="Oxford Quartz alarm disc locks" width="923" height="894" loading="lazy">
+        <span class="tile__cap"><b>Security</b><i>Oxford alarm disc locks and chains.</i></span>
+      </a>
+      <a class="tile tilt" href="https://wa.me/96170500100" data-wa="Hi ANB, I'm interested in a top box.">
+        <img src="img/topbox-alu.webp" alt="Black aluminium top box" width="923" height="1555" loading="lazy">
+        <span class="tile__cap"><b>Luggage</b><i>Plastic and aluminium top boxes.</i></span>
+      </a>
+      <a class="tile tilt" href="https://wa.me/96170500100" data-wa="Hi ANB, I'm interested in the Oximiser, Microjet and cleaning kit.">
+        <img src="img/oximiser.webp" alt="Oxford Oximiser 900 battery charger" width="923" height="1328" loading="lazy">
+        <span class="tile__cap"><b>Bike care</b><i>Oximiser 900, Microjet inflator, brushes.</i></span>
+      </a>
+      <a class="tile tile--price tilt" href="https://wa.me/96170500100" data-wa="Hi ANB, I'd like the $7 Vespa pouch.">
+        <img src="img/vespa-pouch.webp" alt="Vespa leg-shield pouches in black, grey and brown" width="862" height="1902" loading="lazy">
+        <span class="tile__badge">$7</span>
+        <span class="tile__cap"><b>Vespa pouch</b><i>Black, grey or brown.</i></span>
+      </a>
+      <a class="tile tilt" href="https://wa.me/96170500100" data-wa="Hi ANB, I'm interested in gloves and balaclavas.">
+        <img src="img/gloves.webp" alt="Black Oxford leather riding gloves with carbon knuckles" width="923" height="1405" loading="lazy">
+        <span class="tile__cap"><b>Gloves &amp; layers</b><i>Carbon knuckle gloves, Coolmax balaclavas.</i></span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============================== SERVICE ============================== -->
+<section class="sec service" id="service" aria-labelledby="serviceTitle">
+  <div class="wrap service__grid">
+    <div class="tacho" aria-hidden="true">
+      <svg viewBox="0 0 320 320" class="tacho__svg">
+        <defs>
+          <linearGradient id="arcGrad" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#FF6A13"/><stop offset="1" stop-color="#E10A2A"/></linearGradient>
+        </defs>
+        <circle cx="160" cy="160" r="150" class="tacho__ring"/>
+        <path class="tacho__track" d="M54.0 266.0 A150 150 0 1 1 266.0 266.0"/>
+        <path class="tacho__fill" id="tachoFill" d="M54.0 266.0 A150 150 0 1 1 266.0 266.0" pathLength="100"/>
+        <path class="tacho__red" d="M269.0 114.8 A118 118 0 0 1 243.4 243.4"/>
+        <g id="tachoTicks"></g>
+        <g id="tachoNeedle" class="tacho__needle"><path d="M160 160 L160 40" /><circle cx="160" cy="160" r="12"/></g>
+      </svg>
+      <div class="tacho__read"><b id="tachoNum">0</b><span>x1000 r/min</span></div>
+    </div>
+    <div class="service__copy">
+      <p class="eyebrow">ANB Service Center</p>
+      <h2 id="serviceTitle" class="sec__title reveal">Kept at <em>redline</em> condition.</h2>
+      <p class="sec__lede reveal">Factory-trained technicians and a warehouse of genuine parts for every brand we sell. Book a slot, drop the bike, ride out right.</p>
+      <ul class="svc" role="list">
+        <li class="reveal"><b>Free inspection</b><span>A full check-up before any work starts.</span></li>
+        <li class="reveal"><b>Genuine parts</b><span>Stocked locally for Vespa, Aprilia, Bajaj and KTM.</span></li>
+        <li class="reveal"><b>25% off parts</b><span>With every workshop service, limited time.</span></li>
+        <li class="reveal"><b>Discounted labor</b><span>Special rates while the offer runs.</span></li>
+      </ul>
+      <div class="service__cta">
+        <a class="btn btn--red magnetic" data-wa="Hi ANB Service Center, I'd like to book an appointment for my bike: " href="https://wa.me/96170500100">Book a service</a>
+        <span class="phone">Service line <b>79 111 423</b></span>
+      </div>
+    </div>
+  </div>
+  <div class="wrap service__pics">
+    <figure class="reveal"><img src="img/ktm-sx-service.webp" alt="KTM motocross bike on the stand at the ANB Service Center" width="710" height="1170" loading="lazy"></figure>
+    <figure class="reveal"><img src="img/g-parts.webp" alt="Shelves of genuine parts boxes in the ANB warehouse" width="306" height="348" loading="lazy"></figure>
+    <figure class="reveal"><img src="img/oxford-wall.webp" alt="Wall of Oxford accessories in the showroom" width="862" height="1405" loading="lazy"></figure>
+  </div>
+</section>
+
+<!-- ============================== FEED ============================== -->
+<section class="feed" aria-labelledby="feedTitle">
+  <div class="wrap feed__head">
+    <h2 id="feedTitle" class="sec__title">#WeRide<em>ANB</em></h2>
+    <a class="btn btn--ghost btn--sm" href="https://www.instagram.com/anbmotorcycles/" target="_blank" rel="noopener"><svg aria-hidden="true" viewBox="0 0 24 24"><use href="#i-ig"/></svg>@anbmotorcycles</a>
+  </div>
+  <div class="feed__row" data-dir="1">
+    <div class="feed__track">
+      <img src="img/g-two-bikes.webp" alt="" width="304" height="502" loading="lazy">
+      <img src="img/g-vespa-beach.webp" alt="" width="305" height="519" loading="lazy">
+      <img src="img/g-srgt-summer.webp" alt="" width="304" height="519" loading="lazy">
+      <img src="img/g-vespa-camp.webp" alt="" width="305" height="451" loading="lazy">
+      <img src="img/g-ktm1290.webp" alt="" width="305" height="519" loading="lazy">
+      <img src="img/g-vespa-girl.webp" alt="" width="304" height="438" loading="lazy">
+      <img src="img/g-rider-trees.webp" alt="" width="305" height="502" loading="lazy">
+      <img src="img/g-sr150-perf.webp" alt="" width="305" height="519" loading="lazy">
+    </div>
+  </div>
+  <div class="feed__row" data-dir="-1">
+    <div class="feed__track">
+      <img src="img/g-vespa-yellow.webp" alt="" width="304" height="519" loading="lazy">
+      <img src="img/shoei-four.webp" alt="" width="862" height="1906" loading="lazy">
+      <img src="img/g-vespa-streets.webp" alt="" width="305" height="521" loading="lazy">
+      <img src="img/mx-jerseys.webp" alt="" width="862" height="1906" loading="lazy">
+      <img src="img/g-srgt-poster.webp" alt="" width="304" height="492" loading="lazy">
+      <img src="img/bajaj-re.webp" alt="" width="923" height="1839" loading="lazy">
+      <img src="img/g-acerbis-jersey.webp" alt="" width="249" height="502" loading="lazy">
+      <img src="img/g-vespa-sept.webp" alt="" width="306" height="519" loading="lazy">
+    </div>
+  </div>
+</section>
+
+<!-- ============================== VISIT ============================== -->
+<section class="sec visit" id="visit" aria-labelledby="visitTitle">
+  <div class="wrap visit__grid">
+    <div>
+      <p class="eyebrow">Showroom &amp; workshop</p>
+      <h2 id="visitTitle" class="sec__title reveal">Come ride <em>one.</em></h2>
+      <address class="addr reveal">
+        Rue Pierre Amine Al Jmayel<br>Jdeideh, Mount Lebanon
+      </address>
+      <a class="btn btn--line" href="https://www.google.com/maps/search/?api=1&amp;query=ANB+Motorcycles+Jdeideh+Lebanon" target="_blank" rel="noopener"><svg aria-hidden="true" viewBox="0 0 24 24"><use href="#i-pin"/></svg>Open in Google Maps</a>
+    </div>
+    <ul class="lines" role="list">
+      <li class="reveal">
+        <span class="lines__k">WhatsApp</span>
+        <a class="lines__v" data-wa="Hi ANB Motorcycles!" href="https://wa.me/96170500100">+961 70 500 100</a>
+        <button class="copy" data-copy="+96170500100" aria-label="Copy WhatsApp number">Copy</button>
+      </li>
+      <li class="reveal">
+        <span class="lines__k">Sales</span>
+        <a class="lines__v" href="tel:+96179300326">79 300 326</a>
+        <button class="copy" data-copy="+96179300326" aria-label="Copy sales number">Copy</button>
+      </li>
+      <li class="reveal">
+        <span class="lines__k">Service</span>
+        <a class="lines__v" href="tel:+96179111423">79 111 423</a>
+        <button class="copy" data-copy="+96179111423" aria-label="Copy service number">Copy</button>
+      </li>
+      <li class="reveal">
+        <span class="lines__k">Instagram</span>
+        <a class="lines__v" href="https://www.instagram.com/anbmotorcycles/" target="_blank" rel="noopener">@anbmotorcycles</a>
+      </li>
+    </ul>
+  </div>
+  <figure class="visit__photo wrap reveal">
+    <img src="img/showroom-jets.webp" alt="Inside the ANB showroom: helmet wall and Acerbis jet helmets" width="923" height="882" loading="lazy">
+  </figure>
+</section>
+
+</main>
+
+<!-- ============================== FOOTER ============================== -->
+<footer class="foot">
+  <div class="wrap foot__inner">
+    <p class="foot__script" aria-hidden="true">AnB Motorcycles</p>
+    <div class="foot__row">
+      <p>Exclusive distributor of Vespa, Aprilia, Moto Guzzi, Bajaj, KTM, Husqvarna &amp; Stromer in Lebanon.</p>
+      <p>© <span id="year">2026</span> ANB Motorcycles · A.N. Boukather</p>
+    </div>
+  </div>
+</footer>
+
+<a class="fab" data-wa="Hi ANB Motorcycles!" href="https://wa.me/96170500100" aria-label="Chat on WhatsApp"><svg aria-hidden="true" viewBox="0 0 24 24"><use href="#i-wa"/></svg></a>
+
+<!-- icons -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-wa" viewBox="0 0 24 24"><path fill="currentColor" d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21c5.46 0 9.91-4.45 9.91-9.91S17.5 2 12.04 2Zm0 18.15a8.2 8.2 0 0 1-4.19-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.23 8.23 0 0 1 6.98-12.6 8.24 8.24 0 0 1 0 16.46Zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.24-.64.8-.78.97-.15.16-.29.18-.54.06-.25-.13-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.01-.38.11-.5.11-.11.25-.29.37-.43.13-.15.17-.25.25-.42.08-.16.04-.3-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.43h-.48a.92.92 0 0 0-.67.31c-.23.25-.87.85-.87 2.07s.89 2.4 1.02 2.57c.12.16 1.75 2.67 4.24 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.15-1.18-.06-.1-.23-.16-.48-.29Z"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="square" d="M4 12h15M13 5l7 7-7 7"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" d="M12 21s-7-6.1-7-11.5A7 7 0 0 1 19 9.5C19 14.9 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5" fill="none" stroke="currentColor" stroke-width="2"/></symbol>
+  <symbol id="i-ig" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.2" fill="currentColor"/></symbol>
+</svg>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
