@@ -1,0 +1,10 @@
+# ANB Motorcycles: static site, nothing to build.
+# In Netlify set Base directory = anb-motorcycles.
+[build]
+  command = ""
+  publish = "."
+
+[[headers]]
+  for = "/img/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
