@@ -1,10 +1,6 @@
-# Static site — no build step. Command is set explicitly so any
-# build command left in the Netlify UI is overridden.
+# The site lives in hadi-sport/. This works whether the Netlify UI
+# Base directory is empty or set to "hadi-sport".
 [build]
+  base = "hadi-sport"
   command = "echo 'Static site, nothing to build'"
   publish = "."
-
-[[headers]]
-  for = "/assets/*"
-  [headers.values]
-    Cache-Control = "public, max-age=604800"
