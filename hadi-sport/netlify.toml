@@ -1,5 +1,7 @@
-# Static site — set "Base directory" to hadi-sport in Netlify.
+# Static site — no build step. Command is set explicitly so any
+# build command left in the Netlify UI is overridden.
 [build]
+  command = "echo 'Static site, nothing to build'"
   publish = "."
 
 [[headers]]
