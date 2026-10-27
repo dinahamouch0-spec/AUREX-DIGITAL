@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hadi Sport — Football Boots, Player Version Jerseys &amp; Pro Gear | Lebanon</title>
+<meta name="description" content="Hadi Sport — football boots, player version and fan version jerseys, goalkeeper gloves, shin guards, grip socks, headbands and balls. Delivery all over Lebanon. Order on WhatsApp.">
+<meta name="theme-color" content="#05060a">
+<meta property="og:title" content="Hadi Sport — Wear the Game">
+<meta property="og:description" content="Football boots, player & fan version kits and pro gear. Delivery all over Lebanon.">
+<meta property="og:image" content="assets/img/bg/hero.webp">
+<link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Saira:ital,wdth,wght@0,100..125,300..900;1,100..125,300..900&family=Inter:wght@400;500;600;700&family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="assets/img/bg/hero.webp">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="is-loading">
+
+<!-- ================= LOADER ================= -->
+<div class="loader" id="loader" aria-hidden="true">
+  <div class="loader__panel loader__panel--a"></div>
+  <div class="loader__panel loader__panel--b"></div>
+  <div class="loader__inner">
+    <svg class="loader__mark" viewBox="0 0 680 392" aria-hidden="true">
+      <g transform="skewX(-26.565)">
+        <path class="lp lp1" d="M210 0H365V130H210Z"/>
+        <path class="lp lp2" d="M505 0H665V195H440V133H505Z"/>
+        <path class="lp lp3" d="M210 201H430V262H365V392H210Z"/>
+        <path class="lp lp4" d="M470 268H650V392H470Z"/>
+      </g>
+    </svg>
+    <div class="loader__word"><span>H</span><span>A</span><span>D</span><span>I</span><span class="sp"></span><span class="g">S</span><span class="g">P</span><span class="g">O</span><span class="g">R</span><span class="g">T</span></div>
+    <div class="loader__bar"><i id="loaderBar"></i></div>
+    <div class="loader__count"><span id="loaderCount">00</span><small>%</small></div>
+  </div>
+</div>
+
+<div class="progress" id="progress"></div>
+<div class="cursor" id="cursor" aria-hidden="true"></div>
+
+<!-- ================= HEADER ================= -->
+<header class="header" id="header">
+  <div class="container header__row">
+    <a href="#top" class="brand" aria-label="Hadi Sport home">
+      <img src="assets/img/logo-light.webp" alt="Hadi Sport" width="900" height="194">
+    </a>
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="#collection" data-i18n="nav.boots">Boots</a>
+      <a href="#kits" data-i18n="nav.kits">Kits</a>
+      <a href="#goalkeeper" data-i18n="nav.gk">Goalkeeper</a>
+      <a href="#essentials" data-i18n="nav.acc">Essentials</a>
+      <a href="#store" data-i18n="nav.store">The Store</a>
+    </nav>
+    <div class="header__actions">
+      <button class="lang" id="langBtn" type="button" aria-label="Switch language"><span data-lang-label>عربي</span></button>
+      <a class="btn btn--blue btn--sm magnetic" data-wa href="#" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-wa"/></svg><span data-i18n="cta.order">Order Now</span>
+      </a>
+      <button class="burger" id="burger" type="button" aria-label="Menu" aria-expanded="false"><i></i><i></i></button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- ================= HERO ================= -->
+<section class="hero">
+  <div class="hero__bg" data-parallax="0.25"><img src="assets/img/bg/hero.webp" alt="" fetchpriority="high"></div>
+  <div class="hero__shade"></div>
+  <div class="hero__grid"></div>
+  <div class="container hero__row">
+    <div class="hero__copy">
+      <p class="eyebrow reveal"><i class="dot"></i><span data-i18n="hero.eyebrow">Delivery all over Lebanon</span></p>
+      <h1 class="hero__title">
+        <span class="line"><span class="reveal-up" data-i18n="hero.t1">Wear the</span> <span class="reveal-up grad" data-i18n="hero.t2">game.</span></span>
+        <span class="line line--outline"><span class="reveal-up" data-i18n="hero.t3">Own the pitch.</span></span>
+      </h1>
+      <p class="hero__lead reveal" data-i18n="hero.lead">Elite football boots, player &amp; fan version kits and pro goalkeeper gear — hand-picked, photographed for real, and delivered to your door.</p>
+      <div class="hero__cta reveal">
+        <a href="#collection" class="btn btn--blue btn--lg magnetic"><span data-i18n="hero.cta1">Explore the collection</span><svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></a>
+        <a href="#" data-wa class="btn btn--ghost btn--lg magnetic" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><use href="#i-wa"/></svg><span data-i18n="hero.cta2">WhatsApp us</span></a>
+      </div>
+      <dl class="stats reveal">
+        <div><dt><span class="count" data-to="400">0</span>+</dt><dd data-i18n="stat.drops">Drops posted</dd></div>
+        <div><dt><span class="count" data-to="2600">0</span>+</dt><dd data-i18n="stat.fans">Players follow us</dd></div>
+        <div><dt>100<small>%</small></dt><dd data-i18n="stat.real">Real photos</dd></div>
+      </dl>
+    </div>
+
+    <div class="hero__visual reveal" id="heroVisual">
+      <svg class="hmark" viewBox="0 0 680 392" aria-hidden="true">
+        <defs>
+          <clipPath id="c1"><path transform="skewX(-26.565)" d="M210 0H365V130H210Z"/></clipPath>
+          <clipPath id="c2"><path transform="skewX(-26.565)" d="M505 0H665V195H440V133H505Z"/></clipPath>
+          <clipPath id="c3"><path transform="skewX(-26.565)" d="M210 201H430V262H365V392H210Z"/></clipPath>
+          <clipPath id="c4"><path transform="skewX(-26.565)" d="M470 268H650V392H470Z"/></clipPath>
+          <linearGradient id="hg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2d50ff" stop-opacity=".0"/><stop offset="1" stop-color="#2d50ff" stop-opacity=".55"/></linearGradient>
+        </defs>
+        <g class="hp hp1" clip-path="url(#c1)"><image href="assets/img/p/b05.webp" x="130" y="-60" width="250" height="250" preserveAspectRatio="xMidYMid slice"/><rect x="0" y="0" width="680" height="392" fill="url(#hg)"/></g>
+        <g class="hp hp2" clip-path="url(#c2)"><image href="assets/img/p/b01.webp" x="330" y="-40" width="350" height="280" preserveAspectRatio="xMidYMid slice"/><rect x="0" y="0" width="680" height="392" fill="url(#hg)"/></g>
+        <g class="hp hp3" clip-path="url(#c3)"><image href="assets/img/p/j01.webp" x="0" y="170" width="350" height="260" preserveAspectRatio="xMidYMid slice"/><rect x="0" y="0" width="680" height="392" fill="url(#hg)"/></g>
+        <g class="hp hp4" clip-path="url(#c4)"><image href="assets/img/p/g02.webp" x="260" y="230" width="400" height="200" preserveAspectRatio="xMidYMid slice"/><rect x="0" y="0" width="680" height="392" fill="url(#hg)"/></g>
+        <g transform="skewX(-26.565)" class="hmark__lines" fill="none">
+          <path d="M210 0H365V130H210Z"/><path d="M505 0H665V195H440V133H505Z"/><path d="M210 201H430V262H365V392H210Z"/><path d="M470 268H650V392H470Z"/>
+        </g>
+      </svg>
+      <div class="chip chip--a"><i class="dot"></i><span data-i18n="chip.real">All pics are real</span></div>
+      <div class="chip chip--b"><svg viewBox="0 0 24 24"><use href="#i-truck"/></svg><span data-i18n="chip.delivery">Lebanon-wide delivery</span></div>
+    </div>
+  </div>
+  <a href="#categories" class="scroll-cue" aria-label="Scroll"><span></span></a>
+</section>
+
+<!-- marquee -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee__track">
+    <span>Football Boots</span><b>/</b><span>Player Version</span><b>/</b><span>Fan Version</span><b>/</b><span>Goalkeeper Gloves</span><b>/</b><span>Grip Socks</span><b>/</b><span>Shin Guards</span><b>/</b><span>Headbands</span><b>/</b><span>Match Balls</span><b>/</b>
+    <span>Football Boots</span><b>/</b><span>Player Version</span><b>/</b><span>Fan Version</span><b>/</b><span>Goalkeeper Gloves</span><b>/</b><span>Grip Socks</span><b>/</b><span>Shin Guards</span><b>/</b><span>Headbands</span><b>/</b><span>Match Balls</span><b>/</b>
+  </div>
+</div>
+
+<!-- ================= CATEGORIES ================= -->
+<section class="section" id="categories">
+  <div class="container">
+    <div class="head">
+      <p class="kicker reveal">01 — <span data-i18n="cat.kicker">Shop by category</span></p>
+      <h2 class="h2 reveal" data-i18n-html="cat.title">Everything you need<br><em>from kick-off to final whistle.</em></h2>
+    </div>
+    <div class="bento">
+      <a class="tile tile--xl reveal" href="#collection" data-goto="boots">
+        <img src="assets/img/p/b07.webp" alt="" loading="lazy">
+        <div class="tile__body"><span class="tile__n">01</span><h3 data-i18n="c.boots">Football Boots</h3><p data-i18n="c.boots.d">FG · AG · TF — speed, control &amp; touch</p></div><span class="tile__go"><svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></span>
+      </a>
+      <a class="tile tile--tall reveal" href="#collection" data-goto="player">
+        <img src="assets/img/p/j01.webp" alt="" loading="lazy">
+        <div class="tile__body"><span class="tile__n">02</span><h3 data-i18n="c.player">Player Version</h3><p data-i18n="c.player.d">Slim fit · match-day tech</p></div><span class="tile__go"><svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></span>
+      </a>
+      <a class="tile reveal" href="#collection" data-goto="fan">
+        <img src="assets/img/p/f02.webp" alt="" loading="lazy">
+        <div class="tile__body"><span class="tile__n">03</span><h3 data-i18n="c.fan">Fan Version</h3></div><span class="tile__go"><svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></span>
+      </a>
+      <a class="tile reveal" href="#collection" data-goto="gk">
+        <img src="assets/img/p/g01.webp" alt="" loading="lazy">
+        <div class="tile__body"><span class="tile__n">04</span><h3 data-i18n="c.gk">Goalkeeper Gloves</h3></div><span class="tile__go"><svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></span>
+      </a>
+      <a class="tile reveal" href="#collection" data-goto="acc" data-sub="socks">
+        <img src="assets/img/p/k01.webp" alt="" loading="lazy">
+        <div class="tile__body"><span class="tile__n">05</span><h3 data-i18n="c.socks">Grip Socks</h3></div><span class="tile__go"><svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></span>
+      </a>
+      <a class="tile reveal" href="#collection" data-goto="acc" data-sub="shin">
+        <img src="assets/img/p/s01.webp" alt="" loading="lazy">
+        <div class="tile__body"><span class="tile__n">06</span><h3 data-i18n="c.shin">Shin Guards</h3></div><span class="tile__go"><svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></span>
+      </a>
+      <a class="tile reveal" href="#collection" data-goto="acc" data-sub="head">
+        <img src="assets/img/p/h01.webp" alt="" loading="lazy">
+        <div class="tile__body"><span class="tile__n">07</span><h3 data-i18n="c.head">Headbands</h3></div><span class="tile__go"><svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></span>
+      </a>
+      <a class="tile reveal" href="#collection" data-goto="acc" data-sub="ball">
+        <img src="assets/img/p/l03.webp" alt="" loading="lazy">
+        <div class="tile__body"><span class="tile__n">08</span><h3 data-i18n="c.ball">Match Balls</h3></div><span class="tile__go"><svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= COLLECTION ================= -->
+<section class="section section--dark" id="collection">
+  <div class="glow glow--l"></div>
+  <div class="container">
+    <div class="head head--split">
+      <div>
+        <p class="kicker reveal">02 — <span data-i18n="col.kicker">The collection</span></p>
+        <h2 class="h2 reveal" data-i18n-html="col.title">The wall,<br><em>now online.</em></h2>
+      </div>
+      <p class="head__aside reveal" data-i18n="col.aside">Tap any piece to pick your size and send the order straight to our WhatsApp. New drops land every week.</p>
+    </div>
+
+    <div class="tabs reveal" role="tablist" id="tabs">
+      <button role="tab" class="tab is-active" data-tab="boots" data-i18n="tab.boots">Boots</button>
+      <button role="tab" class="tab" data-tab="player" data-i18n="tab.player">Player Version</button>
+      <button role="tab" class="tab" data-tab="fan" data-i18n="tab.fan">Fan Version</button>
+      <button role="tab" class="tab" data-tab="gk" data-i18n="tab.gk">Goalkeeper</button>
+      <button role="tab" class="tab" data-tab="acc" data-i18n="tab.acc">Essentials</button>
+      <span class="tabs__ink" id="tabInk"></span>
+    </div>
+    <div class="filters" id="filters"></div>
+    <div class="grid" id="grid" aria-live="polite"></div>
+  </div>
+</section>
+
+<!-- ================= KITS ================= -->
+<section class="section" id="kits">
+  <div class="container">
+    <div class="head head--center">
+      <p class="kicker reveal">03 — <span data-i18n="kits.kicker">Kits</span></p>
+      <h2 class="h2 reveal" data-i18n-html="kits.title">Player version or fan version?<br><em>Know the difference.</em></h2>
+    </div>
+    <div class="versus">
+      <article class="vcard reveal" data-tilt>
+        <div class="vcard__img"><img src="assets/img/p/j05.webp" alt="" loading="lazy"></div>
+        <div class="vcard__body">
+          <span class="badge badge--blue" data-i18n="kits.pv">Player Version</span>
+          <h3 data-i18n="kits.pv.t">Built like match-day.</h3>
+          <ul>
+            <li data-i18n="kits.pv.1">Athletic slim fit — cut exactly like the pros wear it</li>
+            <li data-i18n="kits.pv.2">Heat-pressed, lightweight crest &amp; logos</li>
+            <li data-i18n="kits.pv.3">Perforated, ultra-breathable performance fabric</li>
+            <li data-i18n="kits.pv.4">Order one size up if you prefer a relaxed fit</li>
+          </ul>
+          <button class="link" data-goto="player" type="button"><span data-i18n="kits.pv.cta">Shop player version</span><svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></button>
+        </div>
+      </article>
+      <div class="versus__vs" aria-hidden="true">VS</div>
+      <article class="vcard reveal" data-tilt>
+        <div class="vcard__img"><img src="assets/img/p/f01.webp" alt="" loading="lazy"></div>
+        <div class="vcard__body">
+          <span class="badge" data-i18n="kits.fv">Fan Version</span>
+          <h3 data-i18n="kits.fv.t">Made for the stands.</h3>
+          <ul>
+            <li data-i18n="kits.fv.1">Regular, comfortable fit for everyday wear</li>
+            <li data-i18n="kits.fv.2">Embroidered crest — classic and durable</li>
+            <li data-i18n="kits.fv.3">Soft, thicker fabric that lasts season after season</li>
+            <li data-i18n="kits.fv.4">True to size — perfect gift for any fan</li>
+          </ul>
+          <button class="link" data-goto="fan" type="button"><span data-i18n="kits.fv.cta">Shop fan version</span><svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></button>
+        </div>
+      </article>
+    </div>
+    <p class="note reveal" data-i18n="kits.note">Name &amp; number printing available on request — just ask us on WhatsApp.</p>
+  </div>
+</section>
+
+<!-- ================= GOALKEEPER ================= -->
+<section class="gk" id="goalkeeper">
+  <div class="gk__bg" data-parallax="0.18"><img src="assets/img/bg/gk.webp" alt="" loading="lazy"></div>
+  <div class="gk__shade"></div>
+  <div class="container gk__row">
+    <div class="gk__copy">
+      <p class="kicker reveal">04 — <span data-i18n="gk.kicker">Goalkeeper</span></p>
+      <h2 class="h2 reveal" data-i18n-html="gk.title">The last line<br><em>deserves the best grip.</em></h2>
+      <p class="lead reveal" data-i18n="gk.lead">Professional goalkeeper gloves with grippy contact latex, finger protection and pro cuts — for kids, amateurs and seasoned keepers.</p>
+      <ul class="feats reveal">
+        <li><b>PRO</b><span data-i18n="gk.f1">Grip latex</span></li>
+        <li><b>KIDS → PRO</b><span data-i18n="gk.f2">All ages</span></li>
+        <li><b>24/7</b><span data-i18n="gk.f3">Order on WhatsApp</span></li>
+      </ul>
+      <button class="btn btn--blue btn--lg magnetic reveal" data-goto="gk" type="button"><span data-i18n="gk.cta">Shop gloves</span><svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></button>
+    </div>
+    <div class="gk__cards">
+      <figure class="gcard reveal" data-tilt><img src="assets/img/p/g02.webp" alt="Goalkeeper gloves" loading="lazy"></figure>
+      <figure class="gcard gcard--offset reveal" data-tilt><img src="assets/img/p/g03.webp" alt="Goalkeeper gloves in yellow" loading="lazy"></figure>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ESSENTIALS ================= -->
+<section class="section" id="essentials">
+  <div class="container">
+    <div class="head head--split">
+      <div>
+        <p class="kicker reveal">05 — <span data-i18n="ess.kicker">Essentials</span></p>
+        <h2 class="h2 reveal" data-i18n-html="ess.title">The small things<br><em>that win big games.</em></h2>
+      </div>
+      <div class="rail-nav reveal">
+        <button class="round" data-rail="-1" aria-label="Previous"><svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></button>
+        <button class="round" data-rail="1" aria-label="Next"><svg viewBox="0 0 24 24"><use href="#i-arrow"/></svg></button>
+      </div>
+    </div>
+  </div>
+  <div class="rail" id="rail">
+    <article class="ess reveal" data-goto="acc" data-sub="socks"><img src="assets/img/p/k02.webp" alt="" loading="lazy"><div><span>01</span><h3 data-i18n="c.socks">Grip Socks</h3><p data-i18n="ess.socks">Anti-slip pads lock your foot inside the boot. Sharper turns, zero sliding.</p></div></article>
+    <article class="ess reveal" data-goto="acc" data-sub="shin"><img src="assets/img/p/s01.webp" alt="" loading="lazy"><div><span>02</span><h3 data-i18n="c.shin">Shin Guards</h3><p data-i18n="ess.shin">Ultra-light carbon-style shells and slip-in guards with sleeves.</p></div></article>
+    <article class="ess reveal" data-goto="acc" data-sub="head"><img src="assets/img/p/h01.webp" alt="" loading="lazy"><div><span>03</span><h3 data-i18n="c.head">Headbands</h3><p data-i18n="ess.head">Sweat-wicking pro headbands — stay sharp for 90 minutes.</p></div></article>
+    <article class="ess reveal" data-goto="acc" data-sub="ball"><img src="assets/img/p/l01.webp" alt="" loading="lazy"><div><span>04</span><h3 data-i18n="c.ball">Match Balls</h3><p data-i18n="ess.ball">Official-size match &amp; training balls, sizes 3, 4 and 5.</p></div></article>
+    <article class="ess reveal" data-goto="acc" data-sub="socks"><img src="assets/img/p/k03.webp" alt="" loading="lazy"><div><span>05</span><h3 data-i18n="ess.sleeve">Socks &amp; Sleeves</h3><p data-i18n="ess.sleeve.d">Cut socks and leg sleeves in every club colour.</p></div></article>
+  </div>
+</section>
+
+<!-- ================= STORE ================= -->
+<section class="section section--dark store" id="store">
+  <div class="glow glow--r"></div>
+  <div class="container store__row">
+    <div class="store__media reveal">
+      <div class="store__frame" data-tilt>
+        <img src="assets/img/store.webp" alt="The Hadi Sport boot wall inside the store" loading="lazy">
+        <span class="store__tag"><i class="dot"></i><span data-i18n="store.live">Live from the store</span></span>
+      </div>
+    </div>
+    <div class="store__copy">
+      <p class="kicker reveal">06 — <span data-i18n="store.kicker">The store</span></p>
+      <h2 class="h2 reveal" data-i18n-html="store.title">Every pair you see<br><em>is on our wall.</em></h2>
+      <p class="lead reveal" data-i18n="store.lead">No catalogue tricks. Every photo on our page is real stock, shot in-store. Come try them on, or let us bring them to you — anywhere in Lebanon.</p>
+      <div class="perks reveal">
+        <div class="perk"><svg viewBox="0 0 24 24"><use href="#i-camera"/></svg><div><h4 data-i18n="perk.1">All pics are real</h4><p data-i18n="perk.1d">What you see is exactly what arrives.</p></div></div>
+        <div class="perk"><svg viewBox="0 0 24 24"><use href="#i-truck"/></svg><div><h4 data-i18n="perk.2">All over Lebanon</h4><p data-i18n="perk.2d">Fast delivery from Beirut to the south, north and Bekaa.</p></div></div>
+        <div class="perk"><svg viewBox="0 0 24 24"><use href="#i-chat"/></svg><div><h4 data-i18n="perk.3">Personal service</h4><p data-i18n="perk.3d">Size advice and new arrivals straight on WhatsApp.</p></div></div>
+      </div>
+      <div class="hero__cta reveal">
+        <a class="btn btn--blue btn--lg magnetic" data-wa href="#" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><use href="#i-wa"/></svg><span>71-122790</span></a>
+        <a class="btn btn--ghost btn--lg magnetic" id="mapLink" href="#" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><use href="#i-pin"/></svg><span data-i18n="store.map">Get directions</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= HOW TO ORDER ================= -->
+<section class="section" id="order">
+  <div class="container">
+    <div class="head head--center">
+      <p class="kicker reveal">07 — <span data-i18n="how.kicker">How to order</span></p>
+      <h2 class="h2 reveal" data-i18n-html="how.title">Three taps<br><em>to your next pair.</em></h2>
+    </div>
+    <ol class="steps">
+      <li class="step reveal"><span class="step__n">01</span><h3 data-i18n="how.1">Pick your gear</h3><p data-i18n="how.1d">Browse the collection and choose your size.</p></li>
+      <li class="step reveal"><span class="step__n">02</span><h3 data-i18n="how.2">Send it on WhatsApp</h3><p data-i18n="how.2d">Your order is pre-written — just hit send. We confirm availability and price.</p></li>
+      <li class="step reveal"><span class="step__n">03</span><h3 data-i18n="how.3">Delivered to you</h3><p data-i18n="how.3d">Fast delivery to your door, anywhere in Lebanon.</p></li>
+    </ol>
+
+    <div class="faq">
+      <details class="reveal"><summary data-i18n="faq.q1">Are the photos real?</summary><p data-i18n="faq.a1">Yes. Every post on our Instagram is shot in our store with real stock. What you see is what you get.</p></details>
+      <details class="reveal"><summary data-i18n="faq.q2">How do I choose my boot size?</summary><p data-i18n="faq.a2">Send us your usual sneaker size and foot width on WhatsApp — we'll recommend the right size for each model.</p></details>
+      <details class="reveal"><summary data-i18n="faq.q3">Do you deliver outside Beirut?</summary><p data-i18n="faq.a3">Yes — we deliver all over Lebanon.</p></details>
+      <details class="reveal"><summary data-i18n="faq.q4">Can I return an item?</summary><p data-i18n="faq.a4">All sales are final — we don't offer refunds. Please confirm your size with us before ordering and we'll make sure it fits.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CTA ================= -->
+<section class="cta">
+  <div class="cta__bg" data-parallax="0.2"><img src="assets/img/bg/crowd.webp" alt="" loading="lazy"></div>
+  <div class="cta__shade"></div>
+  <div class="container cta__inner">
+    <h2 class="cta__title reveal" data-i18n-html="cta.title">Ready to<br><em>play?</em></h2>
+    <p class="lead reveal" data-i18n="cta.lead">DM us on Instagram or WhatsApp — new drops every week.</p>
+    <div class="hero__cta hero__cta--center reveal">
+      <a class="btn btn--blue btn--lg magnetic" data-wa href="#" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><use href="#i-wa"/></svg><span data-i18n="cta.wa">Order on WhatsApp</span></a>
+      <a class="btn btn--ghost btn--lg magnetic" href="https://instagram.com/hadisportx" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><use href="#i-ig"/></svg><span>@hadisportx</span></a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="footer">
+  <div class="container footer__row">
+    <div class="footer__brand">
+      <img src="assets/img/logo-light.webp" alt="Hadi Sport" width="900" height="194" loading="lazy">
+      <p data-i18n="foot.tag">Football boots, kits &amp; pro gear. Delivery all over Lebanon.</p>
+    </div>
+    <div class="footer__col">
+      <h4 data-i18n="foot.shop">Shop</h4>
+      <button data-goto="boots" type="button" data-i18n="c.boots">Football Boots</button>
+      <button data-goto="player" type="button" data-i18n="c.player">Player Version</button>
+      <button data-goto="fan" type="button" data-i18n="c.fan">Fan Version</button>
+      <button data-goto="gk" type="button" data-i18n="c.gk">Goalkeeper Gloves</button>
+      <button data-goto="acc" type="button" data-i18n="tab.acc">Essentials</button>
+    </div>
+    <div class="footer__col">
+      <h4 data-i18n="foot.contact">Contact</h4>
+      <a data-wa href="#" target="_blank" rel="noopener">WhatsApp · 71-122790</a>
+      <a href="https://instagram.com/hadisportx" target="_blank" rel="noopener">Instagram · @hadisportx</a>
+      <a data-map href="#" target="_blank" rel="noopener" data-i18n="store.map">Get directions</a>
+    </div>
+  </div>
+  <div class="container footer__base">
+    <span>© <span id="year"></span> Hadi Sport. <span data-i18n="foot.rights">All rights reserved.</span></span>
+    <span data-i18n="foot.policy">All sales final · No refunds</span>
+  </div>
+</footer>
+
+<a class="wa-float magnetic" data-wa href="#" target="_blank" rel="noopener" aria-label="WhatsApp"><svg viewBox="0 0 24 24"><use href="#i-wa"/></svg></a>
+
+<!-- ================= QUICK VIEW ================= -->
+<div class="modal" id="modal" aria-hidden="true">
+  <div class="modal__backdrop" data-close></div>
+  <div class="modal__card" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+    <button class="modal__x" data-close aria-label="Close"><svg viewBox="0 0 24 24"><use href="#i-x"/></svg></button>
+    <div class="modal__img"><img id="mImg" src="" alt=""></div>
+    <div class="modal__body">
+      <span class="badge badge--blue" id="mCat"></span>
+      <h3 id="mTitle"></h3>
+      <p class="modal__variant" id="mVar"></p>
+      <p class="modal__desc" id="mDesc"></p>
+      <p class="modal__label" data-i18n="m.size">Select size</p>
+      <div class="sizes" id="mSizes"></div>
+      <a class="btn btn--blue btn--lg btn--block" id="mWa" href="#" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><use href="#i-wa"/></svg><span data-i18n="m.order">Order on WhatsApp</span></a>
+      <p class="modal__fine" data-i18n="m.fine">Price & availability confirmed on WhatsApp · Delivery all over Lebanon</p>
+    </div>
+  </div>
+</div>
+
+<!-- ================= ICONS ================= -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-wa" viewBox="0 0 24 24"><path fill="currentColor" d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21c5.46 0 9.91-4.45 9.91-9.91C21.95 6.45 17.5 2 12.04 2zm0 18.15c-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.25-8.24 4.54 0 8.24 3.7 8.24 8.24 0 4.55-3.7 8.24-8.24 8.24zm4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.12-.17.25-.64.81-.78.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.43.06-.66.31-.23.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.17 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.14-1.18-.06-.1-.22-.16-.47-.28z"/></symbol>
+  <symbol id="i-ig" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".6" fill="currentColor"/></g></symbol>
+  <symbol id="i-truck" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M2 6h11v10H2zM13 9h4.5l3.5 3.5V16h-8z"/><circle cx="6" cy="17.5" r="1.8" fill="#05060a"/><circle cx="17" cy="17.5" r="1.8" fill="#05060a"/></g></symbol>
+  <symbol id="i-camera" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3 8h4l2-3h6l2 3h4v11H3z"/><circle cx="12" cy="13" r="3.5"/></g></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></g></symbol>
+</svg>
+
+<script src="assets/js/main.js" defer></script>
+</body>
+</html>
