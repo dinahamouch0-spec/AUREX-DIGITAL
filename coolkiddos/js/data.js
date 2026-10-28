@@ -3,10 +3,9 @@
 
 window.STORE = {
   // International format, digits only, e.g. '96170123456'.
-  // Leave empty to fall back to the WhatsApp link from the Instagram bio.
+  // Empty for now: WhatsApp buttons open an Instagram chat until a number is set.
   whatsappNumber: '',
-  // The wa.me link from the Instagram bio (cannot carry a prefilled message).
-  whatsappLink: 'https://wa.me/message/27WEKV3RLQT',
+  fallbackChat: 'https://ig.me/m/coolkiddos1',
   instagram: 'https://www.instagram.com/coolkiddos1/',
 };
 
@@ -99,7 +98,7 @@ window.I18N = {
     // runtime strings
     ask: 'السعر عند الطلب', quick: 'عرض سريع', add: 'أضف', added: 'أُضيف إلى طلبك',
     pickSize: 'اختاروا مقاساً أولاً', total: 'المجموع التقريبي', plus: '+ موديلات السعر عند الطلب',
-    remove: 'إزالة', copied: 'نسخنا رسالة الطلب — الصقوها في محادثة واتساب',
+    remove: 'إزالة', copied: 'نسخنا رسالة الطلب — الصقوها في المحادثة',
     fleece: 'فليس', cotton: 'قطن', turkey: 'صناعة تركية',
     cat_baby: 'رضّع', cat_kids: 'أطفال', cat_pyjamas: 'بيجامات', cat_fleece: 'فليس',
     msgHello: 'مرحباً كول كيدوز! عندي سؤال عن الموديلات.',
@@ -109,7 +108,7 @@ window.I18N = {
   en: {
     ask: 'Ask for price', quick: 'Quick view', add: 'Add', added: 'Added to your order',
     pickSize: 'Please choose a size first', total: 'Estimated total', plus: '+ items priced on request',
-    remove: 'Remove', copied: 'Order message copied — paste it into the WhatsApp chat',
+    remove: 'Remove', copied: 'Order message copied — paste it into the chat',
     fleece: 'Fleece', cotton: 'Cotton', turkey: 'Made in Turkey',
     cat_baby: 'Baby', cat_kids: 'Kids', cat_pyjamas: 'Pyjamas', cat_fleece: 'Fleece',
     msgHello: 'Hi Coolkiddos! I have a question about your styles.',

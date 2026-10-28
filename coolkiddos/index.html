@@ -8,26 +8,45 @@
   <meta name="theme-color" content="#FBF7F2">
   <meta property="og:title" content="Coolkiddos — Baby & Kids Fashion">
   <meta property="og:description" content="Comfy and stylish clothes for your kids. Retail & wholesale. Delivery all over Lebanon.">
-  <meta property="og:image" content="img/winter-collection.webp">
+  <meta property="og:image" content="img/logo/full.webp">
   <link rel="icon" type="image/png" href="img/favicon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..800;1,6..96,400..700&family=Montserrat:wght@300;400;500;600;700&family=El+Messiri:wght@500;600;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="preload" as="image" href="img/logo/c.webp">
   <link rel="stylesheet" href="css/style.css">
   <noscript><style>.loader{display:none}</style></noscript>
 </head>
 <body>
   <a class="skip" href="#main" data-i18n="skip">Skip to content</a>
 
-  <!-- Preloader: the hanger draws itself, then the monogram lands -->
+  <!-- Preloader: the real logo assembles itself piece by piece, then colour curtains lift -->
   <div class="loader" aria-hidden="true">
-    <div class="loader__mark">
-      <svg class="loader__hanger" viewBox="0 0 120 70" fill="none">
-        <path d="M60 18c0-7 5-10 9-8s4 8-1 10l-8 5L8 52c-4 2-3 8 2 8h100c5 0 6-6 2-8L60 25" stroke="url(#hg)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
-        <defs><linearGradient id="hg" x1="0" x2="120" y1="0" y2="0"><stop stop-color="#61AFA1"/><stop offset="1" stop-color="#DA64D4"/></linearGradient></defs>
-      </svg>
-      <div class="loader__letters"><span class="lc">C</span><span class="lk">K</span></div>
-      <div class="loader__word">COOL KIDDOS</div>
+    <div class="loader__panel loader__panel--pink"></div>
+    <div class="loader__panel loader__panel--teal"></div>
+    <div class="loader__panel loader__panel--cream">
+      <span class="blob blob--teal"></span><span class="blob blob--pink"></span>
+      <div class="loader__ring"></div>
+      <div class="loader__stage">
+        <div class="loader__glow"></div>
+        <img class="ll ll-c" src="img/logo/c.webp" alt="" width="849" height="730">
+        <img class="ll ll-hanger" src="img/logo/hanger.webp" alt="" width="849" height="730">
+        <img class="ll ll-k" src="img/logo/k.webp" alt="" width="849" height="730">
+        <img class="ll ll-l" src="img/logo/o0.webp" alt="" width="849" height="730">
+        <img class="ll ll-l" src="img/logo/o1.webp" alt="" width="849" height="730">
+        <img class="ll ll-l" src="img/logo/o2.webp" alt="" width="849" height="730">
+        <img class="ll ll-l" src="img/logo/i0.webp" alt="" width="849" height="730">
+        <img class="ll ll-l" src="img/logo/i1.webp" alt="" width="849" height="730">
+        <img class="ll ll-l" src="img/logo/i2.webp" alt="" width="849" height="730">
+        <img class="ll ll-l" src="img/logo/i3.webp" alt="" width="849" height="730">
+        <span class="ll-shine"></span>
+        <div class="ll-sparks"></div>
+      </div>
+      <p class="loader__tag"><span>Baby</span><i>✦</i><span>Kids</span><i>✦</i><span>Fashion</span></p>
+      <div class="loader__meta">
+        <span class="loader__bar"><span></span></span>
+        <span class="loader__count"><b>0</b><em>%</em></span>
+      </div>
     </div>
   </div>
 
@@ -38,7 +57,7 @@
   <header class="header">
     <div class="header__inner">
       <a class="brand" href="#top" aria-label="Coolkiddos home">
-        <img src="img/logo.png" alt="" width="48" height="48">
+        <img src="img/monogram.png" alt="" width="48" height="48">
         <span class="brand__word"><b>Cool</b>kiddos</span>
       </a>
       <nav class="nav" aria-label="Main">
@@ -269,7 +288,7 @@
   <footer class="footer">
     <div class="footer__big" aria-hidden="true">Coolkiddos</div>
     <div class="footer__row">
-      <a class="brand" href="#top"><img src="img/logo.png" alt="" width="40" height="40"><span class="brand__word"><b>Cool</b>kiddos</span></a>
+      <a class="brand" href="#top"><img src="img/monogram.png" alt="" width="40" height="40"><span class="brand__word"><b>Cool</b>kiddos</span></a>
       <p data-i18n="foot.tag">Comfy and stylish clothes for your kids.</p>
       <p class="footer__copy">© <span id="year"></span> Coolkiddos · Khaldeh, Lebanon</p>
     </div>

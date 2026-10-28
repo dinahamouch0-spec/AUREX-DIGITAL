@@ -262,12 +262,13 @@
   }
 
   /* ---------------- WhatsApp ---------------- */
-  function sendWhatsApp(text) {
+  function sendWhatsApp(text, copy) {
     const num = (STORE.whatsappNumber || '').replace(/\D/g, '');
     if (num) { window.open(`https://wa.me/${num}?text=${encodeURIComponent(text)}`, '_blank', 'noopener'); return; }
-    // The bio link cannot carry a message, so copy it for the customer to paste.
-    navigator.clipboard?.writeText(text).then(() => toast(t('copied')), () => {});
-    window.open(STORE.whatsappLink, '_blank', 'noopener');
+    // No number yet: the button still works and opens an Instagram chat instead.
+    // An order is copied so the customer only has to paste it.
+    if (copy) navigator.clipboard?.writeText(text).then(() => toast(t('copied')), () => {});
+    window.open(STORE.fallbackChat, '_blank', 'noopener');
   }
   $$('[data-wa]').forEach(a => a.addEventListener('click', e => {
     e.preventDefault();
@@ -278,7 +279,7 @@
       const p = byId(i.id);
       return `• ${p.name[lang]} — ${i.size} × ${i.qty}${p.price != null ? ` (${money(p.price * i.qty)})` : ''}`;
     });
-    sendWhatsApp([t('msgOrder'), ...lines].join('\n'));
+    sendWhatsApp([t('msgOrder'), ...lines].join('\n'), true);
   });
 
   let toastTimer;
@@ -411,20 +412,63 @@
     gsap.set(['.chip', '.badge-spin'], { opacity: 0, scale: .6 });
     gsap.set('.header', { yPercent: -120 });
 
-    const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
-    tl.from('.lc', { yPercent: 40, opacity: 0, duration: 1 })
-      .from('.lk', { scale: 0, rotate: -25, opacity: 0, duration: .9, ease: 'back.out(2)' }, '-=.6')
-      .to('.loader__hanger path', { strokeDashoffset: 0, duration: 1.1, ease: 'power2.inOut' }, '-=.6')
-      .from('.loader__word', { opacity: 0, letterSpacing: '1.2em', duration: 1 }, '-=.8')
-      .to('.loader__mark', { scale: .9, opacity: 0, duration: .5, ease: 'power2.in' }, '+=.15')
-      .to('.loader', { clipPath: 'circle(0% at 50% 50%)', duration: 1, ease: 'expo.inOut', onComplete() { $('.loader').remove(); document.body.classList.remove('is-loading'); } })
-      .to('.header', { yPercent: 0, duration: 1 }, '-=.5')
-      .to('.hero__title .line > *', { yPercent: 0, duration: 1.2, stagger: .1 }, '-=.9')
-      .to('.arch', { clipPath: 'inset(0% 0 0 0)', duration: 1.4, stagger: .14, ease: 'expo.inOut' }, '-=1.2')
+    // 1. The logo assembles itself from its real pieces
+    const loaded = new Promise(res => (document.readyState === 'complete' ? res() : addEventListener('load', res, { once: true })));
+    const count = $('.loader__count b'), barFill = $('.loader__bar span');
+    const sparks = $('.ll-sparks');
+    const colours = ['#61AFA1', '#DA64D4', '#C9A45C', '#F6C9F0', '#9FDCD1'];
+    for (let i = 0; i < 18; i++) {
+      const sp = document.createElement('span');
+      sp.className = 'spark';
+      sp.innerHTML = `<svg viewBox="0 0 24 24" fill="${colours[i % colours.length]}"><path d="M12 0c.8 6.6 4.6 10.8 12 12-7.4 1.2-11.2 5.4-12 12-.8-6.6-4.6-10.8-12-12C7.4 10.8 11.2 6.6 12 0Z"/></svg>`;
+      sparks.appendChild(sp);
+    }
+    gsap.set('.spark', { scale: 0, opacity: 0 });
+    gsap.set('.ll-k', { yPercent: -140, rotate: -35, opacity: 0 });
+    gsap.set('.ll-l', { y: 40, opacity: 0, filter: 'blur(10px)' });
+    gsap.set('.ll-hanger', { yPercent: -45, rotate: 28, opacity: 0 });
+    gsap.set('.loader__tag > *', { y: 20, opacity: 0 });
+
+    gsap.to('.loader__ring', { rotate: 360, duration: 6, ease: 'none', repeat: -1 });
+    const build = gsap.timeline({ defaults: { ease: 'expo.out' },
+      onUpdate() { const p = build.progress(); count.textContent = Math.round(p * 100); barFill.style.transform = `scaleX(${p})`; } });
+    build
+      .to('.loader__ring', { opacity: 1, duration: 1 }, 0)
+      .to('.loader__glow', { opacity: 1, duration: 1.4 }, .1)
+      .fromTo('.ll-c', { '--a': '0deg', scale: .92 }, { '--a': '360deg', scale: 1, duration: 1.4, ease: 'power2.inOut' }, .2)
+      .to('.ll-k', { yPercent: 0, rotate: 0, opacity: 1, duration: 1.3, ease: 'elastic.out(1, .55)' }, .95)
+      .add(() => {
+        gsap.fromTo('.loader__stage', { scale: 1 }, { scale: 1.035, duration: .14, yoyo: true, repeat: 1, ease: 'power2.out' });
+        $$('.spark').forEach(sp => {
+          const ang = Math.random() * Math.PI * 2, dist = 140 + Math.random() * 170;
+          gsap.timeline()
+            .fromTo(sp, { x: 0, y: 0, scale: 0, opacity: 1, rotate: 0 },
+              { x: Math.cos(ang) * dist, y: Math.sin(ang) * dist * .8, scale: .6 + Math.random() * 1.1, rotate: 180 * (Math.random() - .5), duration: 1.1 + Math.random() * .5, ease: 'expo.out' })
+            .to(sp, { opacity: 0, scale: 0, duration: .5, ease: 'power2.in' }, '-=.45');
+        });
+      }, 1.2)
+      .to('.ll-l', { y: 0, opacity: 1, filter: 'blur(0px)', duration: .8, stagger: .07, ease: 'back.out(1.6)' }, 1.35)
+      .to('.ll-hanger', { yPercent: 0, opacity: 1, duration: .7, ease: 'power3.out' }, 1.6)
+      .to('.ll-hanger', { keyframes: { rotate: [28, -14, 8, -4, 1.5, 0] }, duration: 1.9, ease: 'sine.inOut' }, 1.6)
+      .to('.loader__tag > *', { y: 0, opacity: 1, duration: .8, stagger: .08 }, 2)
+      .fromTo('.ll-shine', { backgroundPosition: '-150% 0' }, { backgroundPosition: '150% 0', duration: 1.1, ease: 'power2.inOut' }, 2.55)
+      .to({}, { duration: .25 });
+
+    // 2. Once the page is ready, colour curtains lift to reveal it
+    const tl = gsap.timeline({ paused: true, defaults: { ease: 'expo.out' } });
+    tl.to('.loader__stage', { scale: 1.12, opacity: 0, filter: 'blur(12px)', duration: .7, ease: 'power3.in' })
+      .to(['.loader__tag', '.loader__meta', '.loader__ring'], { opacity: 0, y: -20, duration: .5, ease: 'power2.in' }, 0)
+      .to('.loader__panel--cream', { yPercent: -100, duration: 1, ease: 'expo.inOut' }, .45)
+      .to('.loader__panel--teal', { yPercent: -100, duration: 1, ease: 'expo.inOut' }, .6)
+      .to('.loader__panel--pink', { yPercent: -100, duration: 1, ease: 'expo.inOut', onComplete() { loader.remove(); document.body.classList.remove('is-loading'); } }, .75)
+      .to('.header', { yPercent: 0, duration: 1 }, 1.2)
+      .to('.hero__title .line > *', { yPercent: 0, duration: 1.2, stagger: .1 }, 1.05)
+      .to('.arch', { clipPath: 'inset(0% 0 0 0)', duration: 1.4, stagger: .14, ease: 'expo.inOut' }, .95)
       .from('.arch img', { scale: 1.35, duration: 1.8, stagger: .14 }, '<')
-      .to(['.eyebrow', '.hero__lead', '.hero__cta', '.hero__stats'], { opacity: 1, y: 0, duration: 1, stagger: .08 }, '-=1.4')
-      .to(['.chip', '.badge-spin'], { opacity: 1, scale: 1, duration: .9, stagger: .12, ease: 'back.out(1.8)' }, '-=.9')
-      .add(() => $$('.count').forEach(countUp), '-=1');
+      .to(['.eyebrow', '.hero__lead', '.hero__cta', '.hero__stats'], { opacity: 1, y: 0, duration: 1, stagger: .08 }, 1.3)
+      .to(['.chip', '.badge-spin'], { opacity: 1, scale: 1, duration: .9, stagger: .12, ease: 'back.out(1.8)' }, 1.8)
+      .add(() => $$('.count').forEach(countUp), 1.6);
+    Promise.all([loaded, new Promise(res => build.eventCallback('onComplete', res))]).then(() => tl.play());
 
     scrollScenes();
   }
