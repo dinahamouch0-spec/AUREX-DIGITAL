@@ -69,7 +69,8 @@
     if (!opts.fromHash) {
       var h = '#s' + n;
       if (location.hash !== h) {
-        if (opts.replace) history.replaceState(null, '', h); else history.pushState(null, '', h);
+        try { if (opts.replace) history.replaceState(null, '', h); else history.pushState(null, '', h); }
+        catch (err) { try { location.hash = h; } catch (e2) {} }
       }
     }
     if (opts.focus) {
@@ -201,7 +202,7 @@
   });
   function openPresenter() {
     presenterWin = window.open('presenter.html#s' + current, 'sadr-presenter', 'width=980,height=760');
-    if (!presenterWin) toast('اسمح بالنوافذ المنبثقة لفتح نافذة المقدّم، أو افتح الملف presenter.html مباشرة.');
+    if (!presenterWin) { toast('تعذّر فتح نافذة المقدّم هنا، فاعرض الملاحظات بالمفتاح N بدلاً منها.'); toggleNotes(true); }
     else setTimeout(broadcast, 600);
   }
   $('#presenterBtn').addEventListener('click', openPresenter);
