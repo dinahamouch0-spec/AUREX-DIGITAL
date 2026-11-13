@@ -1,0 +1,656 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>عصر صدر الإسلام — من التحوّل الجاهلي إلى بناء حضارة جديدة</title>
+<meta name="description" content="موقع تعليمي تفاعلي لمادة اللغة العربية عن عصر صدر الإسلام وتحولاته الدينية والسياسية والاجتماعية والاقتصادية والثقافية والأدبية.">
+<meta name="theme-color" content="#0f2a20">
+<link rel="icon" href="img/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/fonts.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip" href="#main">تخطَّ إلى المحتوى</a>
+
+<!-- ===================== شريط التنقل الثابت ===================== -->
+<header class="topbar" id="topbar">
+  <button class="brand" type="button" data-go="1" aria-label="العودة إلى الصفحة الرئيسية (الغلاف)">
+    <svg class="brand-star" viewBox="0 0 40 40" aria-hidden="true"><use href="#star8"/></svg>
+    <span class="brand-text">عصر صدر الإسلام</span>
+  </button>
+
+  <nav class="pager" aria-label="أقسام العرض">
+    <ol id="pagerList">
+      <li><button type="button" data-go="1" title="الغلاف"><span class="num">١</span><span class="lbl">الغلاف</span></button></li>
+      <li><button type="button" data-go="2" title="ما هو عصر صدر الإسلام؟"><span class="num">٢</span><span class="lbl">التعريف</span></button></li>
+      <li><button type="button" data-go="3" title="من الجاهلية إلى الإسلام"><span class="num">٣</span><span class="lbl">المجتمع</span></button></li>
+      <li><button type="button" data-go="4" title="التحول الديني"><span class="num">٤</span><span class="lbl">الديني</span></button></li>
+      <li><button type="button" data-go="5" title="التحول السياسي والاجتماعي والاقتصادي"><span class="num">٥</span><span class="lbl">التنظيم</span></button></li>
+      <li><button type="button" data-go="6" title="التحول الثقافي والأدبي"><span class="num">٦</span><span class="lbl">الثقافة</span></button></li>
+      <li><button type="button" data-go="7" title="هل رفض الإسلام الشعر؟"><span class="num">٧</span><span class="lbl">الشعر</span></button></li>
+      <li><button type="button" data-go="8" title="الخاتمة والمصادر"><span class="num">٨</span><span class="lbl">الخاتمة</span></button></li>
+    </ol>
+  </nav>
+
+  <div class="tools">
+    <button type="button" class="tool" id="notesBtn" aria-pressed="false" aria-controls="notesPanel" title="ملاحظات المتحدث (N)">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 3h10l4 4v14H5z M14 3v5h5 M8 12h8 M8 16h6" /></svg>
+      <span class="tool-lbl">الملاحظات</span>
+    </button>
+    <button type="button" class="tool" id="presenterBtn" title="فتح نافذة المقدّم المنفصلة (P)">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4h18v12H3z M8 20h8 M12 16v4" /></svg>
+      <span class="tool-lbl">نافذة المقدّم</span>
+    </button>
+    <button type="button" class="tool" id="fsBtn" aria-pressed="false" title="ملء الشاشة (F)">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path id="fsIcon" d="M4 9V4h5 M15 4h5v5 M20 15v5h-5 M9 20H4v-5" /></svg>
+      <span class="tool-lbl">ملء الشاشة</span>
+    </button>
+    <button type="button" class="tool" id="helpBtn" title="اختصارات لوحة المفاتيح (?)" aria-controls="helpDialog">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1 .8-1 1.5v.7 M12 17h.01"/></svg>
+      <span class="sr-only">المساعدة</span>
+    </button>
+  </div>
+
+  <div class="progress" role="progressbar" aria-label="تقدم العرض" aria-valuemin="1" aria-valuemax="8" aria-valuenow="1" aria-valuetext="القسم 1 من 8" id="progress">
+    <span class="progress-fill" id="progressFill"></span>
+  </div>
+</header>
+
+<main id="main" tabindex="-1">
+
+<!-- ===================== 1. الغلاف ===================== -->
+<section class="page page-cover" id="s1" data-index="1" aria-labelledby="t1">
+  <div class="cover-media" aria-hidden="true">
+    <img src="img/cover-desert.jpg" alt="" class="kenburns">
+  </div>
+  <div class="cover-shade" aria-hidden="true"></div>
+  <div class="pattern-overlay" aria-hidden="true"></div>
+  <div class="cover-inner">
+    <p class="eyebrow reveal">عرض تفاعلي · مادة اللغة العربية</p>
+    <div class="cover-frame reveal">
+      <svg class="frame-star" viewBox="0 0 40 40" aria-hidden="true"><use href="#star8"/></svg>
+      <h1 id="t1" class="cover-title">عصر صدر الإسلام</h1>
+      <p class="cover-sub">من التحوّل الجاهلي إلى بناء حضارة جديدة</p>
+    </div>
+    <p class="cover-lead reveal">مرحلة تاريخية غيّرت حياة العرب، وأثّرت في عقيدتهم ومجتمعهم وثقافتهم وأدبهم.</p>
+    <blockquote class="cover-question reveal">
+      <span class="q-mark" aria-hidden="true">؟</span>
+      هل يمكن لظهور دين جديد أن يغيّر حياة مجتمع كامل، وأن يؤثر حتى في لغته وأدبه؟
+    </blockquote>
+    <button type="button" class="btn-gold reveal" data-go="2">
+      ابدأ الرحلة
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+    </button>
+  </div>
+  <figure class="cover-credit"><figcaption>الخلفية: كثبان الربع الخالي في جزيرة العرب — تصوير Nepenthes، ترخيص CC BY-SA 3.0</figcaption></figure>
+</section>
+
+<!-- ===================== 2. التعريف والخط الزمني ===================== -->
+<section class="page page-light" id="s2" data-index="2" aria-labelledby="t2" hidden>
+  <div class="wrap">
+    <header class="sec-head reveal">
+      <span class="sec-num" aria-hidden="true">٠٢</span>
+      <div>
+        <p class="kicker">التعريف والإطار الزمني</p>
+        <h2 id="t2">ما هو عصر صدر الإسلام؟</h2>
+      </div>
+    </header>
+
+    <div class="split-2">
+      <div class="def-text reveal">
+        <p class="lead">يُقصد بعصر صدر الإسلام المرحلة التاريخية التي بدأت <strong>ببعثة النبي محمد ﷺ وظهور الإسلام سنة 610م</strong>، وامتدت في التقسيم التاريخي المدرسي إلى <strong>نهاية عصر الخلفاء الراشدين سنة 661م</strong>.</p>
+        <p>شهدت هذه المرحلة تحولات كبرى في حياة العرب، وانتقالاً تدريجياً من المجتمع القبلي إلى مجتمع إسلامي أكثر ترابطاً، ثم قيام الدولة الإسلامية.</p>
+        <div class="stat-row">
+          <div class="stat"><span class="stat-n">610م</span><span class="stat-l">البداية</span></div>
+          <div class="stat"><span class="stat-n">≈ 51</span><span class="stat-l">سنة تقريباً</span></div>
+          <div class="stat"><span class="stat-n">661م</span><span class="stat-l">النهاية</span></div>
+        </div>
+        <p class="src-tag src-book">من الكتاب المدرسي: التعريف وحدود المرحلة</p>
+      </div>
+      <figure class="photo-card tilt reveal">
+        <img src="img/quran-manuscript.jpg" alt="رقّ من مخطوطة قرآنية مبكرة مكتوبة بالخط الحجازي بحبر بني على جلد فاتح اللون" loading="lazy" width="1400" height="911">
+        <figcaption>ورقتان من «مخطوطة برمنغهام» القرآنية بالخط الحجازي، وقد أُرّخ رقّها بالكربون المشع إلى ما بين 568 و645م تقريباً <span class="credit">(ملكية عامة، جامعة برمنغهام)</span></figcaption>
+      </figure>
+    </div>
+
+    <div class="timeline-block reveal">
+      <h3 class="block-title">الخط الزمني <span class="hint">اضغط على أي تاريخ لعرض تفاصيله</span></h3>
+      <div class="timeline" role="tablist" aria-label="أحداث عصر صدر الإسلام">
+        <span class="tl-line" aria-hidden="true"><span class="tl-line-fill" id="tlFill"></span></span>
+        <button type="button" role="tab" class="tl-node" id="tl-0" aria-controls="tl-panel" aria-selected="true" data-tl="0"><span class="tl-dot" aria-hidden="true"></span><span class="tl-year">610م</span><span class="tl-name">بداية الدعوة</span></button>
+        <button type="button" role="tab" class="tl-node" id="tl-1" aria-controls="tl-panel" aria-selected="false" data-tl="1"><span class="tl-dot" aria-hidden="true"></span><span class="tl-year">622م</span><span class="tl-name">الهجرة النبوية</span></button>
+        <button type="button" role="tab" class="tl-node" id="tl-2" aria-controls="tl-panel" aria-selected="false" data-tl="2"><span class="tl-dot" aria-hidden="true"></span><span class="tl-year">632م</span><span class="tl-name">وفاة النبي ﷺ</span></button>
+        <button type="button" role="tab" class="tl-node" id="tl-3" aria-controls="tl-panel" aria-selected="false" data-tl="3"><span class="tl-dot" aria-hidden="true"></span><span class="tl-year">632–661م</span><span class="tl-name">الخلفاء الراشدون</span></button>
+        <button type="button" role="tab" class="tl-node" id="tl-4" aria-controls="tl-panel" aria-selected="false" data-tl="4"><span class="tl-dot" aria-hidden="true"></span><span class="tl-year">661م</span><span class="tl-name">الدولة الأموية</span></button>
+      </div>
+      <div class="tl-panel" id="tl-panel" role="tabpanel" aria-live="polite" aria-labelledby="tl-0">
+        <p class="tl-panel-year" id="tlYear">610م</p>
+        <h4 id="tlTitle">بداية الدعوة الإسلامية</h4>
+        <p id="tlText">نزول الوحي وبدء رسالة الإسلام.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 3. من الجاهلية إلى الإسلام ===================== -->
+<section class="page page-dark" id="s3" data-index="3" aria-labelledby="t3" hidden>
+  <div class="pattern-overlay faint" aria-hidden="true"></div>
+  <div class="wrap">
+    <header class="sec-head reveal">
+      <span class="sec-num" aria-hidden="true">٠٣</span>
+      <div>
+        <p class="kicker">التحول في القيم والمجتمع</p>
+        <h2 id="t3">من الجاهلية إلى الإسلام: تحوّل في القيم والمجتمع</h2>
+      </div>
+    </header>
+
+    <div class="split-map">
+      <div class="reveal">
+        <p class="lead light">قبل الإسلام، كان المجتمع العربي يتسم بتعدد القبائل والعصبيات، وكانت <strong>القبيلة</strong> تؤدي دوراً أساسياً في حماية الفرد وتحديد مكانته.</p>
+        <p class="light">ومع ظهور الإسلام، ظهرت مبادئ جديدة تدعو إلى <strong>التوحيد والأخوة والعدل والتكافل</strong>، والابتعاد عن الظلم والتعصب.</p>
+        <figure class="photo-card small">
+          <img src="img/tribal-camp.jpg" alt="لوحة زيتية لخيام بدوية من الشعر في سهل صحراوي عند سفح جبل، وراعٍ يرعى قطيعاً من الغنم والماعز" loading="lazy" width="1280" height="979">
+          <figcaption>«مخيم بدوي» للرسام أوجين جيراردي (القرن 19م): تصوير فني رمزي لحياة الخيام والرعي والترحال، وليس توثيقاً لجزيرة العرب قبل الإسلام <span class="credit">(ملكية عامة)</span></figcaption>
+        </figure>
+      </div>
+
+      <figure class="map-card reveal" aria-labelledby="mapCap">
+        <svg class="map" viewBox="0 0 600 468" role="img" aria-labelledby="mapTitle mapDesc">
+          <title id="mapTitle">خريطة توضيحية لشبه الجزيرة العربية</title>
+          <desc id="mapDesc">خريطة مبسطة تبين موقع مكة المكرمة والمدينة المنورة (يثرب) والطائف وخيبر وتبوك وصنعاء، مع سهم يوضح طريق الهجرة من مكة إلى المدينة.</desc>
+          <defs>
+            <pattern id="sea" width="14" height="14" patternUnits="userSpaceOnUse"><path d="M0 7 q3.5 -3 7 0 t7 0" class="sea-wave"/></pattern>
+            <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" class="arrow-head"/></marker>
+          </defs>
+          <rect width="600" height="468" class="sea"/>
+          <rect width="600" height="468" fill="url(#sea)"/>
+          <path class="land other" d="M0,54 L6,55 L11,81 L12,92 L24,114 L36,136 L52,160 L70,202 L86,232 L104,288 L128,320 L149,368 L176,388 L194,404 L215,420 L226,434 L223,448 L250,472 L280,466 L310,458 L340,454 L376,442 L386,460 L386,468 L0,468 Z"/>
+          <path class="land other" d="M330,80 L352,80 L366,94 L376,101 L388,121 L412,132 L440,148 L470,146 L486,136 L498,142 L506,162 L516,167 L550,172 L590,178 L600,180 L600,0 L240,0 L260,12 L290,28 L312,50 L320,60 Z"/>
+          <path class="land arabia" d="M58,90 L60,118 L74,133 L89,156 L106,180 L121,198 L138,228 L143,250 L165,277 L184,300 L200,322 L211,342 L216,368 L225,414 L229,427 L248,426 L261,424 L296,412 L320,400 L342,389 L370,378 L404,368 L426,346 L442,340 L468,324 L492,312 L506,300 L516,282 L536,272 L548,252 L556,230 L540,212 L532,208 L512,202 L494,193 L486,174 L487,152 L479,164 L466,175 L448,191 L420,198 L392,194 L392,176 L390,162 L384,157 L377,168 L375,180 L368,168 L362,152 L353,140 L338,128 L328,110 L320,92 L330,80 L320,60 L312,50 L290,28 L260,12 L240,0 L90,0 L78,2 L70,10 L62,24 L58,34 L50,48 L44,54 L20,58 L6,55 L11,81 L14,90 L32,116 L46,122 L52,108 L58,90 Z"/>
+          <text x="300" y="250" class="region">شبه الجزيرة العربية</text>
+          <text x="150" y="70" class="region sm">بلاد الشام</text>
+          <text x="96" y="330" class="sea-lbl" transform="rotate(58 96 330)">البحر الأحمر</text>
+          <text x="440" y="110" class="sea-lbl" transform="rotate(35 440 110)">الخليج العربي</text>
+          <text x="410" y="430" class="sea-lbl">بحر العرب</text>
+          <text x="216" y="300" class="region sm">الحجاز</text>
+          <text x="280" y="385" class="region sm">اليمن</text>
+          <path d="M155,246 C 140,228 136,210 151,197" class="route" marker-end="url(#arrow)"/>
+          <g class="city" data-city="makkah" tabindex="0" role="button" aria-label="مكة المكرمة"><circle cx="157" cy="252" r="7"/><text x="146" y="266" class="city-lbl" text-anchor="end">مكة المكرمة</text></g>
+          <g class="city" data-city="madinah" tabindex="0" role="button" aria-label="المدينة المنورة (يثرب)"><circle cx="152" cy="191" r="7"/><text x="164" y="186" class="city-lbl" text-anchor="start">المدينة المنورة</text></g>
+          <g class="city minor" data-city="taif" tabindex="0" role="button" aria-label="الطائف"><circle cx="170" cy="257" r="4.5"/><text x="180" y="262" class="city-lbl sm" text-anchor="start">الطائف</text></g>
+          <g class="city minor" data-city="khaybar" tabindex="0" role="button" aria-label="خيبر"><circle cx="144" cy="166" r="4.5"/><text x="154" y="164" class="city-lbl sm" text-anchor="start">خيبر</text></g>
+          <g class="city minor" data-city="tabuk" tabindex="0" role="button" aria-label="تبوك"><circle cx="91" cy="112" r="4.5"/><text x="101" y="110" class="city-lbl sm" text-anchor="start">تبوك</text></g>
+          <g class="city minor" data-city="sanaa" tabindex="0" role="button" aria-label="صنعاء"><circle cx="244" cy="373" r="4.5"/><text x="254" y="372" class="city-lbl sm" text-anchor="start">صنعاء</text></g>
+        </svg>
+        <div class="map-info" id="mapInfo" aria-live="polite">
+          <strong id="mapInfoT">اضغط على مدينة</strong>
+          <span id="mapInfoD">لمعرفة صلتها بأحداث هذه المرحلة.</span>
+        </div>
+        <figcaption id="mapCap">خريطة توضيحية مبسطة أُعدّت لهذا العرض، والمواقع فيها تقريبية <span class="src-tag src-extra inline">إثراء</span></figcaption>
+      </figure>
+    </div>
+
+    <h3 class="block-title light reveal">مقارنة تفاعلية <span class="hint">اضغط على أي بطاقة لعرض الشرح</span></h3>
+    <p class="note-sci reveal" role="note"><strong>ملاحظة علمية:</strong> هذه مقارنة بين <em>بعض</em> المظاهر الاجتماعية قبل الإسلام والقيم التي دعا إليها الإسلام؛ فالعرب قبل الإسلام لم يكونوا متشابهين في كل البيئات، ولم تتغير جميع الممارسات فوراً، بل كان التحول تدريجياً.</p>
+
+    <div class="compare reveal">
+      <div class="compare-col before">
+        <h4 class="col-title"><span class="col-ico" aria-hidden="true">◐</span> من مظاهر المجتمع قبل الإسلام</h4>
+        <ul class="flip-list">
+          <li><button type="button" class="xcard" aria-expanded="false"><span class="x-h">العصبية القبلية والتفاخر بالأنساب</span><span class="x-b">كان انتماء الفرد إلى قبيلته مصدر قوته وحمايته، فكثر الاعتزاز بالنسب والتفاخر به، وقد يُقدَّم نصر القبيلة على الحق أحياناً.</span></button></li>
+          <li><button type="button" class="xcard" aria-expanded="false"><span class="x-h">النزاعات والثارات القبلية</span><span class="x-b">انتشرت في بعض البيئات نزاعات بين القبائل، وكان الثأر قد يمتد لسنوات ويتوارثه الأبناء.</span></button></li>
+          <li><button type="button" class="xcard" aria-expanded="false"><span class="x-h">تفاوت مكانة المرأة وحقوقها</span><span class="x-b">اختلفت مكانة المرأة وحقوقها باختلاف البيئات والعادات والقبائل، فلم تكن صورة واحدة ثابتة في كل الجزيرة العربية.</span></button></li>
+          <li><button type="button" class="xcard" aria-expanded="false"><span class="x-h">تعدد المعتقدات والوثنية</span><span class="x-b">سادت عبادة الأصنام في أجزاء واسعة من الجزيرة العربية، إلى جانب معتقدات أخرى متعددة.</span></button></li>
+        </ul>
+      </div>
+      <div class="compare-mid" aria-hidden="true"><span>⟵</span></div>
+      <div class="compare-col after">
+        <h4 class="col-title"><span class="col-ico" aria-hidden="true">✦</span> القيم التي دعا إليها الإسلام</h4>
+        <ul class="flip-list">
+          <li><button type="button" class="xcard" aria-expanded="false"><span class="x-h">الأخوة والترابط بين المؤمنين</span><span class="x-b">أصبحت رابطة الإيمان والأخوة أوسع من رابطة القبيلة، فتقاربت جماعات مختلفة في مجتمع واحد.</span></button></li>
+          <li><button type="button" class="xcard" aria-expanded="false"><span class="x-h">التفاضل بالتقوى والعمل الصالح</span><span class="x-b">لم تعد قيمة الإنسان تُقاس بنسبه أو ماله، بل بتقواه وعمله الصالح.</span></button></li>
+          <li><button type="button" class="xcard" aria-expanded="false"><span class="x-h">العدل والإصلاح ونبذ الظلم</span><span class="x-b">دعا الإسلام إلى العدل حتى مع المخالف، وإلى الإصلاح بين الناس بدلاً من إشعال النزاعات.</span></button></li>
+          <li><button type="button" class="xcard" aria-expanded="false"><span class="x-h">صون كرامة المرأة وتنظيم حقوقها</span><span class="x-b">أكد الإسلام كرامة المرأة، ونظّم حقوقها في الأسرة والمجتمع.</span></button></li>
+          <li><button type="button" class="xcard" aria-expanded="false"><span class="x-h">عبادة الله الواحد</span><span class="x-b">التوحيد أساس العقيدة الجديدة، وهو الذي وحّد وجهة الناس بعد تعدد المعبودات.</span></button></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 4. التحول الديني ===================== -->
+<section class="page page-ivory" id="s4" data-index="4" aria-labelledby="t4" hidden>
+  <div class="wrap">
+    <div class="religion-hero">
+      <header class="sec-head reveal">
+        <span class="sec-num" aria-hidden="true">٠٤</span>
+        <div>
+          <p class="kicker">التحول الديني والروحي</p>
+          <h2 id="t4">التحول الديني: بناء الإنسان من الداخل</h2>
+        </div>
+      </header>
+      <p class="lead reveal">كان التحول الديني والروحي من أبرز آثار ظهور الإسلام، إذ جاء <strong>القرآن الكريم</strong> بتعاليم أسهمت في تغيير نظرة الإنسان إلى الحياة، وعلاقته بربه وبالآخرين.</p>
+      <p class="src-tag src-book reveal">من الكتاب المدرسي: التحول الديني والروحي</p>
+    </div>
+
+    <div class="religion-grid">
+      <figure class="photo-card tall reveal">
+        <img src="img/blue-quran.jpg" alt="ورقة من المصحف الأزرق: كتابة كوفية ذهبية على رقّ مصبوغ باللون الأزرق الداكن" loading="lazy" width="1400" height="1062">
+        <figcaption>ورقة من «المصحف الأزرق» بالخط الكوفي الذهبي (نحو القرن 4هـ / 10م): من روائع فن كتابة المصاحف في عصور لاحقة <span class="credit">(ملكية عامة، مكتبة تشستر بيتي)</span></figcaption>
+      </figure>
+
+      <ol class="glow-grid reveal" aria-label="المبادئ الأساسية">
+        <li><button type="button" class="glow" aria-expanded="false">
+          <span class="g-ico" aria-hidden="true"><svg viewBox="0 0 48 48"><use href="#star8"/><circle cx="24" cy="24" r="4"/></svg></span>
+          <span class="g-n">1</span><span class="g-h">التوحيد</span>
+          <span class="g-b">الدعوة إلى عبادة الله الواحد وترك عبادة الأصنام.</span>
+          <span class="g-more">التوحيد هو الأساس الذي قامت عليه بقية المبادئ؛ فقد نقل العرب من تعدد المعبودات إلى عبادة الله وحده.</span>
+        </button></li>
+        <li><button type="button" class="glow" aria-expanded="false">
+          <span class="g-ico" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M24 8v32 M10 18h28 M12 18l-5 11h10z M36 18l-5 11h10z"/></svg></span>
+          <span class="g-n">2</span><span class="g-h">الأمر بالمعروف والنهي عن المنكر</span>
+          <span class="g-b">الدعوة إلى الخير والابتعاد عن الشر.</span>
+          <span class="g-more">جعل الإسلام الفرد شريكاً في إصلاح مجتمعه، لا متفرجاً عليه.</span>
+        </button></li>
+        <li><button type="button" class="glow" aria-expanded="false">
+          <span class="g-ico" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M24 38s-13-8-13-18a7 7 0 0 1 13-3 7 7 0 0 1 13 3c0 10-13 18-13 18z"/></svg></span>
+          <span class="g-n">3</span><span class="g-h">عمل الخير</span>
+          <span class="g-b">تشجيع الإنسان على مساعدة الآخرين والإحسان إليهم.</span>
+          <span class="g-more">أصبح الإحسان إلى المحتاج والضعيف عبادة يُثاب عليها الإنسان، لا مجرد عادة اجتماعية.</span>
+        </button></li>
+        <li><button type="button" class="glow" aria-expanded="false">
+          <span class="g-ico" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M24 6c-6 8-10 13-10 20a10 10 0 0 0 20 0c0-7-4-12-10-20z M24 30v6"/></svg></span>
+          <span class="g-n">4</span><span class="g-h">تهذيب النفس</span>
+          <span class="g-b">الابتعاد عن الرذائل وتنمية الأخلاق الحسنة.</span>
+          <span class="g-more">اهتم الإسلام بإصلاح الداخل؛ لأن السلوك الحسن يبدأ من نفس مهذبة.</span>
+        </button></li>
+        <li><button type="button" class="glow" aria-expanded="false">
+          <span class="g-ico" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M4 24s8-12 20-12 20 12 20 12-8 12-20 12S4 24 4 24z"/><circle cx="24" cy="24" r="5"/></svg></span>
+          <span class="g-n">5</span><span class="g-h">مراقبة الله</span>
+          <span class="g-b">أن يكون الإنسان مسؤولاً عن أقواله وأفعاله.</span>
+          <span class="g-more">الشعور بمراقبة الله يجعل الإنسان مستقيماً في السر والعلن، وهو أساس المسؤولية الفردية.</span>
+        </button></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 5. السياسي والاجتماعي والاقتصادي ===================== -->
+<section class="page page-dark page-five" id="s5" data-index="5" aria-labelledby="t5" hidden>
+  <div class="wrap">
+    <header class="sec-head reveal">
+      <span class="sec-num" aria-hidden="true">٠٥</span>
+      <div>
+        <p class="kicker">التحول السياسي والاجتماعي والاقتصادي</p>
+        <h2 id="t5">الإسلام يعيد تنظيم حياة المجتمع</h2>
+      </div>
+    </header>
+    <p class="hint-line reveal">اختر أحد المحاور الثلاثة لعرض تفاصيله <span class="src-tag src-book inline">من الكتاب المدرسي</span></p>
+
+    <div class="tri-tabs reveal" role="tablist" aria-label="محاور التحول">
+      <button type="button" role="tab" class="tri" id="tab-pol" aria-controls="panel-pol" aria-selected="true">
+        <img src="img/medina.jpg" alt="" loading="lazy">
+        <span class="tri-shade" aria-hidden="true"></span>
+        <span class="tri-ico" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M6 40h36 M10 40V22 M18 40V22 M30 40V22 M38 40V22 M6 22h36 L24 8z"/></svg></span>
+        <span class="tri-title">سياسي</span><span class="tri-sub">من التفرق إلى الدولة</span>
+      </button>
+      <button type="button" role="tab" class="tri" id="tab-soc" aria-controls="panel-soc" aria-selected="false">
+        <img src="img/social.jpg" alt="" loading="lazy">
+        <span class="tri-shade" aria-hidden="true"></span>
+        <span class="tri-ico" aria-hidden="true"><svg viewBox="0 0 48 48"><circle cx="16" cy="16" r="6"/><circle cx="32" cy="16" r="6"/><path d="M4 40c0-8 5-13 12-13s12 5 12 13 M20 40c0-8 5-13 12-13s12 5 12 13"/></svg></span>
+        <span class="tri-title">اجتماعي</span><span class="tri-sub">الأخوة والتكافل</span>
+      </button>
+      <button type="button" role="tab" class="tri" id="tab-eco" aria-controls="panel-eco" aria-selected="false">
+        <img src="img/caravan.jpg" alt="" loading="lazy">
+        <span class="tri-shade" aria-hidden="true"></span>
+        <span class="tri-ico" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M24 6v36 M8 14h32 M8 14l-6 14h12z M40 14l-6 14h12z M16 42h16"/></svg></span>
+        <span class="tri-title">اقتصادي</span><span class="tri-sub">التجارة والأخلاق</span>
+      </button>
+    </div>
+
+    <div class="tri-panels">
+      <article class="tri-panel" id="panel-pol" role="tabpanel" aria-labelledby="tab-pol" tabindex="0">
+        <figure class="panel-img">
+          <img src="img/medina.jpg" alt="صورة فوتوغرافية قديمة بالأبيض والأسود للمدينة المنورة تظهر فيها المباني والمآذن والأسوار" loading="lazy" width="1174" height="628">
+          <figcaption>المدينة المنورة في صورة قديمة نُشرت سنة 1919م؛ وفي المدينة تأسست الدولة الإسلامية الأولى <span class="credit">(ملكية عامة، كتاب إيفالد بانزه)</span></figcaption>
+        </figure>
+        <div class="panel-body">
+          <h3>أولاً: التحول السياسي</h3>
+          <ul class="check">
+            <li>الانتقال من التفرق القبلي إلى قيام مجتمع ودولة إسلامية.</li>
+            <li>تعزيز مبدأ الأخوة والترابط بين أفراد المجتمع.</li>
+            <li>الدعوة إلى العدل والمساواة.</li>
+            <li>تنظيم العلاقات والحقوق والواجبات.</li>
+          </ul>
+          <details class="more">
+            <summary>شرح موسّع</summary>
+            <p>ساعد الإسلام على جمع جماعات وقبائل مختلفة ضمن مجتمع واحد، ثم تأسست الدولة الإسلامية في المدينة المنورة بعد الهجرة. وأصبح تنظيم شؤون المجتمع قائماً على مبادئ دينية وأخلاقية، من أبرزها العدل والتعاون والمسؤولية.</p>
+          </details>
+        </div>
+      </article>
+
+      <article class="tri-panel" id="panel-soc" role="tabpanel" aria-labelledby="tab-soc" tabindex="0" hidden>
+        <figure class="panel-img">
+          <img src="img/social.jpg" alt="لوحة زيتية لجماعة من البدو مجتمعين أمام خيامهم بين النخيل والإبل وقت الغروب" loading="lazy" width="1280" height="1021">
+          <figcaption id="socialCap">«مخيم بدوي» للرسام يوزف هايكه (1846م): لوحة من القرن 19م ترمز إلى الاجتماع والتكافل، وتفاصيلها من عصر الرسام لا من عصر صدر الإسلام <span class="credit">(ملكية عامة)</span></figcaption>
+        </figure>
+        <div class="panel-body">
+          <h3>ثانياً: التحول الاجتماعي</h3>
+          <ul class="check">
+            <li>تعزيز الأخوة والتكافل الاجتماعي.</li>
+            <li>الدعوة إلى المساواة والعدل.</li>
+            <li>الحد من العصبية القبلية.</li>
+            <li>تنظيم حقوق المرأة وصون كرامتها.</li>
+            <li>الدعوة إلى العدل والإحسان في التعامل.</li>
+          </ul>
+          <details class="more">
+            <summary>شرح موسّع</summary>
+            <p>دعا الإسلام إلى تقوية الروابط بين الناس، وعدم التمييز بينهم بسبب النسب أو القبيلة. كما نظّم حقوق المرأة، وأكد كرامتها، ودعا إلى العدل والإحسان والتكافل بين أفراد المجتمع.</p>
+          </details>
+        </div>
+      </article>
+
+      <article class="tri-panel" id="panel-eco" role="tabpanel" aria-labelledby="tab-eco" tabindex="0" hidden>
+        <figure class="panel-img">
+          <img src="img/caravan.jpg" alt="لوحة زيتية لقافلة طويلة من الإبل والمسافرين تعبر الصحراء تحت سماء صافية" loading="lazy" width="1600" height="1066">
+          <figcaption>«حجاج في طريقهم إلى مكة» للرسام ليون بيلي (1861م): قافلة إبل تعبر الصحراء، رمزٌ للتجارة والترحال <span class="credit">(ملكية عامة، متحف أورسيه)</span></figcaption>
+        </figure>
+        <div class="panel-body">
+          <h3>ثالثاً: التحول الاقتصادي</h3>
+          <p>أباح الإسلام الأنشطة الاقتصادية المشروعة، وربطها بمجموعة من المبادئ الأخلاقية:</p>
+          <ul class="chips">
+            <li>النزاهة والإنصاف في التعامل</li>
+            <li>الأمانة والصدق</li>
+            <li>الابتعاد عن الغش والاحتيال</li>
+            <li>محاربة الاحتكار والاستغلال والرشوة</li>
+            <li>احترام حقوق الآخرين</li>
+          </ul>
+          <details class="more">
+            <summary>شرح موسّع</summary>
+            <p>أباح الإسلام النشاط الاقتصادي والتجارة، لكنه لم يجعل الربح هدفاً منفصلاً عن الأخلاق، بل اشترط النزاهة والأمانة والإنصاف في التعامل، ونهى عن الغش والاستغلال والاحتكار والرشوة.</p>
+          </details>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 6. الثقافة والأدب ===================== -->
+<section class="page page-light page-six" id="s6" data-index="6" aria-labelledby="t6" hidden>
+  <div class="wrap">
+    <header class="sec-head reveal">
+      <span class="sec-num" aria-hidden="true">٠٦</span>
+      <div>
+        <p class="kicker">التحول الثقافي والأدبي</p>
+        <h2 id="t6">كيف أثّر الإسلام في الثقافة والأدب العربي؟</h2>
+      </div>
+    </header>
+
+    <div class="duo">
+      <article class="duo-card culture reveal">
+        <figure class="duo-img">
+          <img src="img/library.jpg" alt="منمنمة ملونة تصوّر مجلساً من العلماء والقرّاء جالسين أمام رفوف مكتبة مليئة بالكتب" loading="lazy" width="1100" height="1283">
+          <figcaption>منمنمة «مكتبة» للواسطي من مخطوطة مقامات الحريري (634هـ / 1237م): صورة رمزية لازدهار المعرفة في عصور لاحقة <span class="credit">(ملكية عامة، المكتبة الوطنية الفرنسية)</span></figcaption>
+        </figure>
+        <div class="duo-body">
+          <p class="duo-tag">أولاً</p>
+          <h3>التحول الثقافي</h3>
+          <p>كان للقرآن الكريم أثر عميق في الحياة الثقافية والعقلية للعرب. ومن أبرز مظاهره:</p>
+          <ul class="acc" data-acc>
+            <li><button type="button" aria-expanded="false">الاهتمام باللغة العربية والبلاغة</button><div class="acc-b" hidden>أصبح القرآن محوراً لفهم اللغة وأسرار بلاغتها.</div></li>
+            <li><button type="button" aria-expanded="false">اتساع مجالات المعرفة والتعلم</button><div class="acc-b" hidden>توسعت المعرفة مع انتشار الإسلام واتساع الدولة الإسلامية.</div></li>
+            <li><button type="button" aria-expanded="false">نشوء علوم دينية مثل التفسير والفقه</button><div class="acc-b" hidden>ساعد الاهتمام بفهم النص القرآني على نشوء هذه العلوم.</div></li>
+            <li><button type="button" aria-expanded="false">ازدياد الاهتمام بفهم القرآن وبيان معانيه</button><div class="acc-b" hidden>صار فهم القرآن وتدبّره غاية علمية ودينية في آن واحد.</div></li>
+            <li><button type="button" aria-expanded="false">تطور أساليب التعبير والتواصل</button><div class="acc-b" hidden>تأثرت لغة الناس وأساليبهم بما في القرآن من بيان.</div></li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="duo-card literature reveal">
+        <figure class="duo-img">
+          <img src="img/kufic-pages.jpg" alt="صفحتان متقابلتان من مصحف مكتوب بالخط الكوفي بحبر بني داكن مع زخارف ذهبية" loading="lazy" width="1600" height="560">
+          <figcaption>صفحتان من «مصحف أماجور» بالخط الكوفي (نحو 870–878م): أثر القرآن في العناية بالكتابة واللغة <span class="credit">(ملكية عامة، متحف أشموليان)</span></figcaption>
+        </figure>
+        <div class="duo-body">
+          <p class="duo-tag">ثانياً</p>
+          <h3>التحول الأدبي</h3>
+          <p>تأثر الأدب العربي بظهور الإسلام، فتغيرت بعض موضوعاته واتجاهاته، وظهرت موضوعات جديدة مرتبطة بالدعوة والقيم الإسلامية.</p>
+          <ol class="lit-steps">
+            <li><span>١</span>تأثر الأسلوب الأدبي ببلاغة القرآن الكريم.</li>
+            <li><span>٢</span>انتشار الخطابة الدينية والسياسية.</li>
+            <li><span>٣</span>تطور الرسائل بوصفها وسيلة للتواصل.</li>
+            <li><span>٤</span>ظهور موضوعات تتصل بالدعوة والدفاع عن الإسلام.</li>
+            <li><span>٥</span>استمرار الشعر مع تغير بعض أغراضه ومضامينه.</li>
+          </ol>
+          <button type="button" class="btn-link" data-go="7">ولكن… هل رفض الإسلام الشعر؟ ←</button>
+        </div>
+      </article>
+    </div>
+    <p class="src-tag src-book reveal">من الكتاب المدرسي: التحول الثقافي والأدبي</p>
+  </div>
+</section>
+
+<!-- ===================== 7. هل رفض الإسلام الشعر؟ ===================== -->
+<section class="page page-dark page-poetry" id="s7" data-index="7" aria-labelledby="t7" hidden>
+  <div class="pattern-overlay faint" aria-hidden="true"></div>
+  <div class="wrap">
+    <header class="poetry-head reveal">
+      <span class="sec-num" aria-hidden="true">٠٧</span>
+      <h2 id="t7">هل رفض الإسلام الشعر؟</h2>
+      <p class="sub-gold">بين نقد الشعر المذموم وتشجيع الشعر الهادف</p>
+    </header>
+
+    <div class="thesis reveal">
+      <p><strong>الإسلام لم يرفض الشعر كله</strong>، ولم يمنع الشعر بوصفه فناً أدبياً، وإنما وجّه النقد إلى الشعر الذي يحمل الضلال والباطل والكذب، أو يُستخدم في الظلم وإثارة العصبية والاعتداء على الآخرين.</p>
+      <p class="thesis-key">فالحكم على الشعر يرتبط <span>بمضمونه</span> و<span>هدفه</span> و<span>أثره</span>، لا بمجرد كونه شعراً.</p>
+    </div>
+
+    <!-- الآيات -->
+    <div class="ayat-block reveal">
+      <h3 class="block-title light">سورة الشعراء: الآيات 224–227 <span class="hint">اقرأ الآيات متصلة، ثم اضغط على كل آية لفهم دلالتها</span></h3>
+      <div class="ayat">
+        <button type="button" class="aya" aria-expanded="false" aria-controls="ayaExp">
+          <span class="aya-text">﴿وَالشُّعَرَاءُ يَتَّبِعُهُمُ الْغَاوُونَ﴾</span><span class="aya-no">٢٢٤</span>
+        </button>
+        <button type="button" class="aya" aria-expanded="false" aria-controls="ayaExp">
+          <span class="aya-text">﴿أَلَمْ تَرَ أَنَّهُمْ فِي كُلِّ وَادٍ يَهِيمُونَ﴾</span><span class="aya-no">٢٢٥</span>
+        </button>
+        <button type="button" class="aya" aria-expanded="false" aria-controls="ayaExp">
+          <span class="aya-text">﴿وَأَنَّهُمْ يَقُولُونَ مَا لَا يَفْعَلُونَ﴾</span><span class="aya-no">٢٢٦</span>
+        </button>
+        <button type="button" class="aya aya-key" aria-expanded="false" aria-controls="ayaExp">
+          <span class="aya-badge">آية الاستثناء</span>
+          <span class="aya-text">﴿إِلَّا الَّذِينَ آمَنُوا وَعَمِلُوا الصَّالِحَاتِ وَذَكَرُوا اللَّهَ كَثِيرًا وَانْتَصَرُوا مِنْ بَعْدِ مَا ظُلِمُوا ۗ وَسَيَعْلَمُ الَّذِينَ ظَلَمُوا أَيَّ مُنْقَلَبٍ يَنْقَلِبُونَ﴾</span><span class="aya-no">٢٢٧</span>
+        </button>
+      </div>
+      <div class="aya-exp" id="ayaExp" aria-live="polite">
+        <p id="ayaExpText">اضغط على أي آية لعرض ما نفهمه منها.</p>
+      </div>
+      <div class="understand">
+        <h4>ماذا نفهم من الآيات؟</h4>
+        <ul>
+          <li>الآيات تنتقد <strong>فئة</strong> من الشعراء الذين يتبعهم الضالون.</li>
+          <li>تشير إلى التناقض بين القول والعمل.</li>
+          <li>تنتقد التيه في الأغراض، والقول الذي لا يلتزم صاحبه بما يقول.</li>
+          <li>تستثني الشعراء المؤمنين الذين يعملون الصالحات ويذكرون الله وينتصرون بعد أن يتعرضوا للظلم.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- لماذا النقد -->
+    <div class="why reveal">
+      <h3 class="block-title light">لماذا وُجّه النقد إلى بعض الشعر؟</h3>
+      <p class="note-sci" role="note">هذه مظاهرُ للشعر الذي تعرّض للنقد، وليست صفاتٍ لكل الشعر الجاهلي؛ ففي الشعر الجاهلي حكمة وقيم نبيلة كثيرة.</p>
+      <div class="why-grid">
+        <details class="why-card"><summary><span class="w-n">١</span>الكذب والتناقض</summary><p>بعض الشعراء كانوا يقولون ما لا يفعلون، ويبالغون في وصف الأمور دون التزام بالصدق.</p></details>
+        <details class="why-card"><summary><span class="w-n">٢</span>العصبية القبلية</summary><p>استخدم بعض الشعراء الهجاء لإثارة النزاعات والتعصب بين القبائل.</p></details>
+        <details class="why-card"><summary><span class="w-n">٣</span>الظلم والاعتداء</summary><p>قد يُستخدم الشعر في التشهير بالآخرين والانتقاص منهم بغير حق.</p></details>
+        <details class="why-card"><summary><span class="w-n">٤</span>الابتعاد عن القيم الأخلاقية</summary><p>بعض المضامين الشعرية كانت تتعارض مع الأخلاق التي دعا إليها الإسلام.</p></details>
+      </div>
+    </div>
+
+    <!-- الأدلة -->
+    <div class="evidence reveal">
+      <article class="hadith-card">
+        <p class="ev-label">الدليل على أن الشعر لم يكن مرفوضاً كله</p>
+        <p class="hadith-intro">قال رسول الله ﷺ:</p>
+        <p class="hadith">«إِنَّ مِنَ الشِّعْرِ حِكْمَةً»</p>
+        <p class="hadith-src">رواه البخاري، حديث رقم 6145</p>
+        <p class="hadith-mean"><strong>المعنى:</strong> قد يحمل الشعر حكمة وموعظة وكلاماً صادقاً نافعاً، ولذلك ليس كل الشعر مذموماً.</p>
+      </article>
+      <article class="hadith-card hassan">
+        <p class="ev-label">حسان بن ثابت رضي الله عنه نموذجاً للشعر الهادف</p>
+        <p>كان حسان بن ثابت من شعراء المدينة، واستخدم شعره في الدفاع عن النبي ﷺ والرد على هجاء المشركين. وقد قال له النبي ﷺ:</p>
+        <p class="hadith">«اهْجُهُمْ - أَوْ هَاجِهِمْ - وَجِبْرِيلُ مَعَكَ»</p>
+        <p class="hadith-src">رواه البخاري، حديث رقم 3213</p>
+        <p class="hadith-mean"><strong>الدلالة:</strong> يمكن أن يكون الشعر وسيلة لنصرة الحق والدفاع عنه، إذا كان في موضعه وبما يوافق القيم الإسلامية.</p>
+        <p class="tabari"><span class="src-tag src-extra inline">إثراء</span> ذكر الطبري في تفسيره أن آية الاستثناء نزلت في شعراء رسول الله ﷺ، كحسان بن ثابت وكعب بن مالك.</p>
+      </article>
+    </div>
+
+    <!-- المقارنة -->
+    <div class="poem-compare reveal">
+      <h3 class="block-title light">المقارنة <span class="hint">اضغط على كل بطاقة لعرض الشرح</span></h3>
+      <div class="pc-grid">
+        <button type="button" class="pc pc-bad" aria-expanded="false">
+          <span class="pc-h"><span aria-hidden="true">✕</span> الشعر المذموم</span>
+          <span class="pc-tags"><span>الكذب</span><span>الظلم</span><span>العصبية</span><span>الفحش</span><span>الاعتداء على الآخرين</span></span>
+          <span class="pc-more">هو الشعر الذي يُذمّ لمضمونه وأثره: كأن يقوم على الكذب والمبالغة الباطلة، أو يُستخدم في هجاء ظالم يشهّر بالناس، أو يثير العصبية والنزاع بين القبائل، أو يحمل كلاماً فاحشاً يخالف الأخلاق.</span>
+        </button>
+        <button type="button" class="pc pc-good" aria-expanded="false">
+          <span class="pc-h"><span aria-hidden="true">✓</span> الشعر الهادف</span>
+          <span class="pc-tags"><span>الحكمة</span><span>الموعظة</span><span>الصدق</span><span>الدفاع عن الحق</span><span>نصرة المظلوم</span></span>
+          <span class="pc-more">هو الشعر الذي يحمل حكمة أو موعظة أو كلاماً صادقاً، أو يدافع عن الحق ويرد الظلم، كما في شعر حسان بن ثابت في الدفاع عن النبي ﷺ، وهو ما يتفق مع حديث «إن من الشعر حكمة» ومع آية الاستثناء.</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- نشاط التصنيف -->
+    <div class="sorter reveal" id="sorter">
+      <h3 class="block-title light">نشاط: صنّف الشعر حسب مضمونه وهدفه</h3>
+      <p class="hint-line light">لكل وصف، اختر: <strong>مذموم</strong> أو <strong>هادف</strong>.</p>
+      <ul class="sort-list" id="sortList"></ul>
+      <div class="sort-foot">
+        <p class="sort-score" id="sortScore" aria-live="polite"></p>
+        <button type="button" class="btn-ghost" id="sortReset">إعادة النشاط</button>
+      </div>
+    </div>
+
+    <!-- سؤال الجمهور -->
+    <div class="quiz reveal" id="quiz">
+      <p class="quiz-label">سؤال للجمهور</p>
+      <h3 class="quiz-q">إذا كان الإسلام قد انتقد بعض الشعراء، فهل يعني ذلك أنه رفض الشعر كله؟</h3>
+      <div class="quiz-opts" role="group" aria-label="خيارات الإجابة">
+        <button type="button" class="opt" data-correct="false">نعم، رفض الشعر كله.</button>
+        <button type="button" class="opt" data-correct="true">لا، انتقد الشعر المذموم وأقرّ الشعر الهادف.</button>
+      </div>
+      <div class="quiz-fb" id="quizFb" aria-live="polite" hidden></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== 8. الخاتمة والمصادر ===================== -->
+<section class="page page-ivory page-end" id="s8" data-index="8" aria-labelledby="t8" hidden>
+  <div class="wrap">
+    <header class="sec-head reveal">
+      <span class="sec-num" aria-hidden="true">٠٨</span>
+      <div>
+        <p class="kicker">الخاتمة</p>
+        <h2 id="t8">عصر صدر الإسلام: تحوّل صنع مرحلة جديدة</h2>
+      </div>
+    </header>
+
+    <div class="end-grid">
+      <div class="reveal">
+        <p class="lead">لم يكن ظهور الإسلام مجرد تحول ديني، بل كان نقطة انطلاق لتحولات واسعة شملت:</p>
+        <ul class="ring" aria-label="مجالات التحول">
+          <li><button type="button" data-go="4">العقيدة والفكر</button></li>
+          <li><button type="button" data-go="5">السياسة وتنظيم الدولة</button></li>
+          <li><button type="button" data-go="5">المجتمع والعلاقات الإنسانية</button></li>
+          <li><button type="button" data-go="5">الاقتصاد والمعاملات</button></li>
+          <li><button type="button" data-go="6">الثقافة والعلوم</button></li>
+          <li><button type="button" data-go="6">اللغة والأدب</button></li>
+        </ul>
+        <p>وقد انعكست هذه التحولات على الأدب العربي، فتغيرت بعض موضوعاته واتجاهاته، وبرزت الخطابة والرسائل، واستمر الشعر في أداء دوره مع تأثره بالقيم الإسلامية.</p>
+      </div>
+      <div class="final-q reveal">
+        <img src="img/kufic-parchment.jpg" alt="" aria-hidden="true">
+        <div class="final-q-in">
+          <p class="fq-label">سؤال ختامي</p>
+          <p class="fq">هل يمكن اعتبار الأدب مرآةً للتحولات التي يشهدها المجتمع؟</p>
+        </div>
+      </div>
+    </div>
+
+    <section class="refs reveal" id="refs" aria-labelledby="refsT">
+      <h3 id="refsT" class="block-title">المصادر والمراجع</h3>
+      <ol class="ref-list">
+        <li><span class="ref-k">١</span><div><strong>الكتاب المدرسي</strong>، الصفحتان 123 و124، مقدمة محور «عصر صدر الإسلام».<span class="src-tag src-book inline">المرجع الأساسي</span></div></li>
+        <li><span class="ref-k">٢</span><div><strong>القرآن الكريم</strong>، سورة الشعراء، الآيات 224–227.<br><a href="https://quran.com/ar/26/224-227" target="_blank" rel="noopener">نص الآيات 224–227 (Quran.com) ↗</a></div></li>
+        <li><span class="ref-k">٣</span><div><strong>صحيح البخاري</strong>، حديث «إن من الشعر حكمة»، رقم 6145.<br><a href="https://hadeethenc.com/ar/browse/hadith/66279" target="_blank" rel="noopener">موسوعة الأحاديث النبوية (HadeethEnc) ↗</a></div></li>
+        <li><span class="ref-k">٤</span><div><strong>صحيح البخاري</strong>، حديث حسان بن ثابت «اهجهم - أو هاجهم - وجبريل معك»، رقم 3213.<br><a href="https://dorar.net/hadith/sharh/14398" target="_blank" rel="noopener">الدرر السنية: الموسوعة الحديثية ↗</a></div></li>
+        <li><span class="ref-k">٥</span><div><strong>تفسير الطبري</strong> (جامع البيان)، تفسير الآية 227 من سورة الشعراء (آية الاستثناء).<br><a href="https://quran.ksu.edu.sa/tafseer/tabary/sura26-aya227.html" target="_blank" rel="noopener">تفسير الطبري للآية 227 ↗</a></div></li>
+      </ol>
+      <details class="credits">
+        <summary>مصادر الصور وتراخيصها</summary>
+        <ul id="creditList"></ul>
+        <p class="small">الخريطة والزخارف الهندسية والأيقونات رُسمت خصيصاً لهذا الموقع.</p>
+      </details>
+      <p class="small legend"><span class="src-tag src-book inline">من الكتاب المدرسي</span> محتوى مأخوذ من إطار الكتاب المدرسي. <span class="src-tag src-extra inline">إثراء</span> سياق إضافي من خارج الكتاب لدعم الفهم.</p>
+    </section>
+
+    <div class="end-actions reveal">
+      <button type="button" class="btn-gold" data-go="1">العودة إلى البداية</button>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ===================== أزرار السابق / التالي ===================== -->
+<div class="stepper" role="group" aria-label="التنقل بين الأقسام">
+  <button type="button" class="step prev" id="prevBtn" aria-label="القسم السابق">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg><span>السابق</span>
+  </button>
+  <p class="step-count" aria-live="polite" id="stepCount"><span id="curN">1</span> / 8</p>
+  <button type="button" class="step next" id="nextBtn" aria-label="القسم التالي">
+    <span>التالي</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>
+  </button>
+</div>
+
+<!-- ===================== لوحة ملاحظات المتحدث ===================== -->
+<aside class="notes-panel" id="notesPanel" aria-labelledby="notesT" hidden>
+  <div class="notes-head">
+    <h2 id="notesT">ملاحظات المتحدث <span id="notesSec"></span></h2>
+    <button type="button" class="tool" id="notesClose" aria-label="إغلاق الملاحظات">✕</button>
+  </div>
+  <div class="notes-body" id="notesBody"></div>
+  <p class="notes-tip">للعرض أمام الصف: استخدم «نافذة المقدّم» على شاشتك، واعرض النافذة الرئيسية على جهاز العرض.</p>
+</aside>
+
+<!-- ===================== المساعدة ===================== -->
+<dialog class="help" id="helpDialog" aria-labelledby="helpT">
+  <h2 id="helpT">اختصارات العرض</h2>
+  <dl>
+    <div><dt><kbd>←</kbd> أو <kbd>PageDown</kbd></dt><dd>القسم التالي</dd></div>
+    <div><dt><kbd>→</kbd> أو <kbd>PageUp</kbd></dt><dd>القسم السابق</dd></div>
+    <div><dt><kbd>1</kbd>–<kbd>8</kbd></dt><dd>الانتقال المباشر إلى قسم</dd></div>
+    <div><dt><kbd>Home</kbd> / <kbd>End</kbd></dt><dd>الغلاف / الخاتمة</dd></div>
+    <div><dt><kbd>F</kbd></dt><dd>ملء الشاشة</dd></div>
+    <div><dt><kbd>N</kbd></dt><dd>إظهار ملاحظات المتحدث أو إخفاؤها</dd></div>
+    <div><dt><kbd>P</kbd></dt><dd>فتح نافذة المقدّم المنفصلة</dd></div>
+  </dl>
+  <p class="small">الأسهم تتبع اتجاه القراءة العربية: السهم الأيسر يتقدم والأيمن يرجع.</p>
+  <form method="dialog"><button class="btn-gold" type="submit">حسناً</button></form>
+</dialog>
+
+<!-- رموز SVG مشتركة -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="star8" viewBox="0 0 40 40"><path d="M20 2l4.6 6.9 8.1-1.6-1.6 8.1L38 20l-6.9 4.6 1.6 8.1-8.1-1.6L20 38l-4.6-6.9-8.1 1.6 1.6-8.1L2 20l6.9-4.6-1.6-8.1 8.1 1.6z"/></symbol>
+</svg>
+
+<script src="js/notes.js"></script>
+<script src="js/credits.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
