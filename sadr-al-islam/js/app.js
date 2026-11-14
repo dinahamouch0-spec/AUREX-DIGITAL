@@ -389,33 +389,6 @@
   buildSorter();
 
   /* ---------------------------------------------------------------
-     سؤال الجمهور
-  --------------------------------------------------------------- */
-  $$('#quiz .opt').forEach(function (o) {
-    o.addEventListener('click', function () {
-      var ok = o.dataset.correct === 'true';
-      $$('#quiz .opt').forEach(function (x) { x.classList.remove('right', 'wrong'); x.removeAttribute('aria-pressed'); });
-      o.classList.add(ok ? 'right' : 'wrong');
-      o.setAttribute('aria-pressed', 'true');
-      var fb = $('#quizFb');
-      fb.hidden = false;
-      fb.className = 'quiz-fb ' + (ok ? 'ok' : 'no');
-      fb.innerHTML = ok
-        ? '<strong>إجابة صحيحة.</strong> الآيات انتقدت فئة من الشعراء، ثم استثنت في الآية 227 الذين آمنوا وعملوا الصالحات وذكروا الله كثيراً وانتصروا من بعد ما ظُلموا. وقال النبي ﷺ: «إن من الشعر حكمة»، وأيّد حسانَ بن ثابت في الدفاع عنه بشعره.'
-        : '<strong>ليس تماماً.</strong> اقرأ الآيات كاملة: الآية الأخيرة (227) تستثني الشعراء المؤمنين. فالنقد موجّه إلى الشعر المذموم، لا إلى الشعر كله. جرّب مرة أخرى.';
-    });
-  });
-
-  /* ---------------------------------------------------------------
-     مصادر الصور
-  --------------------------------------------------------------- */
-  var CREDITS = window.IMAGE_CREDITS || [];
-  $('#creditList').innerHTML = CREDITS.map(function (c) {
-    return '<li><strong>' + c.ar + '</strong> — ' + c.author + ' · ' + c.license +
-      ' · <a href="' + c.url + '" target="_blank" rel="noopener">ويكيميديا كومنز ↗</a></li>';
-  }).join('');
-
-  /* ---------------------------------------------------------------
      الإقلاع
   --------------------------------------------------------------- */
   var start = parseHash();
