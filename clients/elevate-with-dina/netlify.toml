@@ -1,0 +1,4 @@
+# Static page, no build step. In Netlify set Base directory to clients/elevate-with-dina.
+[build]
+  publish = "."
+  command = "echo static site"
