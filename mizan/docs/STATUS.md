@@ -34,7 +34,7 @@ Legend:
 | Durable outbox, retry with backoff + jitter, never discarded | ✅ | unit tests with a fake server |
 | Conflict detection, user resolution (finance never auto-merged) | ✅ | unit tests + resolution UI |
 | Tombstone deletes | ✅ | |
-| Supabase schema: 46 tables, constraints, indexes | ✅ | `npm run test:db` on PostgreSQL 16 |
+| Supabase schema: 49 tables across 3 migrations (46 core + 3 perfect-days), constraints, indexes | ✅ | `npm run test:db` on PostgreSQL 16 |
 | RLS on every table: cross-user isolation, spoof/hijack rejected, audit append-only | ✅ | `supabase/tests/rls_test.sql` |
 | Every app field has a DB column | ✅ | `tests/schema-sync.test.ts` |
 | Supabase Auth (email/password, reset), session in iOS Keychain | 🟡 | Needs a Supabase project + `EXPO_PUBLIC_SUPABASE_*` |
@@ -103,13 +103,16 @@ Legend:
 | Prayers can't be the only criterion (validated in app) | ✅ |
 | Not applicable ≠ failure: archived/paused habits, unscheduled days, weekly-target habits, program rest days, days with nothing planned, low-priority tasks | ✅ |
 | Pending (never failed) until the day closes at 04:00 next morning; late logging allowed in the grace window | ✅ |
-| Immutable closed-day ledger (`perfect_day_results`), append-only in the app **and** in Postgres RLS | ✅ (unit + DB tests) |
+| Immutable closed-day ledger (`perfect_day_results`), append-only in the app, by RLS, and by a trigger that also blocks privileged updates | ✅ (unit + DB tests) |
+| **Server-enforced closing:** the database computes the close time (`perfect_day_seal_due`: 04:00 Asia/Beirut next day, DST-aware; a profile timezone can only make it later, never earlier), rejects inserts before it using the **server clock**, and overwrites any client `sealed_at` | ✅ (DB tests incl. winter, summer and both DST nights) |
+| Late sync of days closed while offline is accepted (any time after the close time) | ✅ (DB test) |
+| Result consistency enforced in SQL: perfect ⇒ met = applicable > 0; incomplete ⇒ met < applicable; rest ⇒ 0/0; definition must belong to the user and be in effect that day | ✅ (DB tests) |
 | Anti-fake-streak: records created/edited after a day closes don't count; definitions can't be backdated; rest days only for today or later | ✅ |
 | Rest / holiday days bridge a streak without counting | ✅ |
 | Current streak, start date, longest (with dates), total, history | ✅ |
 | Dashboard 🔥 card, detail screen, monthly calendar, month-by-month chart, analytics section | ✅ (e2e) |
 | Multi-device: each device seals days independently; the server keeps the first result per day (unique index). A second device's duplicate push is rejected and shown as a failed sync item | 🟡 needs live Supabase validation |
-| Device clock: closing uses the device clock; a user who changes the phone's date offline could affect sealing | Known limitation (server-side sealing would close this) |
+| Device clock: with sync enabled the server's clock decides (early results are rejected). In **local-only mode** there is no server, so a user who moves the phone's clock forward could close a day early on that device | Known limitation (local-only mode only) |
 
 ## Assistant (AI)
 | Feature | Status |

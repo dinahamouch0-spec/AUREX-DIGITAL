@@ -210,8 +210,29 @@ describe('streak computation', () => {
       { month: '2026-11-01', perfect: 1, sealed: 2, rest: 1 },
     ]);
   });
-  it('seal time is 04:00 local the next day (DST-safe)', () => {
-    expect(sealTime('2026-11-02', TZ).toISOString()).toBe('2026-11-03T02:00:00.000Z');
-    expect(sealTime('2026-07-01', TZ).toISOString()).toBe('2026-07-02T01:00:00.000Z');
+  it('seal time matches the database (04:00 Beirut next day, DST-safe, never earlier than Beirut)', () => {
+    // same fixtures as supabase/tests/rls_test.sql
+    expect(sealTime('2026-01-15', TZ).toISOString()).toBe('2026-01-16T02:00:00.000Z'); // winter
+    expect(sealTime('2026-07-01', TZ).toISOString()).toBe('2026-07-02T01:00:00.000Z'); // summer
+    expect(sealTime('2026-03-28', TZ).toISOString()).toBe('2026-03-29T01:00:00.000Z'); // spring-forward night
+    expect(sealTime('2026-10-24', TZ).toISOString()).toBe('2026-10-25T02:00:00.000Z'); // fall-back night
+    expect(sealTime('2026-07-01', 'Pacific/Kiritimati').toISOString()).toBe('2026-07-02T01:00:00.000Z'); // east: not earlier
+    expect(sealTime('2026-07-01', 'America/New_York').toISOString()).toBe('2026-07-02T08:00:00.000Z'); // west: own 04:00
+  });
+  it('only produces results the database accepts (status agrees with counts)', () => {
+    defineHabits(read, walk);
+    done(read, '2026-11-02'); // Mon: walk not done -> incomplete
+    setNow('2026-11-05', '05:00');
+    uc.sealPerfectDays(store, clock, TZ);
+    for (const r of store.list('perfect_day_results')) {
+      const ok =
+        (r.status === 'perfect' && r.applicable > 0 && r.met === r.applicable) ||
+        (r.status === 'incomplete' && r.applicable > 0 && r.met < r.applicable) ||
+        (r.status === 'rest' && r.applicable === 0 && r.met === 0) ||
+        r.status === 'exempt';
+      expect(ok, JSON.stringify(r)).toBe(true);
+      expect(new Date(r.sealed_at).getTime()).toBe(sealTime(r.local_date, TZ).getTime());
+    }
+    expect(store.list('perfect_day_results').map((r) => r.status)).toEqual(['incomplete', 'incomplete', 'incomplete']);
   });
 });

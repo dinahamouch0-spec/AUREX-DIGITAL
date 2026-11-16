@@ -22,3 +22,4 @@
 | 18 | Rest/exempt days and days with no applicable criteria bridge streaks without counting | Owner spec: fair to rest days and holidays; nothing unrecorded is treated as failure |
 | 19 | Prayers may be a criterion but never the only one | Owner spec §5: DEEN alone must not define a perfect day; no faith score |
 | 20 | CI: GitHub Actions workflow for `mizan/**` (typecheck, lint, unit, DB/RLS, e2e) | Every PR verified the same way as locally |
+| 21 | The database, not the client, decides when a day is closed: close time computed in SQL from the date (04:00 Beirut next day, or later for western profile zones), checked against the server clock, and written as `sealed_at` | A client-supplied timestamp can't be trusted; late offline sync still works because only "not before" is enforced |

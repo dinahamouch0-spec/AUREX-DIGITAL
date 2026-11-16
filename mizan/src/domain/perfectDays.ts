@@ -30,11 +30,21 @@ import type {
 export type Lists = <C extends CollectionName>(c: C) => CollectionMap[C][];
 export type DayStatus = SealedDayStatus | 'pending' | 'not_tracked';
 
-/** Hours after local midnight during which the previous day can still be completed. */
+/** Local time on the next day at which a day closes. */
 export const SEAL_GRACE = '04:00';
+/** Reference zone: a day never closes before 04:00 Beirut time (mirrors public.perfect_day_seal_due). */
+export const SEAL_REFERENCE_TZ = 'Asia/Beirut';
 
+/**
+ * When `date` closes: 04:00 on the next day in the user's zone, but never
+ * earlier than 04:00 Beirut time (so changing the timezone can't close a day
+ * early). Must stay identical to the SQL function public.perfect_day_seal_due.
+ */
 export function sealTime(date: LocalDate, timeZone: string): Date {
-  return zonedToUtc(addDays(date, 1), SEAL_GRACE, timeZone);
+  const next = addDays(date, 1);
+  const own = zonedToUtc(next, SEAL_GRACE, timeZone).getTime();
+  const ref = zonedToUtc(next, SEAL_GRACE, SEAL_REFERENCE_TZ).getTime();
+  return new Date(Math.max(own, ref));
 }
 
 export function criterionKey(c: PerfectCriterion): string {
