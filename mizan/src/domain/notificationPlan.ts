@@ -3,7 +3,7 @@
  * Delivery is handled by data/notifications.ts. Keeping this pure lets the
  * combined-prayer and quiet-hours rules be unit tested.
  */
-import { LocalDate, addDays, localTimeOf, zonedToUtc } from './dates';
+import { LocalDate, addDays, localTimeOf, parseLocalDate, weekdayOf, zonedToUtc } from './dates';
 import { dayPrayerSummary } from './deen';
 import { PRAYER_ALERT_GROUPS, PrayerCalcSettings, computePrayerTimes } from './prayerTimes';
 import type { Domain, PrayerLog, Reminder } from './types';
@@ -66,9 +66,12 @@ export function planNotifications(p: PlanInput): PlannedNotification[] {
         }
       }
     }
-    if (p.reviews.daily && p.channels.system !== false) {
+    if (p.channels.system !== false) {
       const at = zonedToUtc(date, p.reviews.time, p.timeZone).toISOString();
-      if (future(at)) out.push({ id: `review:daily:${date}`, at, titleKey: 'home.eveningReview', domain: 'system' });
+      // blueprint 09 §9: daily evening review, weekly on Sunday, monthly on the 1st
+      if (p.reviews.daily && future(at)) out.push({ id: `review:daily:${date}`, at, titleKey: 'home.eveningReview', domain: 'system' });
+      if (p.reviews.weekly && weekdayOf(date) === 0 && future(at)) out.push({ id: `review:weekly:${date}`, at, titleKey: 'setn.weeklyTitle', domain: 'system' });
+      if (p.reviews.monthly && parseLocalDate(date).d === 1 && future(at)) out.push({ id: `review:monthly:${date}`, at, titleKey: 'setn.monthlyTitle', domain: 'system' });
     }
   }
 

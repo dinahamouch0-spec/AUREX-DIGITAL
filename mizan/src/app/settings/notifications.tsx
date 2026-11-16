@@ -46,6 +46,8 @@ export default function NotificationSettings() {
       ))}
       <SectionHeader title={t('setn.reviews')} />
       <BooleanField label={t('setn.daily')} value={n.dailyReview} onChange={(v) => set({ dailyReview: v })} />
+      <BooleanField label={t('setn.weekly')} value={n.weeklyReview} onChange={(v) => set({ weeklyReview: v })} testID="setn-weekly" />
+      <BooleanField label={t('setn.monthly')} value={n.monthlyReview} onChange={(v) => set({ monthlyReview: v })} testID="setn-monthly" />
       <TextField label={t('setn.time')} value={rt} onChange={(v) => { setRt(v); if (isTimeOfDay(v)) set({ reviewTime: v }); }} error={!isTimeOfDay(rt) ? 'invalid_date' : undefined} />
       <Button
         variant="secondary"

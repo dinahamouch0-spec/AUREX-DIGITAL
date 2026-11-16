@@ -72,6 +72,15 @@ describe('notification planning', () => {
     const fu = plan.filter((p) => p.id.startsWith('prayer-followup')).map((p) => p.id);
     expect(fu).toEqual(['prayer-followup:2026-11-16:fajr', 'prayer-followup:2026-11-16:maghrib_isha']);
   });
+  it('schedules daily, weekly (Sunday) and monthly (1st) reviews only when enabled', () => {
+    // 2026-11-01 is a Sunday and the 1st of the month
+    const p = planNotifications({ ...base, now: new Date('2026-10-31T00:00:00Z'), today: '2026-10-31', days: 3, prayer: null, reviews: { daily: false, weekly: true, monthly: true, time: '20:30' } });
+    expect(p.map((x) => x.id)).toEqual(['review:weekly:2026-11-01', 'review:monthly:2026-11-01']);
+    expect(planNotifications({ ...base, now: new Date('2026-10-31T00:00:00Z'), today: '2026-10-31', days: 3, prayer: null }).length).toBe(0);
+    const daily = planNotifications({ ...base, now: new Date('2026-10-31T00:00:00Z'), today: '2026-10-31', days: 3, prayer: null, reviews: { daily: true, weekly: false, monthly: false, time: '20:30' } });
+    expect(daily).toHaveLength(3);
+    expect(daily[0].at).toBe('2026-10-31T18:30:00.000Z'); // 20:30 Beirut, winter time (UTC+2)
+  });
   it('respects quiet hours for ordinary reminders, including across midnight', () => {
     expect(inQuietHours('2026-11-16T22:30:00Z', 'Asia/Beirut', '23:00', '06:30')).toBe(true); // 00:30 local
     expect(inQuietHours('2026-11-16T10:00:00Z', 'Asia/Beirut', '23:00', '06:30')).toBe(false);

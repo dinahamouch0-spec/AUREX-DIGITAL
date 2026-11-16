@@ -40,6 +40,7 @@ Nothing below is claimed to work until checked here. Record results in `docs/STA
 | 5 | Combined wording: Fajr / "Dhuhr and Asr" / "Maghrib and Isha"; each prayer still logged separately | |
 | 6 | Follow-up reminder fires only if the group isn't recorded | Set follow-up 15 min; log one group, leave another |
 | 7 | Quiet hours suppress ordinary reminders but not prayer alerts | |
+| 7b | Review reminders: daily, weekly (Sunday), monthly (1st) fire at the chosen time | Settings → Notifications |
 | 8 | Behaviour in Focus / Silent / Low Power Mode | Note any delays |
 | 9 | Adhan audio | Not supported; confirm only the default sound plays |
 | 10 | Export opens the share sheet and the JSON file is readable | Settings → Export & delete |

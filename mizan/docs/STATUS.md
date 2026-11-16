@@ -19,6 +19,7 @@ Legend:
 | Analytics: 7/30/90 days per domain, data range shown | ✅ | |
 | Search across domains with filters | ✅ | |
 | In-app notification centre (read / snooze / dismiss), reminders | ✅ | |
+| Review reminders: daily evening, weekly (Sunday), monthly (1st), configurable time | ✅ planning (unit test) · 📱 delivery |
 | Device notifications (prayer alerts, reminders, quiet hours, follow-ups) | 📱 | Planning logic unit-tested; delivery via `expo-notifications` not yet verified on iPhone |
 | Adhan audio | 📱 / ⏳ | Not supported; standard notification sound only (stated in app) |
 | Export (JSON, documented conventions) | ✅ | Web download tested; iOS share sheet 📱 |
@@ -128,9 +129,21 @@ Legend:
 ## Test counts (current)
 | Suite | Count |
 |---|---|
-| Unit (`npm test`) | 158 |
+| Unit (`npm test`) | 159 |
 | PostgreSQL (`npm run test:db`) | 45 checks |
-| End-to-end (`npm run test:e2e`) | 164 checks |
+| End-to-end smoke (`tests/e2e/smoke.mjs`) | 164 checks |
+| End-to-end functional flows (`tests/e2e/flows.mjs`) | 22 checks |
+| Native iOS bundle (`expo export --platform ios`) + iOS prebuild | compiles / generates |
+
+## Security review (post-merge)
+| Item | Result |
+|---|---|
+| Secrets in Git history (`mizan/`, workflow) | none found |
+| Tracked env files | only `.env.example` templates (empty values) |
+| Client env vars | only public: Supabase URL, anon key, AI proxy URL |
+| RLS forced on every table | ✅ (DB test) |
+| `console.*` logging in app code | none |
+| `npm audit` (production deps) | 3 moderate, all `minimatch` ReDoS via `@expo/fingerprint` (build tooling). Only automated fix is an Expo SDK downgrade (58 → 52) — not applied |
 
 ## Release
 | Item | Status |

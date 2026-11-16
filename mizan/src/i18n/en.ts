@@ -1015,6 +1015,8 @@ export const en = {
   'field.applicable': 'Required',
   'field.sealed_at': 'Closed at',
   'field.definition_id': 'Definition',
+  'setn.weeklyTitle': 'Weekly review',
+  'setn.monthlyTitle': 'Monthly review',
 } as const;
 
 export type TranslationKey = keyof typeof en;

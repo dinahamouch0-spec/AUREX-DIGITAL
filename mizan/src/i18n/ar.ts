@@ -993,4 +993,6 @@ export const ar: Record<TranslationKey, string> = {
   'field.applicable': 'مطلوب',
   'field.sealed_at': 'أُغلق في',
   'field.definition_id': 'التعريف',
+  'setn.weeklyTitle': 'المراجعة الأسبوعية',
+  'setn.monthlyTitle': 'المراجعة الشهرية',
 };
