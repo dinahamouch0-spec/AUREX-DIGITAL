@@ -568,7 +568,18 @@ export const AUDITED_COLLECTIONS: CollectionName[] = ['transactions', 'invoices'
 
 /** Collections stored only on this device: never queued for sync or sent to AI. */
 /** Collections that may only be appended to: updates and deletes are refused. */
-export const APPEND_ONLY_COLLECTIONS: CollectionName[] = ['perfect_day_results', 'audit_logs'];
+export const APPEND_ONLY_COLLECTIONS: CollectionName[] = ['perfect_day_results', 'perfect_day_definitions', 'audit_logs'];
+
+/**
+ * Collections whose previous versions are kept locally (field `_history`,
+ * never synced) so a closed day can be evaluated exactly as the records were
+ * at its close time (as-of evaluation).
+ */
+export const VERSIONED_COLLECTIONS: CollectionName[] = [
+  'habits', 'habit_logs', 'routines', 'routine_logs', 'workout_programs', 'workouts',
+  'study_sessions', 'tasks', 'prayer_logs', 'day_exemptions',
+];
+export const MAX_VERSIONS = 100;
 
 export const LOCAL_ONLY_COLLECTIONS: CollectionName[] = ['body_photos'];
 export const SYNCED_COLLECTIONS: CollectionName[] = COLLECTIONS.filter((c) => !LOCAL_ONLY_COLLECTIONS.includes(c));

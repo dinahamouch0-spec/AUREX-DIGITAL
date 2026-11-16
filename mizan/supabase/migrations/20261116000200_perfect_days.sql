@@ -64,10 +64,10 @@ begin
   end loop;
 end $$;
 
--- Definitions and exemptions can be edited/tombstoned by their owner; results cannot.
-create policy perfect_day_definitions_update_own on public.perfect_day_definitions for update to authenticated using (user_id = auth.uid()) with check (user_id = auth.uid());
+-- Exemptions can be edited/tombstoned by their owner. Definitions and results
+-- cannot (no update/delete policy, and triggers below refuse even privileged updates).
 create policy day_exemptions_update_own on public.day_exemptions for update to authenticated using (user_id = auth.uid()) with check (user_id = auth.uid());
--- (no update/delete policy on perfect_day_results: append-only)
+-- (no update/delete policy on perfect_day_definitions or perfect_day_results)
 
 -- ------------------------------------------------------------------ sealing
 -- A day D closes at 04:00 local time on D+1. The reference zone is
@@ -116,6 +116,16 @@ begin
   if v_def.effective_from > new.local_date then
     raise exception 'definition was not in effect on %', new.local_date using errcode = '23514';
   end if;
+  -- it must be THE definition in force that day (latest effective_from, then newest)
+  if exists (
+    select 1 from public.perfect_day_definitions d
+    where d.user_id = new.user_id and d.deleted_at is null and d.id <> v_def.id
+      and d.effective_from <= new.local_date
+      and (d.effective_from > v_def.effective_from
+           or (d.effective_from = v_def.effective_from and d.created_at > v_def.created_at))
+  ) then
+    raise exception 'definition was superseded on %', new.local_date using errcode = '23514';
+  end if;
   return new;
 end $$;
 
@@ -124,3 +134,58 @@ create trigger perfect_day_results_seal
   for each row execute function public.enforce_perfect_day_seal();
 
 grant execute on function public.perfect_day_seal_due(date, text) to authenticated;
+
+-- ------------------------------------------------------------ definitions
+-- Definitions are immutable versions. To change criteria the app inserts a new
+-- row. A new version may never take effect on a day that is already closed,
+-- so history can't be rewritten by backdating effective_from.
+create or replace function public.enforce_perfect_day_definition() returns trigger
+language plpgsql
+set search_path = public, pg_catalog
+as $$
+declare
+  v_last_closed date;
+  v_el jsonb;
+  v_types text[] := '{}';
+  v_keys text[] := '{}';
+  v_key text;
+begin
+  if tg_op = 'UPDATE' then
+    raise exception 'perfect_day_definitions is append-only; insert a new version instead' using errcode = '42501';
+  end if;
+
+  -- criteria: non-empty array of known criterion objects, no duplicates, not prayers-only
+  if jsonb_typeof(new.criteria) <> 'array' or jsonb_array_length(new.criteria) = 0 then
+    raise exception 'invalid criteria: must be a non-empty array' using errcode = '23514';
+  end if;
+  for v_el in select * from jsonb_array_elements(new.criteria) loop
+    if jsonb_typeof(v_el) <> 'object'
+       or not (v_el->>'type' = any (array['habit','routine','prayers','planned_workout','planned_study','tasks_due'])) then
+      raise exception 'invalid criteria: unknown criterion %', v_el using errcode = '23514';
+    end if;
+    if v_el->>'type' in ('habit','routine') and coalesce(v_el->>'ref_id', '') = '' then
+      raise exception 'invalid criteria: % needs ref_id', v_el->>'type' using errcode = '23514';
+    end if;
+    v_key := (v_el->>'type') || ':' || coalesce(v_el->>'ref_id', '');
+    if v_key = any (v_keys) then
+      raise exception 'invalid criteria: duplicate %', v_key using errcode = '23514';
+    end if;
+    v_keys := v_keys || v_key;
+    v_types := v_types || (v_el->>'type');
+  end loop;
+  if array_position(v_types, 'prayers') is not null
+     and (select bool_and(t = 'prayers') from unnest(v_types) t) then
+    raise exception 'invalid criteria: prayers cannot be the only criterion' using errcode = '23514';
+  end if;
+
+  -- no retroactive versions: must start after the last closed day
+  select max(local_date) into v_last_closed from public.perfect_day_results where user_id = new.user_id;
+  if v_last_closed is not null and new.effective_from <= v_last_closed then
+    raise exception 'definition cannot take effect on % (days up to % are closed)', new.effective_from, v_last_closed using errcode = '23514';
+  end if;
+  return new;
+end $$;
+
+create trigger perfect_day_definitions_guard
+  before insert or update on public.perfect_day_definitions
+  for each row execute function public.enforce_perfect_day_definition();

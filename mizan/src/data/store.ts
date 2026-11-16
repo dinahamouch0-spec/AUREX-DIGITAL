@@ -9,10 +9,24 @@
  * - Deletes are tombstones (`deleted_at`) so they can sync and be undone.
  * - The UI never touches the driver directly — only this store / use cases.
  */
-import { APPEND_ONLY_COLLECTIONS, AUDITED_COLLECTIONS, BaseRecord, CollectionMap, CollectionName, COLLECTIONS, LOCAL_ONLY_COLLECTIONS } from '../domain/types';
+import { APPEND_ONLY_COLLECTIONS, AUDITED_COLLECTIONS, BaseRecord, CollectionMap, CollectionName, COLLECTIONS, LOCAL_ONLY_COLLECTIONS, MAX_VERSIONS, VERSIONED_COLLECTIONS } from '../domain/types';
 import { ValidationError, defaultsFor, validateRecord } from '../domain/schema';
 
-export type Row = BaseRecord & Record<string, unknown> & { _server_updated_at?: string | null };
+export type Row = BaseRecord & Record<string, unknown> & { _server_updated_at?: string | null; _history?: Row[] };
+
+/** Previous versions are kept (newest first) for as-of evaluation; local only. */
+export function withPreviousVersion(collection: CollectionName, existing: Row, next: Row): Row {
+  if (!VERSIONED_COLLECTIONS.includes(collection)) return next;
+  const { _history, ...snapshot } = existing;
+  const strip = (r: Row) => {
+    const { _history: _h, _server_updated_at: _s, ...rest } = r;
+    void _h;
+    void _s;
+    return JSON.stringify(rest);
+  };
+  if (strip(existing) === strip(next)) return next;
+  return { ...next, _history: [snapshot as Row, ...(_history ?? [])].slice(0, MAX_VERSIONS) };
+}
 
 export type OutboxStatus = 'pending' | 'failed' | 'conflict';
 export interface OutboxItem {
@@ -184,7 +198,7 @@ export class Store {
       updated_at: this.now().toISOString(),
     } as Row;
     if (!next.deleted_at) this.validate(collection, next);
-    this.persist(collection, next);
+    this.persist(collection, withPreviousVersion(collection, existing, next));
     this.audit(collection, 'update', id);
     this.emit(collection);
     return next as unknown as CollectionMap[C];
@@ -196,7 +210,7 @@ export class Store {
     const existing = this.data.get(collection)?.get(id);
     if (!existing || existing.deleted_at) return () => undefined;
     const ts = this.now().toISOString();
-    this.persist(collection, { ...existing, deleted_at: ts, updated_at: ts });
+    this.persist(collection, withPreviousVersion(collection, existing, { ...existing, deleted_at: ts, updated_at: ts }));
     this.audit(collection, 'delete', id);
     this.emit(collection);
     return () => this.restore(collection, id);
@@ -205,7 +219,7 @@ export class Store {
   restore(collection: CollectionName, id: string) {
     const existing = this.data.get(collection)?.get(id);
     if (!existing || !existing.deleted_at) return;
-    this.persist(collection, { ...existing, deleted_at: null, updated_at: this.now().toISOString() });
+    this.persist(collection, withPreviousVersion(collection, existing, { ...existing, deleted_at: null, updated_at: this.now().toISOString() }));
     this.audit(collection, 'restore', id);
     this.emit(collection);
   }
@@ -258,8 +272,11 @@ export class Store {
 
   /** Apply a server row without creating an outbox entry. */
   applyRemote(collection: CollectionName, remote: Row) {
-    const row: Row = { ...remote, _server_updated_at: remote.updated_at };
+    const existing = this.data.get(collection)?.get(remote.id);
+    let row: Row = { ...remote, _server_updated_at: remote.updated_at };
     delete (row as Record<string, unknown>).user_id;
+    delete (row as Record<string, unknown>)._history; // never trust history from elsewhere
+    if (existing) row = withPreviousVersion(collection, existing, row);
     this.driver.writeRecord(collection, row);
     this.data.get(collection)?.set(row.id, row);
     this.emit(collection);

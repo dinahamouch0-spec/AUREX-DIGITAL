@@ -108,9 +108,12 @@ Legend:
 | Late sync of days closed while offline is accepted (any time after the close time) | ✅ (DB test) |
 | Result consistency enforced in SQL: perfect ⇒ met = applicable > 0; incomplete ⇒ met < applicable; rest ⇒ 0/0; definition must belong to the user and be in effect that day | ✅ (DB tests) |
 | Anti-fake-streak: records created/edited after a day closes don't count; definitions can't be backdated; rest days only for today or later | ✅ |
+| **As-of evaluation:** a closed day is evaluated with every input (definitions, exemptions, habits, routines, workout programs, tasks, study sessions, all logs) exactly as it was at the close time, using a local version history (`_history`, never synced, capped at 100 versions per record). Schedule changes, archiving, deletions, moved due dates, edited or back-filled logs after the close can't change the day | ✅ (16 unit tests, verified to fail without the fix) |
+| **Immutable definitions:** criteria / effective_from can't be updated (no UPDATE policy + trigger that also blocks privileged roles); a change inserts a new version, which must start after the last closed day; a result must reference the definition in force that day; criteria validated in SQL (known types, ref_id, no duplicates, not prayers-only) | ✅ (DB tests) |
 | Rest / holiday days bridge a streak without counting | ✅ |
 | Current streak, start date, longest (with dates), total, history | ✅ |
 | Dashboard 🔥 card, detail screen, monthly calendar, month-by-month chart, analytics section | ✅ (e2e) |
+| Version history is per device: an edit made on another device is only known from when this device pulls it (the earlier local version is kept). Records created before this release have no older versions; the oldest known version is used | Known limitation |
 | Multi-device: each device seals days independently; the server keeps the first result per day (unique index). A second device's duplicate push is rejected and shown as a failed sync item | 🟡 needs live Supabase validation |
 | Device clock: with sync enabled the server's clock decides (early results are rejected). In **local-only mode** there is no server, so a user who moves the phone's clock forward could close a day early on that device | Known limitation (local-only mode only) |
 
@@ -121,6 +124,13 @@ Legend:
 | Proposed actions require confirmation and are audit-logged | ✅ |
 | Provider abstraction; minimised context (no sensitive fields, no disabled domains) | ✅ (unit tested) |
 | External AI provider (chat, planning drafts) | 🟡: needs a provider choice and a server-side proxy holding the key. See `docs/AI.md` |
+
+## Test counts (current)
+| Suite | Count |
+|---|---|
+| Unit (`npm test`) | 158 |
+| PostgreSQL (`npm run test:db`) | 45 checks |
+| End-to-end (`npm run test:e2e`) | 164 checks |
 
 ## Release
 | Item | Status |

@@ -20,8 +20,8 @@ The app works fully **offline / local-only** with no configuration. To enable ac
 |---|---|
 | `npm run typecheck` | TypeScript strict |
 | `npm run lint` | ESLint (Expo config + React hooks rules) |
-| `npm test` | 140 unit tests: perfect-day streaks, dates/DST, money, prayer times, grades, invoices, habits, fitness, goals, forms, notifications plan, store, sync engine, use cases, AI provider, schema⇄DB consistency, i18n parity |
-| `npm run test:db` | Applies the migrations to a throwaway PostgreSQL and runs RLS / ownership tests |
+| `npm test` | 158 unit tests: perfect-day streaks, dates/DST, money, prayer times, grades, invoices, habits, fitness, goals, forms, notifications plan, store, sync engine, use cases, AI provider, schema⇄DB consistency, i18n parity |
+| `npm run test:db` | Applies the migrations to a throwaway PostgreSQL and runs 45 RLS / ownership / integrity checks |
 | `npm run test:e2e` | Builds the web app and drives real flows in Chromium (164 checks, Arabic + English) |
 | `npx expo-doctor` | Expo SDK / dependency health |
 

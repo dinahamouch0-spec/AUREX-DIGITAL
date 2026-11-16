@@ -167,7 +167,7 @@ export function removeDayExemption(store: Store, id: string, now: Date, timeZone
 /** Append immutable results for every day whose seal time has passed. */
 export function sealPerfectDays(store: Store, now: Date, timeZone: string): number {
   const list = store.list.bind(store) as never;
-  const rows = daysToSeal(list, timeZone, now);
+  const rows = daysToSeal(list, timeZone, now, 400, store.allRaw.bind(store) as never);
   for (const r of rows) store.insert('perfect_day_results', r);
   return rows.length;
 }

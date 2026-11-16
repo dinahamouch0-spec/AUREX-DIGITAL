@@ -92,26 +92,51 @@ export interface DayEvaluation {
   status: 'perfect' | 'unmet' | 'rest' | 'exempt' | 'not_tracked';
 }
 
-/**
- * Evaluate one day. With `asOf`, only records created and last edited at or
- * before `asOf` are considered (used when sealing).
- */
-export function evaluateDay(list: Lists, date: LocalDate, timeZone: string, asOf?: Date): DayEvaluation {
-  const cut = asOf?.toISOString();
-  const createdBy = <T extends { created_at: string }>(r: T) => !cut || r.created_at <= cut;
-  const stable = <T extends { created_at: string; updated_at: string }>(r: T) => !cut || (r.created_at <= cut && r.updated_at <= cut);
+/** Same signature as Lists but including tombstoned rows (for as-of evaluation). */
+export type RawLists = <C extends CollectionName>(c: C) => (CollectionMap[C] & { _history?: unknown[] })[];
 
-  const def = definitionFor(list('perfect_day_definitions').filter(createdBy), date) ?? null;
+type Versioned = { created_at: string; updated_at: string; deleted_at?: string | null; _history?: unknown[] };
+
+/**
+ * The version of a record as it was at `cut` (ISO instant), or undefined if it
+ * didn't exist (created later, or already deleted). Uses the local version
+ * history; if no version that old is known, the oldest known version is used.
+ */
+export function versionAt<T extends Versioned>(row: T, cut: string): T | undefined {
+  if (row.created_at > cut) return undefined;
+  const versions = [row, ...((row._history ?? []) as T[])];
+  const v = versions.find((x) => x.updated_at <= cut) ?? versions[versions.length - 1];
+  if (v.deleted_at && v.deleted_at <= cut) return undefined;
+  return v;
+}
+
+/**
+ * Evaluate one day.
+ * - Without `asOf`: current records (live status of an unsealed day).
+ * - With `asOf` (the close time): EVERY input — definitions, exemptions,
+ *   habits, routines, programs, tasks, study sessions and all logs — is read
+ *   as it was at that instant, so later edits (schedule changes, archiving,
+ *   moved due dates, back-filled or edited logs) can't change a closed day.
+ */
+export function evaluateDay(list: Lists, date: LocalDate, timeZone: string, asOf?: Date, raw?: RawLists): DayEvaluation {
+  const cut = asOf?.toISOString();
+  const get = <C extends CollectionName>(c: C): CollectionMap[C][] => {
+    if (!cut) return list(c);
+    const rows = (raw ? raw(c) : list(c)) as unknown as Versioned[];
+    return rows.map((r) => versionAt(r, cut)).filter((r): r is Versioned => !!r) as unknown as CollectionMap[C][];
+  };
+
+  const def = definitionFor(get('perfect_day_definitions'), date) ?? null;
   const base = { date, definition: def, results: [] as CriterionResult[], applicable: 0, met: 0 };
   if (!def) return { ...base, exempt: false, status: 'not_tracked' };
 
   // Exemptions must be created on or before the day itself (no retroactive excuses).
-  const exempt = list('day_exemptions').some((e) => e.local_date === date && createdBy(e) && localDateOf(e.created_at, timeZone) <= date);
+  const exempt = get('day_exemptions').some((e) => e.local_date === date && localDateOf(e.created_at, timeZone) <= date);
 
-  const habits = list('habits');
-  const habitLogs = list('habit_logs').filter(stable);
-  const routines = list('routines');
-  const routineLogs = list('routine_logs').filter(stable);
+  const habits = get('habits');
+  const habitLogs = get('habit_logs');
+  const routines = get('routines');
+  const routineLogs = get('routine_logs');
   const onDay = (iso: string | null | undefined) => !!iso && localDateOf(iso, timeZone) === date;
 
   const results: CriterionResult[] = def.criteria.map((c): CriterionResult => {
@@ -128,28 +153,28 @@ export function evaluateDay(list: Lists, date: LocalDate, timeZone: string, asOf
         return { criterion: c, applicable: true, met: routineLogs.some((l) => l.routine_id === r.id && l.local_date === date && l.status === 'completed') };
       }
       case 'prayers': {
-        const s = dayPrayerSummary(list('prayer_logs').filter(stable), date);
+        const s = dayPrayerSummary(get('prayer_logs'), date);
         const done = s.performed + s.excused;
         return { criterion: c, applicable: true, met: done === 5, progress: { done, total: 5 } };
       }
       case 'planned_workout': {
-        const program = list('workout_programs').find((p) => p.is_active && createdBy(p));
+        const program = get('workout_programs').find((p) => p.is_active);
         const label = program?.schedule_json?.[String(weekdayOf(date))];
         if (!program || !label) return { criterion: c, applicable: false, met: false }; // rest day
-        const met = list('workouts').filter(stable).some((w) => onDay(w.started_at) && w.status === 'completed');
+        const met = get('workouts').some((w) => onDay(w.started_at) && w.status === 'completed');
         return { criterion: c, applicable: true, met };
       }
       case 'planned_study': {
-        const planned = list('study_sessions').filter((s) => s.planned_date === date && createdBy(s));
+        const planned = get('study_sessions').filter((s) => s.planned_date === date);
         if (planned.length === 0) return { criterion: c, applicable: false, met: false };
-        const done = planned.filter((s) => s.status === 'completed' && stable(s)).length;
+        const done = planned.filter((s) => s.status === 'completed').length;
         return { criterion: c, applicable: true, met: done === planned.length, progress: { done, total: planned.length } };
       }
       case 'tasks_due': {
         // low-priority tasks are optional and never affect the result
-        const due = list('tasks').filter((x) => onDay(x.due_at) && x.priority !== 'low' && x.status !== 'archived' && createdBy(x));
+        const due = get('tasks').filter((x) => onDay(x.due_at) && x.priority !== 'low' && x.status !== 'archived');
         if (due.length === 0) return { criterion: c, applicable: false, met: false };
-        const done = due.filter((x) => x.status === 'completed' && stable(x)).length;
+        const done = due.filter((x) => x.status === 'completed').length;
         return { criterion: c, applicable: true, met: done === due.length, progress: { done, total: due.length } };
       }
     }
@@ -178,7 +203,7 @@ export function liveStatus(list: Lists, date: LocalDate, timeZone: string, now: 
  * Days that are past their seal time but have no result yet, starting from
  * the first definition's effective date. Returns the results to append.
  */
-export function daysToSeal(list: Lists, timeZone: string, now: Date, maxDays = 400): Omit<PerfectDayResult, 'id' | 'created_at' | 'updated_at'>[] {
+export function daysToSeal(list: Lists, timeZone: string, now: Date, maxDays = 400, raw?: RawLists): Omit<PerfectDayResult, 'id' | 'created_at' | 'updated_at'>[] {
   const defs = list('perfect_day_definitions');
   if (defs.length === 0) return [];
   const first = defs.reduce((a, d) => (d.effective_from < a ? d.effective_from : a), defs[0].effective_from);
@@ -190,7 +215,7 @@ export function daysToSeal(list: Lists, timeZone: string, now: Date, maxDays = 4
     if (sealedDates.has(d)) continue;
     const at = sealTime(d, timeZone);
     if (at > now) break;
-    const ev = evaluateDay(list, d, timeZone, at);
+    const ev = evaluateDay(list, d, timeZone, at, raw);
     if (ev.status === 'not_tracked' || !ev.definition) continue;
     out.push({
       local_date: d,

@@ -202,4 +202,66 @@ reset role;
 
 -- even with RLS bypassed (e.g. service role), updates are refused by the trigger
 select pg_temp.expect_error($$update public.perfect_day_results set status = 'incomplete', met = 0 where id = 'bbbbbbbb-0000-0000-0000-000000000002'$$, 'privileged update of a closed day', 'append-only');
+-- ============================================ immutable definitions (user 3)
+insert into auth.users (id) values ('33333333-3333-3333-3333-333333333333');
+set role authenticated;
+select set_config('request.jwt.claim.sub', '33333333-3333-3333-3333-333333333333', false);
+-- v1 effective 20 days ago; days -10 and -9 closed with v1
+insert into public.perfect_day_definitions (id, effective_from, criteria)
+  values ('cccccccc-0000-0000-0000-000000000001', (select today_beirut - 20 from pd_dates), '[{"type":"habit","ref_id":"h1"}]');
+insert into public.perfect_day_results (local_date, status, met, applicable, sealed_at, definition_id)
+  values ((select today_beirut - 10 from pd_dates), 'perfect', 1, 1, now(), 'cccccccc-0000-0000-0000-000000000001'),
+         ((select today_beirut - 9 from pd_dates), 'incomplete', 0, 1, now(), 'cccccccc-0000-0000-0000-000000000001');
+
+-- owner can't change criteria or effective_from (no UPDATE policy) and can't delete
+update public.perfect_day_definitions set criteria = '[{"type":"tasks_due"}]', effective_from = '2000-01-01';
+delete from public.perfect_day_definitions;
+do $$ begin
+  if (select criteria::text from public.perfect_day_definitions where id = 'cccccccc-0000-0000-0000-000000000001') <> '[{"type": "habit", "ref_id": "h1"}]'
+     or (select effective_from from public.perfect_day_definitions where id = 'cccccccc-0000-0000-0000-000000000001') <> (select today_beirut - 20 from pd_dates) then
+    raise exception 'FAIL: definition was modified';
+  end if;
+  raise notice 'PASS: owner cannot update criteria/effective_from or delete a definition';
+end $$;
+
+-- a new version can't be backdated onto closed days (including the last closed day itself)
+select pg_temp.expect_error(format($f$insert into public.perfect_day_definitions (effective_from, criteria) values (%L, '[{"type":"tasks_due"}]')$f$, (select today_beirut - 15 from pd_dates)), 'new definition backdated before closed days', 'are closed');
+select pg_temp.expect_error(format($f$insert into public.perfect_day_definitions (effective_from, criteria) values (%L, '[{"type":"tasks_due"}]')$f$, (select today_beirut - 9 from pd_dates)), 'new definition effective on the last closed day (edge)', 'are closed');
+-- the day after the last closed day is allowed (edge)
+insert into public.perfect_day_definitions (id, effective_from, criteria)
+  values ('cccccccc-0000-0000-0000-000000000002', (select today_beirut - 8 from pd_dates), '[{"type":"habit","ref_id":"h1"},{"type":"tasks_due"}]');
+do $$ begin raise notice 'PASS: new version effective the day after the last closed day is accepted'; end $$;
+
+-- closed days keep their original definition; new days must use the one in force
+select pg_temp.expect_error(format($f$insert into public.perfect_day_results (local_date, status, met, applicable, sealed_at, definition_id) values (%L, 'perfect', 1, 1, now(), 'cccccccc-0000-0000-0000-000000000001')$f$, (select today_beirut - 7 from pd_dates)), 'result using a superseded definition', 'superseded');
+insert into public.perfect_day_results (local_date, status, met, applicable, sealed_at, definition_id)
+  values ((select today_beirut - 7 from pd_dates), 'perfect', 2, 2, now(), 'cccccccc-0000-0000-0000-000000000002');
+do $$ begin
+  if (select definition_id from public.perfect_day_results where local_date = (select today_beirut - 10 from pd_dates)
+        and user_id = '33333333-3333-3333-3333-333333333333') <> 'cccccccc-0000-0000-0000-000000000001' then
+    raise exception 'FAIL: closed day lost its definition';
+  end if;
+  raise notice 'PASS: result for a new day must use the definition in force; closed days keep theirs';
+end $$;
+-- same-day tie: the newer version wins
+insert into public.perfect_day_definitions (id, effective_from, criteria)
+  values ('cccccccc-0000-0000-0000-000000000003', (select today_beirut - 6 from pd_dates), '[{"type":"habit","ref_id":"h1"}]');
+insert into public.perfect_day_definitions (id, effective_from, criteria)
+  values ('cccccccc-0000-0000-0000-000000000004', (select today_beirut - 6 from pd_dates), '[{"type":"habit","ref_id":"h2"}]');
+select pg_temp.expect_error(format($f$insert into public.perfect_day_results (local_date, status, met, applicable, sealed_at, definition_id) values (%L, 'perfect', 1, 1, now(), 'cccccccc-0000-0000-0000-000000000003')$f$, (select today_beirut - 6 from pd_dates)), 'older of two same-day versions', 'superseded');
+
+-- criteria validation
+select pg_temp.expect_error($$insert into public.perfect_day_definitions (effective_from, criteria) values (current_date + 30, '[]')$$, 'empty criteria', 'check constraint|non-empty');
+select pg_temp.expect_error($$insert into public.perfect_day_definitions (effective_from, criteria) values (current_date + 30, '[{"type":"prayers"}]')$$, 'prayers as the only criterion', 'only criterion');
+select pg_temp.expect_error($$insert into public.perfect_day_definitions (effective_from, criteria) values (current_date + 30, '[{"type":"score"}]')$$, 'unknown criterion type', 'unknown criterion');
+select pg_temp.expect_error($$insert into public.perfect_day_definitions (effective_from, criteria) values (current_date + 30, '[{"type":"habit"}]')$$, 'habit criterion without ref_id', 'needs ref_id');
+select pg_temp.expect_error($$insert into public.perfect_day_definitions (effective_from, criteria) values (current_date + 30, '[{"type":"tasks_due"},{"type":"tasks_due"}]')$$, 'duplicate criterion', 'duplicate');
+insert into public.perfect_day_definitions (effective_from, criteria) values (current_date + 30, '[{"type":"prayers"},{"type":"habit","ref_id":"h1"}]');
+do $$ begin raise notice 'PASS: prayers combined with another criterion is accepted'; end $$;
+reset role;
+
+-- even privileged roles can't rewrite a definition
+select pg_temp.expect_error($$update public.perfect_day_definitions set effective_from = '2000-01-01' where id = 'cccccccc-0000-0000-0000-000000000001'$$, 'privileged update of effective_from', 'append-only');
+select pg_temp.expect_error($$update public.perfect_day_definitions set criteria = '[{"type":"tasks_due"}]' where id = 'cccccccc-0000-0000-0000-000000000001'$$, 'privileged update of criteria', 'append-only');
+
 \echo ALL RLS TESTS PASSED

@@ -7,6 +7,9 @@ import type { Habit, PerfectDayResult } from '../src/domain/types';
 import { MemoryDriver } from '../src/data/drivers/memory';
 import { Store } from '../src/data/store';
 import * as uc from '../src/data/usecases';
+import { toServerRow } from '../src/data/sync';
+
+const toServerRowForTest = (r: Parameters<typeof toServerRow>[0]) => toServerRow(r, 'u');
 
 const TZ = 'Asia/Beirut';
 let clock: Date;
@@ -234,5 +237,172 @@ describe('streak computation', () => {
       expect(new Date(r.sealed_at).getTime()).toBe(sealTime(r.local_date, TZ).getTime());
     }
     expect(store.list('perfect_day_results').map((r) => r.status)).toEqual(['incomplete', 'incomplete', 'incomplete']);
+  });
+});
+
+describe('historical stability: edits after a day closes never change it', () => {
+  // Monday 2026-11-02 closes at Tue 04:00 Beirut. Each edit below happens at
+  // Tue 05:00 — after the close but BEFORE the sealing job runs.
+  const closeThenEdit = (edit: () => void) => {
+    setNow('2026-11-03', '05:00');
+    edit();
+    uc.sealPerfectDays(store, clock, TZ);
+    return store.list('perfect_day_results').find((r) => r.local_date === '2026-11-02');
+  };
+
+  it('changing a habit schedule afterwards does not turn a missed day into a rest day', () => {
+    defineHabits(walk); // Mon/Wed/Fri, not done on Monday
+    const r = closeThenEdit(() => store.update('habits', walk.id, { schedule_days: [2] })); // now Tue only
+    expect(r?.status).toBe('incomplete');
+  });
+
+  it('archiving or pausing a habit afterwards does not erase the day', () => {
+    defineHabits(read);
+    const r = closeThenEdit(() => store.update('habits', read.id, { status: 'archived' }));
+    expect(r).toMatchObject({ status: 'incomplete', applicable: 1, met: 0 });
+  });
+
+  it('deleting a habit afterwards does not erase the day', () => {
+    defineHabits(read);
+    const r = closeThenEdit(() => store.remove('habits', read.id));
+    expect(r?.status).toBe('incomplete');
+  });
+
+  it('moving a task due date or completing it afterwards does not change the day', () => {
+    uc.savePerfectDayDefinition(store, [{ type: 'tasks_due' }, { type: 'habit', ref_id: read.id }], clock, TZ);
+    done(read, '2026-11-02');
+    const task = store.insert('tasks', { title: 'Report', priority: 'high', due_at: at('2026-11-02', '17:00').toISOString() });
+    const r = closeThenEdit(() => {
+      store.update('tasks', task.id, { due_at: at('2026-11-05', '17:00').toISOString() });
+      store.update('tasks', task.id, { status: 'completed' });
+    });
+    expect(r).toMatchObject({ status: 'incomplete', applicable: 2, met: 1 });
+  });
+
+  it('a task created afterwards for that day does not count against it', () => {
+    uc.savePerfectDayDefinition(store, [{ type: 'tasks_due' }, { type: 'habit', ref_id: read.id }], clock, TZ);
+    done(read, '2026-11-02');
+    const r = closeThenEdit(() => store.insert('tasks', { title: 'late', priority: 'high', due_at: at('2026-11-02', '12:00').toISOString() }));
+    expect(r?.status).toBe('perfect');
+  });
+
+  it('changing the workout program afterwards does not turn a training day into a rest day', () => {
+    const prog = store.insert('workout_programs', { name: 'P', is_active: true, schedule_json: { '1': 'Push' } });
+    uc.savePerfectDayDefinition(store, [{ type: 'planned_workout' }, { type: 'habit', ref_id: read.id }], clock, TZ);
+    done(read, '2026-11-02');
+    const r = closeThenEdit(() => store.update('workout_programs', prog.id, { schedule_json: { '2': 'Push' } }));
+    expect(r).toMatchObject({ status: 'incomplete', applicable: 2, met: 1 });
+  });
+
+  it('deactivating the program afterwards does not change the day', () => {
+    const prog = store.insert('workout_programs', { name: 'P', is_active: true, schedule_json: { '1': 'Push' } });
+    uc.savePerfectDayDefinition(store, [{ type: 'planned_workout' }, { type: 'habit', ref_id: read.id }], clock, TZ);
+    const r = closeThenEdit(() => store.update('workout_programs', prog.id, { is_active: false }));
+    expect(r?.applicable).toBe(2);
+  });
+
+  it('deleting or completing a planned study session afterwards does not change the day', () => {
+    uc.savePerfectDayDefinition(store, [{ type: 'planned_study' }, { type: 'habit', ref_id: read.id }], clock, TZ);
+    done(read, '2026-11-02');
+    const a = store.insert('study_sessions', { title: 'Algebra', planned_date: '2026-11-02', planned_minutes: 30 });
+    const b = store.insert('study_sessions', { title: 'Physics', planned_date: '2026-11-02', planned_minutes: 30 });
+    const r = closeThenEdit(() => {
+      store.remove('study_sessions', a.id);
+      store.update('study_sessions', b.id, { status: 'completed' });
+    });
+    expect(r).toMatchObject({ status: 'incomplete', applicable: 2, met: 1 });
+  });
+
+  it('moving a study session to another day afterwards does not change the day', () => {
+    uc.savePerfectDayDefinition(store, [{ type: 'planned_study' }, { type: 'habit', ref_id: read.id }], clock, TZ);
+    done(read, '2026-11-02');
+    const s = store.insert('study_sessions', { title: 'Algebra', planned_date: '2026-11-02', planned_minutes: 30 });
+    const r = closeThenEdit(() => uc.moveStudySession(store, s.id, '2026-11-04'));
+    expect(r?.status).toBe('incomplete');
+  });
+
+  it('pausing a routine afterwards does not change the day', () => {
+    const routine = store.insert('routines', { name: 'Morning', kind: 'morning', status: 'active' });
+    uc.savePerfectDayDefinition(store, [{ type: 'routine', ref_id: routine.id }, { type: 'habit', ref_id: read.id }], clock, TZ);
+    done(read, '2026-11-02');
+    const r = closeThenEdit(() => store.update('routines', routine.id, { status: 'paused' }));
+    expect(r).toMatchObject({ status: 'incomplete', applicable: 2 });
+  });
+
+  it('editing a log afterwards uses the version that existed at close (both directions)', () => {
+    defineHabits(read);
+    uc.logHabit(store, read, '2026-11-02', 'skipped', clock);
+    let r = closeThenEdit(() => uc.logHabit(store, read, '2026-11-02', 'completed', clock));
+    expect(r?.status).toBe('incomplete'); // can't upgrade a closed day
+
+    // and a later downgrade can't break a day that was perfect at close
+    uc.logHabit(store, read, '2026-11-03', 'completed', clock);
+    setNow('2026-11-04', '05:00');
+    uc.logHabit(store, read, '2026-11-03', 'skipped', clock);
+    uc.sealPerfectDays(store, clock, TZ);
+    r = store.list('perfect_day_results').find((x) => x.local_date === '2026-11-03');
+    expect(r?.status).toBe('perfect');
+  });
+
+  it('boundary: a record written exactly at the close instant counts, one millisecond later does not', () => {
+    defineHabits(read);
+    const due = sealTime('2026-11-02', TZ).getTime();
+    clock = new Date(due);
+    done(read, '2026-11-02');
+    clock = new Date(due + 1);
+    uc.sealPerfectDays(store, clock, TZ);
+    expect(store.list('perfect_day_results')[0].status).toBe('perfect');
+
+    clock = new Date(sealTime('2026-11-03', TZ).getTime() + 1);
+    done(read, '2026-11-03'); // 1 ms too late
+    uc.sealPerfectDays(store, clock, TZ);
+    expect(store.list('perfect_day_results').find((x) => x.local_date === '2026-11-03')?.status).toBe('incomplete');
+  });
+
+  it('version history survives an app restart', async () => {
+    const driver = new MemoryDriver();
+    store = new Store(driver, { uuid: randomUUID, now: () => clock });
+    await store.load();
+    const h = store.insert('habits', { name: 'Read', schedule_type: 'daily', status: 'active', sort_order: 0 });
+    uc.savePerfectDayDefinition(store, [{ type: 'habit', ref_id: h.id }], clock, TZ);
+    setNow('2026-11-03', '05:00');
+    store.update('habits', h.id, { status: 'archived' });
+    const reloaded = new Store(driver, { uuid: randomUUID, now: () => clock });
+    await reloaded.load();
+    uc.sealPerfectDays(reloaded, clock, TZ);
+    expect(reloaded.list('perfect_day_results')[0].status).toBe('incomplete');
+  });
+
+  it('an edit pulled from another device after the close keeps the earlier version too', () => {
+    defineHabits(read);
+    const r = closeThenEdit(() => store.applyRemote('habits', { ...store.getRaw('habits', read.id)!, status: 'archived', updated_at: clock.toISOString() }));
+    expect(r?.status).toBe('incomplete');
+  });
+
+  it('history is local only: it is stripped before upload and capped', () => {
+    for (let i = 0; i < 120; i++) store.update('habits', read.id, { name: `Read ${i}` });
+    const raw = store.getRaw('habits', read.id)!;
+    expect((raw._history ?? []).length).toBe(100);
+    expect(Object.keys(toServerRowForTest(raw))).not.toContain('_history');
+  });
+});
+
+describe('definitions are immutable', () => {
+  it('cannot be updated or deleted; changing criteria creates a new version', () => {
+    const d1 = defineHabits(read);
+    expect(() => store.update('perfect_day_definitions', d1.id, { criteria: [] })).toThrow('append_only');
+    expect(() => store.update('perfect_day_definitions', d1.id, { effective_from: '2020-01-01' })).toThrow('append_only');
+    expect(() => store.remove('perfect_day_definitions', d1.id)).toThrow('append_only');
+    const d2 = defineHabits(read, walk);
+    expect(store.list('perfect_day_definitions').map((d) => d.id)).toEqual([d1.id, d2.id]);
+  });
+  it('a definition created after a day closed never applies to that day, even on the same date', () => {
+    defineHabits(read);
+    done(read, '2026-11-02');
+    setNow('2026-11-03', '05:00');
+    // a stricter definition saved now is effective Tue, never Mon
+    defineHabits(read, walk);
+    uc.sealPerfectDays(store, clock, TZ);
+    expect(store.list('perfect_day_results')[0]).toMatchObject({ local_date: '2026-11-02', status: 'perfect', applicable: 1 });
   });
 });
