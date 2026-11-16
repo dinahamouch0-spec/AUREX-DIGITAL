@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { AiAnswer, LocalInsightsProvider, ProposedAction, getProviders } from '@/ai/provider';
 import { addDays } from '@/domain/dates';
 import { DOMAINS } from '@/domain/types';
-import { store, useApp, useStoreVersion } from '@/state/AppContext';
+import { store, useApp, useStoreVersion, listAll } from '@/state/AppContext';
 import { InsightCard } from '@/ui/InsightCard';
 import { Badge, Button, Card, EmptyState, Notice, Row, Screen, SectionHeader, Txt } from '@/ui/primitives';
 
@@ -19,18 +19,18 @@ export default function Assistant() {
   const version = useStoreVersion();
   const [answer, setAnswer] = useState<AiAnswer | null>(null);
   const [error, setError] = useState(false);
-  const allowed = DOMAINS.filter((d) => settings.ai.domains[d]);
+  const allowedKey = DOMAINS.filter((d) => settings.ai.domains[d]).join(',');
 
   useEffect(() => {
     if (!settings.ai.enabled) return;
     new LocalInsightsProvider()
-      .analyse(store.list.bind(store) as never, { today, now: new Date(), timeZone: settings.timezone, weekStart: settings.weekStart, allowedDomains: allowed })
+      .analyse(listAll as never, { today, now: new Date(), timeZone: settings.timezone, weekStart: settings.weekStart, allowedDomains: allowedKey ? (allowedKey.split(',') as typeof DOMAINS) : [] })
       .then((a) => {
         setAnswer(a);
         setError(false);
       })
       .catch(() => setError(true));
-  }, [version, settings.ai, today]);
+  }, [version, settings.ai.enabled, allowedKey, today, settings.timezone, settings.weekStart]);
 
   const approve = async (a: ProposedAction) => {
     const ok = await confirm({ title: t('ai.confirmTitle'), body: t(a.summaryKey, a.params), confirmLabel: t('common.add') });

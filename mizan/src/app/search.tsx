@@ -1,9 +1,9 @@
 import { router } from 'expo-router';
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 
 import { searchRecords } from '@/domain/aggregate';
 import { DOMAINS, Domain } from '@/domain/types';
-import { domainOf, store, useApp, useStoreVersion } from '@/state/AppContext';
+import { domainOf, listAll, useApp, useStoreVersion } from '@/state/AppContext';
 import { agendaRoute } from '@/ui/agenda';
 import { Input } from '@/ui/fields';
 import { DomainDot, EmptyState, FilterChips, ListItem, Screen, Txt } from '@/ui/primitives';
@@ -13,7 +13,8 @@ export default function Search() {
   const version = useStoreVersion();
   const [q, setQ] = useState('');
   const [domains, setDomains] = useState<Domain[]>([]);
-  const results = useMemo(() => searchRecords(store.list.bind(store) as never, q, domainOf, domains), [q, domains, version]);
+  void version; // re-render on any store change
+  const results = searchRecords(listAll as never, q, domainOf, domains);
   return (
     <Screen title={t('search.title')} testID="screen-search">
       <Input value={q} onChangeText={setQ} placeholder={t('search.placeholder')} accessibilityLabel={t('search.placeholder')} autoFocus testID="search-input" />

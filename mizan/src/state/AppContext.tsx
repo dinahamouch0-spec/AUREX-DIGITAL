@@ -166,11 +166,14 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   }, [engine, version, syncNow]);
   useEffect(() => {
     if (!engine) return;
-    void syncNow();
+    const first = setTimeout(() => void syncNow(), 0);
     const sub = AppState.addEventListener('change', (s) => {
       if (s === 'active') void syncNow();
     });
-    return () => sub.remove();
+    return () => {
+      clearTimeout(first);
+      sub.remove();
+    };
   }, [engine, syncNow]);
 
   const rescheduleNotifications = useCallback(async () => {
@@ -302,3 +305,6 @@ export function useStoreVersion(): number {
 }
 
 export const domainOf = (c: CollectionName) => COLLECTION_DOMAIN[c];
+
+/** Stable accessor for pure read models (agenda, insights, search, export). */
+export const listAll = store.list.bind(store) as <C extends CollectionName>(c: C) => CollectionMap[C][];

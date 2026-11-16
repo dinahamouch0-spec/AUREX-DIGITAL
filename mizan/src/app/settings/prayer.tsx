@@ -1,6 +1,5 @@
 import React, { useMemo, useState } from 'react';
 
-import { formToRecord } from '@/domain/formValues';
 import { CALCULATION_SOURCE, DEFAULT_PRAYER_SETTINGS, PrayerTimeKey, computePrayerTimes } from '@/domain/prayerTimes';
 import { parseNumberInput } from '@/domain/formValues';
 import { useApp } from '@/state/AppContext';
@@ -24,7 +23,6 @@ export default function PrayerSettings() {
     adj: Object.fromEntries(KEYS.map((k) => [k, s.adjustments[k] ? String(s.adjustments[k]) : ''])) as Record<string, string>,
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
-  void formToRecord;
 
   const parsed = useMemo(() => {
     const errs: Record<string, string> = {};

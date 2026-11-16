@@ -128,6 +128,13 @@ export interface BodyMeasurement extends BaseRecord {
   body_fat_method?: string | null;
   note?: string | null;
 }
+/** Progress photo. Local-only: the file never leaves the device in v1. */
+export interface BodyPhoto extends BaseRecord {
+  local_uri: string;
+  captured_at: string;
+  phase_id?: string | null;
+  note?: string | null;
+}
 export interface FitnessPhase extends BaseRecord {
   phase_type: 'bulking' | 'cutting' | 'maintenance' | 'custom';
   name: string;
@@ -433,6 +440,7 @@ export interface CollectionMap {
   adhkar_logs: AdhkarLog;
   good_deed_logs: GoodDeedLog;
   body_measurements: BodyMeasurement;
+  body_photos: BodyPhoto;
   fitness_phases: FitnessPhase;
   exercises: Exercise;
   workouts: Workout;
@@ -481,6 +489,7 @@ export const COLLECTION_DOMAIN: Record<CollectionName, Domain> = {
   adhkar_logs: 'deen',
   good_deed_logs: 'deen',
   body_measurements: 'fitness',
+  body_photos: 'fitness',
   fitness_phases: 'fitness',
   exercises: 'fitness',
   workouts: 'fitness',
@@ -520,3 +529,7 @@ export const COLLECTIONS = Object.keys(COLLECTION_DOMAIN) as CollectionName[];
 
 /** Collections whose edits are audited (sensitive: finance + contacts). */
 export const AUDITED_COLLECTIONS: CollectionName[] = ['transactions', 'invoices', 'invoice_payments', 'deals', 'clients'];
+
+/** Collections stored only on this device: never queued for sync or sent to AI. */
+export const LOCAL_ONLY_COLLECTIONS: CollectionName[] = ['body_photos'];
+export const SYNCED_COLLECTIONS: CollectionName[] = COLLECTIONS.filter((c) => !LOCAL_ONLY_COLLECTIONS.includes(c));

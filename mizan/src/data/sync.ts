@@ -14,7 +14,7 @@
  * - The client never trusts its own user_id: it sends the session's user id
  *   and the database RLS policy rejects anything else.
  */
-import { COLLECTIONS, CollectionName } from '../domain/types';
+import { CollectionName, SYNCED_COLLECTIONS } from '../domain/types';
 import type { OutboxItem, Row, Store } from './store';
 
 export interface RemoteAdapter {
@@ -156,7 +156,7 @@ export class SyncEngine {
   }
 
   private async pull(result: SyncResult) {
-    for (const collection of COLLECTIONS) {
+    for (const collection of SYNCED_COLLECTIONS) {
       const cursorKey = `sync:cursor:${collection}`;
       let cursor = this.store.getMeta(cursorKey) ?? null;
       for (;;) {

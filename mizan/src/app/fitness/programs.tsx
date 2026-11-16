@@ -2,8 +2,7 @@ import { router } from 'expo-router';
 import React from 'react';
 
 import { store, useApp, useCollection } from '@/state/AppContext';
-import { Input } from '@/ui/fields';
-import { BooleanField } from '@/ui/fields';
+import { BooleanField, Input } from '@/ui/fields';
 import { Button, Card, EmptyState, Row, Screen, Txt } from '@/ui/primitives';
 import { newRecordHref } from '@/ui/records';
 

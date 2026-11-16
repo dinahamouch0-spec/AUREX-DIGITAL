@@ -5,7 +5,7 @@ import { Pressable, View } from 'react-native';
 import { agendaForDay } from '@/domain/aggregate';
 import { addDays, addMonths, dateRange, endOfMonth, startOfMonth, startOfWeek, weekdayOf } from '@/domain/dates';
 import { DOMAINS, Domain } from '@/domain/types';
-import { store, useApp, useStoreVersion } from '@/state/AppContext';
+import { listAll, useApp, useStoreVersion } from '@/state/AppContext';
 import { DOMAIN_COLORS, radius, spacing } from '@/theme/tokens';
 import { TimelineList } from '@/ui/agenda';
 import { Button, FilterChips, IconButton, Row, Screen, SectionHeader, Txt } from '@/ui/primitives';
@@ -22,7 +22,7 @@ export default function CalendarScreen() {
   const [mode, setMode] = useState<Mode>('day');
   const [date, setDate] = useState(today);
   const [domains, setDomains] = useState<Domain[]>(DOMAINS);
-  const list = store.list.bind(store) as never;
+  const list = listAll as never;
   const opts = { timeZone: settings.timezone, prayer: domains.includes('deen') ? settings.prayer : null, domains };
 
   const days = useMemo(() => {
@@ -34,7 +34,8 @@ export default function CalendarScreen() {
     return dateRange(startOfMonth(date), endOfMonth(date));
   }, [mode, date, settings.weekStart]);
 
-  const agendas = useMemo(() => new Map(days.map((d) => [d, agendaForDay(list, d, opts)])), [days, version, domains, settings.prayer, settings.timezone]);
+  void version; // re-render on any store change
+  const agendas = new Map(days.map((d) => [d, agendaForDay(list, d, opts)]));
 
   const shift = (dir: 1 | -1) => setDate(mode === 'day' ? addDays(date, dir) : mode === 'week' ? addDays(date, 7 * dir) : addMonths(date, dir));
   const toggleDomain = (d: Domain) => setDomains((cur) => (cur.includes(d) ? cur.filter((x) => x !== d) : [...cur, d]));

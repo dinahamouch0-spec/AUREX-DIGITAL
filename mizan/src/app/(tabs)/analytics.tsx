@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import { View } from 'react-native';
 
 import { averageGrades, isAssignmentOpen } from '@/domain/academics';
@@ -27,7 +27,8 @@ export default function Analytics() {
     return d >= from && d <= today;
   };
 
-  const data = useMemo(() => {
+  void version; // re-render on any store change
+  const data = (() => {
     const prayers = rangePrayerSummary(store.list('prayer_logs'), from, today);
     const quran = store.list('quran_logs').filter((q) => inRange(q.read_at)).length;
     const workouts = store.list('workouts').filter((w) => w.status === 'completed' && inRange(w.started_at));
@@ -53,7 +54,7 @@ export default function Analytics() {
     const dailyPrayers = prayers.days.map((d) => ({ label: fmt.weekdayShort(d.date), value: d.performed, date: d.date }));
     const dailyHabits = dateRange(from, today).map((d) => ({ label: fmt.weekdayShort(d), value: logs.filter((l) => l.local_date === d && l.status === 'completed').length, date: d }));
     return { prayers, quran, workouts: workouts.length, volume, waterAvg, avg, openHw, study, fin, completed, recorded, dailyPrayers, dailyHabits };
-  }, [version, range, today, tz]);
+  })();
 
   const money = (totals: Partial<Record<CurrencyCode, number>>) => {
     const e = Object.entries(totals) as [CurrencyCode, number][];

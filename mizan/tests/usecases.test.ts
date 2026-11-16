@@ -118,3 +118,12 @@ describe('integrations', () => {
     expect(await appleHealth.sync()).toEqual({ imported: 0, errors: 0 });
   });
 });
+
+describe('local-only progress photos', () => {
+  it('never enters the sync outbox or AI context', () => {
+    store.insert('body_photos', { local_uri: 'file:///doc/p.jpg', captured_at: now.toISOString() });
+    expect(store.list('body_photos')).toHaveLength(1);
+    expect(store.pendingOutbox().some((o) => o.collection === 'body_photos')).toBe(false);
+    expect(buildAiContext(store.list.bind(store) as never, ['fitness']).body_photos).toBeUndefined();
+  });
+});

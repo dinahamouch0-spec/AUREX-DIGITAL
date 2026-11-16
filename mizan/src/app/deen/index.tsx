@@ -20,7 +20,12 @@ export default function Deen() {
   const { t, fmt, today, settings, showToast, rtl } = useApp();
   const p = usePalette();
   const [date, setDate] = useState(today);
-  const [sheet, setSheet] = useState<PrayerType | null>(null);
+  const [sheet, setSheetState] = useState<PrayerType | null>(null);
+  const [sheetTarget, setSheetTarget] = useState<PrayerType>('fajr');
+  const setSheet = (p: PrayerType | null) => {
+    if (p) setSheetTarget(p);
+    setSheetState(p);
+  };
   const logs = useCollection('prayer_logs');
   const quran = useCollection('quran_logs');
   const adhkar = useCollection('adhkar_logs');
@@ -132,8 +137,8 @@ export default function Deen() {
 
       <SelectSheet
         visible={sheet != null}
-        title={sheet ? t('deen.chooseStatus', { prayer: t(`opt.prayer.${sheet}`) }) : ''}
-        value={sheet ? summary.statuses[sheet] : null}
+        title={t('deen.chooseStatus', { prayer: t(`opt.prayer.${sheetTarget}`) })}
+        value={summary.statuses[sheetTarget]}
         options={[
           { value: 'performed', label: t('opt.pstatus.performed') },
           { value: 'excused', label: t('opt.pstatus.excused') },

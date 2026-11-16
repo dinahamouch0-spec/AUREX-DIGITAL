@@ -1,56 +1,41 @@
-# Welcome to your Expo app 👋
+# MIZAN | ميزان
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A private, premium personal life-management app: **Deen · Fitness · Academics · Business (AUREX) · Habits**, plus a global dashboard, calendar, goals, analytics, notifications, search, settings and an on-device assistant. Arabic (RTL) and English (LTR), dark and light themes, Beirut timezone by default.
 
-## Get started
+Built from the blueprint in [`blueprint/`](blueprint/). **What is done, what is pending, and why** is tracked in [`docs/STATUS.md`](docs/STATUS.md). Read that before relying on any feature.
 
-1. Install dependencies
-
-   ```bash
-   npm install
-   ```
-
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **src/app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+## Run it
 
 ```bash
-npm run reset-project
+cd mizan
+npm install
+npx expo start            # press "w" for web, or scan with a development build on iPhone
 ```
 
-This command will move the starter code to the **example** directory and create a blank **src/app** directory where you can start developing.
+The app works fully **offline / local-only** with no configuration. To enable accounts and cloud sync, see [`docs/SUPABASE.md`](docs/SUPABASE.md). To install it on an iPhone, see [`docs/IPHONE.md`](docs/IPHONE.md).
 
-### Other setup steps
+## Verify it
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+| Command | What it checks |
+|---|---|
+| `npm run typecheck` | TypeScript strict |
+| `npm run lint` | ESLint (Expo config + React hooks rules) |
+| `npm test` | 116 unit tests: dates/DST, money, prayer times, grades, invoices, habits, fitness, goals, forms, notifications plan, store, sync engine, use cases, AI provider, schema⇄DB consistency, i18n parity |
+| `npm run test:db` | Applies the migrations to a throwaway PostgreSQL and runs RLS / ownership tests |
+| `npm run test:e2e` | Builds the web app and drives real flows in Chromium (151 checks, Arabic + English) |
+| `npx expo-doctor` | Expo SDK / dependency health |
 
-## Learn more
+## Structure
 
-To learn more about developing your project with Expo, look at the following resources:
+```
+mizan/
+  src/app/          screens (Expo Router)       src/domain/     pure business logic (tested)
+  src/data/         store, drivers, sync, use cases, Supabase adapter, notifications
+  src/ai/           AI provider abstraction     src/integrations/  integration framework (Apple Health slot)
+  src/ui/           design system components    src/i18n/       Arabic + English
+  supabase/         migrations, RLS tests, edge function
+  docs/             status, decisions, iPhone, Supabase, AI, integrations
+  tests/            unit tests + e2e smoke test
+```
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Architecture in one paragraph: screens call **use cases** and a **local-first store**. Every write is persisted synchronously (SQLite on device, localStorage on web) and queued in a durable **outbox**. When Supabase is configured and the user signs in, the **sync engine** pushes the outbox and pulls changes. Conflicting edits are never auto-merged; the user resolves them. Postgres **RLS** enforces ownership server-side. Domain rules (money, grades, prayer times, "not recorded ≠ missed") live in `src/domain` and are unit-tested.

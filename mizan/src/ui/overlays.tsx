@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Modal, Pressable, ScrollView, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -8,10 +8,15 @@ import { Button, Icon, Row, Txt } from './primitives';
 import { usePalette } from './theme';
 
 export function ConfirmHost() {
+  const { confirmSpec } = useApp();
+  if (!confirmSpec) return null;
+  return <ConfirmDialog key={`${confirmSpec.title}:${confirmSpec.body ?? ''}`} />;
+}
+
+function ConfirmDialog() {
   const { confirmSpec, resolveConfirm, t } = useApp();
   const p = usePalette();
   const [typed, setTyped] = useState('');
-  useEffect(() => setTyped(''), [confirmSpec]);
   if (!confirmSpec) return null;
   const blocked = !!confirmSpec.requireText && typed !== confirmSpec.requireText;
   return (
@@ -122,10 +127,12 @@ export function SelectSheet({
   const { t } = useApp();
   const insets = useSafeAreaInsets();
   const [q, setQ] = useState('');
-  useEffect(() => setQ(''), [visible]);
-  const lastTitle = React.useRef(title);
-  if (title) lastTitle.current = title;
-  title = lastTitle.current;
+  const [wasVisible, setWasVisible] = useState(visible);
+  if (visible !== wasVisible) {
+    // reset the search box whenever the sheet opens (derived-state pattern, no effect)
+    setWasVisible(visible);
+    if (visible) setQ('');
+  }
   const filtered = q ? options.filter((o) => o.label.toLocaleLowerCase().includes(q.toLocaleLowerCase())) : options;
   return (
     <Modal transparent visible={visible} animationType="slide" onRequestClose={onClose}>

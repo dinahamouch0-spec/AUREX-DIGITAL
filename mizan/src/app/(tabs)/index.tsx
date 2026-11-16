@@ -1,5 +1,5 @@
 import { router } from 'expo-router';
-import React, { useMemo } from 'react';
+import React from 'react';
 import { ScrollView, View } from 'react-native';
 
 import { agendaForDay, generateInsights } from '@/domain/aggregate';
@@ -11,7 +11,7 @@ import { goalProgress } from '@/domain/goals';
 import { habitDayStatus, isScheduledOn } from '@/domain/habits';
 import { CurrencyCode } from '@/domain/money';
 import { DOMAINS, Domain } from '@/domain/types';
-import { store, useApp, useCollection, useStoreVersion } from '@/state/AppContext';
+import { store, useApp, useCollection, useStoreVersion, listAll } from '@/state/AppContext';
 import { DOMAIN_COLORS, spacing } from '@/theme/tokens';
 import { TimelineList } from '@/ui/agenda';
 import { InsightCard } from '@/ui/InsightCard';
@@ -33,15 +33,12 @@ export default function Home() {
   const goals = useCollection('goals');
   const milestones = useCollection('milestones');
 
-  const list = store.list.bind(store) as never;
-  const agenda = useMemo(() => agendaForDay(list, today, { timeZone: tz, prayer: settings.prayer }), [version, today, tz, settings.prayer]);
-  const insights = useMemo(
-    () =>
-      settings.ai.enabled
-        ? generateInsights(list, { today, now, timeZone: tz, weekStart: settings.weekStart, allowedDomains: DOMAINS.filter((d) => settings.ai.domains[d]) })
-        : [],
-    [version, today, settings.ai, tz],
-  );
+  const list = listAll as never;
+  void version; // re-render on any store change
+  const agenda = agendaForDay(list, today, { timeZone: tz, prayer: settings.prayer });
+  const insights = settings.ai.enabled
+    ? generateInsights(list, { today, now, timeZone: tz, weekStart: settings.weekStart, allowedDomains: DOMAINS.filter((d) => settings.ai.domains[d]) })
+    : [];
 
   const hour = Number(new Intl.DateTimeFormat('en-GB', { hour: 'numeric', hourCycle: 'h23', timeZone: tz }).format(now));
   const greeting = t(hour < 12 ? 'home.greeting.morning' : hour < 18 ? 'home.greeting.afternoon' : 'home.greeting.evening');

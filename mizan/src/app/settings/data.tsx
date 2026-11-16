@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import { buildExport } from '@/domain/aggregate';
 import { deleteAccount } from '@/data/account';
 import { saveTextFile } from '@/data/exportFile';
-import { store, useApp } from '@/state/AppContext';
+import { store, useApp, listAll } from '@/state/AppContext';
 import { Button, Card, Notice, Screen, SectionHeader, Txt } from '@/ui/primitives';
 
 export default function DataScreen() {
@@ -15,7 +15,7 @@ export default function DataScreen() {
   const exportData = async () => {
     setBusy(true);
     try {
-      const data = buildExport(store.list.bind(store) as never, {
+      const data = buildExport(listAll as never, {
         timeZone: settings.timezone,
         locale: settings.locale,
         appVersion: Constants.expoConfig?.version ?? '1.0.0',

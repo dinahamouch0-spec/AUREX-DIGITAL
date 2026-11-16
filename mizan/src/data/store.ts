@@ -9,7 +9,7 @@
  * - Deletes are tombstones (`deleted_at`) so they can sync and be undone.
  * - The UI never touches the driver directly — only this store / use cases.
  */
-import { AUDITED_COLLECTIONS, BaseRecord, CollectionMap, CollectionName, COLLECTIONS } from '../domain/types';
+import { AUDITED_COLLECTIONS, BaseRecord, CollectionMap, CollectionName, COLLECTIONS, LOCAL_ONLY_COLLECTIONS } from '../domain/types';
 import { ValidationError, defaultsFor, validateRecord } from '../domain/schema';
 
 export type Row = BaseRecord & Record<string, unknown> & { _server_updated_at?: string | null };
@@ -216,6 +216,7 @@ export class Store {
   private persist(collection: CollectionName, row: Row) {
     this.driver.writeRecord(collection, row);
     this.data.get(collection)?.set(row.id, row);
+    if (LOCAL_ONLY_COLLECTIONS.includes(collection)) return;
     const key = `${collection}:${row.id}`;
     const existing = this.outbox.get(key);
     const item: OutboxItem = {

@@ -13,7 +13,7 @@
  */
 import { Insight, InsightContext, Lists, generateInsights } from '../domain/aggregate';
 import { SCHEMAS } from '../domain/schema';
-import { COLLECTIONS, COLLECTION_DOMAIN, CollectionName, Domain } from '../domain/types';
+import { COLLECTION_DOMAIN, CollectionName, Domain, SYNCED_COLLECTIONS } from '../domain/types';
 
 export interface ProposedAction {
   id: string;
@@ -42,7 +42,7 @@ export interface AiProvider {
 /** Context passed to any external provider: allowed domains only, no sensitive fields. */
 export function buildAiContext(list: Lists, allowedDomains: Domain[]): Record<string, Record<string, unknown>[]> {
   const out: Record<string, Record<string, unknown>[]> = {};
-  for (const c of COLLECTIONS) {
+  for (const c of SYNCED_COLLECTIONS) {
     const d = COLLECTION_DOMAIN[c];
     if (c === 'audit_logs' || c === 'notifications') continue;
     if (d !== 'general' && !allowedDomains.includes(d)) continue;

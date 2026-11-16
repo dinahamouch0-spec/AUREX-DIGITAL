@@ -933,6 +933,16 @@ export const en = {
   'lim.photos': 'Progress photos are stored on this device only and need iPhone testing.',
   'lim.food': 'No external food database is connected; nutrition comes from foods you enter.',
   'lim.prefs': 'Preferences (language, theme, prayer settings) are saved per device and do not sync.',
+  'fit.photos': 'Progress photos',
+  'fit.addPhoto': 'Add photo',
+  'fit.photosPrivate': 'Photos stay private on this device. They are never synced, shared or sent to the assistant. Long-press a photo to delete it.',
+  'fit.photosWeb': 'Progress photos are available in the iPhone app only.',
+  'fit.photoDenied': 'Photo access was not allowed. You can change this in iOS Settings.',
+  'fit.photoDeleteBody': 'The photo file will be removed from this device.',
+  'col.body_photos': 'Progress photos',
+  'field.local_uri': 'File',
+  'field.captured_at': 'Taken',
+  'field.phase_id': 'Phase',
 } as const;
 
 export type TranslationKey = keyof typeof en;

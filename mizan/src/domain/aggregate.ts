@@ -3,7 +3,7 @@
  * export. Pure functions over a `Lists` accessor so they are testable and
  * never duplicate source records (blueprint 09 §10).
  */
-import { isAssignmentOpen, isAssignmentOverdue, workloadByDay } from './academics';
+import { isAssignmentOverdue, workloadByDay } from './academics';
 import { invoiceBalance } from './business';
 import { LocalDate, addDays, daysBetween, localDateOf, startOfWeek, weekdayOf } from './dates';
 import { dayPrayerSummary } from './deen';

@@ -21,7 +21,13 @@ export default function Habits() {
   const logs = useCollection('habit_logs');
   const routines = useCollection('routines').filter((r) => r.status !== 'archived');
   const categories = useCollection('habit_categories');
-  const [sheet, setSheet] = useState<string | null>(null);
+  const [sheet, setSheetState] = useState<string | null>(null);
+  const [sheetTarget, setSheetTarget] = useState<string | null>(null);
+  const setSheet = (id: string | null) => {
+    if (id) setSheetTarget(id);
+    setSheetState(id);
+  };
+  const targetHabit = habits.find((h) => h.id === sheetTarget);
   const todays = habits.filter((h) => isScheduledOn(h, today) || h.status === 'paused');
   return (
     <Screen title={t('hab.title')} actions={<IconButton icon="add" label={t('common.new')} onPress={() => router.push(newRecordHref('habits') as never)} testID="habit-add" />} testID="screen-habits">
@@ -95,8 +101,8 @@ export default function Habits() {
 
       <SelectSheet
         visible={sheet != null}
-        title={habits.find((h) => h.id === sheet)?.name ?? ''}
-        value={sheet ? (habitDayStatus(habits.find((h) => h.id === sheet)!, logs, today) as string) : null}
+        title={targetHabit?.name ?? ''}
+        value={targetHabit ? (habitDayStatus(targetHabit, logs, today) as string) : null}
         options={[...STATUSES.map((s) => ({ value: s, label: t(`opt.hlog.${s}`) })), { value: 'clear', label: t('opt.hlog.not_recorded') }, { value: 'detail', label: t('hab.logDetail') }]}
         onClose={() => setSheet(null)}
         onSelect={(v) => {

@@ -217,6 +217,18 @@ export const SCHEMAS: Record<CollectionName, CollectionSchema> = {
       f('note', 'multiline', { maxLength: 2000, sensitive: true }),
     ],
   },
+  body_photos: {
+    collection: 'body_photos',
+    titleField: 'captured_at',
+    sortField: 'captured_at',
+    dateField: 'captured_at',
+    fields: [
+      f('local_uri', 'text', { required: true, hidden: true, sensitive: true }),
+      f('captured_at', 'datetime', { required: true, default: now }),
+      f('phase_id', 'ref', { ref: 'fitness_phases' }),
+      f('note', 'multiline', { maxLength: 2000, sensitive: true }),
+    ],
+  },
   fitness_phases: {
     collection: 'fitness_phases',
     titleField: 'name',
