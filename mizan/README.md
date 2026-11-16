@@ -2,7 +2,7 @@
 
 A private, premium personal life-management app: **Deen · Fitness · Academics · Business (AUREX) · Habits**, plus a global dashboard, calendar, goals, analytics, notifications, search, settings and an on-device assistant. Arabic (RTL) and English (LTR), dark and light themes, Beirut timezone by default.
 
-Built from the blueprint in [`blueprint/`](blueprint/). **What is done, what is pending, and why** is tracked in [`docs/STATUS.md`](docs/STATUS.md). Read that before relying on any feature.
+Built from the blueprint in [`blueprint/`](blueprint/). **Hand-off and iPhone steps: [`docs/DELIVERY.md`](docs/DELIVERY.md).** **What is done, what is pending, and why** is tracked in [`docs/STATUS.md`](docs/STATUS.md). Read that before relying on any feature.
 
 ## Run it
 
@@ -20,9 +20,9 @@ The app works fully **offline / local-only** with no configuration. To enable ac
 |---|---|
 | `npm run typecheck` | TypeScript strict |
 | `npm run lint` | ESLint (Expo config + React hooks rules) |
-| `npm test` | 158 unit tests: perfect-day streaks, dates/DST, money, prayer times, grades, invoices, habits, fitness, goals, forms, notifications plan, store, sync engine, use cases, AI provider, schema⇄DB consistency, i18n parity |
+| `npm test` | 159 unit tests: perfect-day streaks, dates/DST, money, prayer times, grades, invoices, habits, fitness, goals, forms, notifications plan, store, sync engine, use cases, AI provider, schema⇄DB consistency, i18n parity |
 | `npm run test:db` | Applies the migrations to a throwaway PostgreSQL and runs 45 RLS / ownership / integrity checks |
-| `npm run test:e2e` | Builds the web app and drives real flows in Chromium (164 checks, Arabic + English) |
+| `npm run test:e2e` | Builds the web app and drives it in Chromium: 164 smoke checks (every screen, Arabic + English) + 22 functional flow checks |
 | `npx expo-doctor` | Expo SDK / dependency health |
 
 ## Structure

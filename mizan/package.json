@@ -54,7 +54,7 @@
     "test": "vitest run",
     "test:db": "bash scripts/test-db.sh",
     "build:web": "expo export --platform web --output-dir dist",
-    "test:e2e": "npm run build:web && node tests/e2e/smoke.mjs",
+    "test:e2e": "npm run build:web && node tests/e2e/smoke.mjs && node tests/e2e/flows.mjs",
     "check": "npm run typecheck && npm run lint && npm test",
     "build:ios:dev": "npx eas-cli@latest build --profile development --platform ios",
     "build:ios:preview": "npx eas-cli@latest build --profile preview --platform ios",

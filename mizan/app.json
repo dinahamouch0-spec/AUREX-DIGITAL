@@ -13,9 +13,6 @@
       "infoPlist": {
         "CFBundleAllowMixedLocalizations": true,
         "ITSAppUsesNonExemptEncryption": false
-      },
-      "config": {
-        "usesNonExemptEncryption": false
       }
     },
     "android": {
