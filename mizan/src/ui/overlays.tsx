@@ -123,6 +123,9 @@ export function SelectSheet({
   const insets = useSafeAreaInsets();
   const [q, setQ] = useState('');
   useEffect(() => setQ(''), [visible]);
+  const lastTitle = React.useRef(title);
+  if (title) lastTitle.current = title;
+  title = lastTitle.current;
   const filtered = q ? options.filter((o) => o.label.toLocaleLowerCase().includes(q.toLocaleLowerCase())) : options;
   return (
     <Modal transparent visible={visible} animationType="slide" onRequestClose={onClose}>

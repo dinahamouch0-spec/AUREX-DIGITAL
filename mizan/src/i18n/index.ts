@@ -14,6 +14,8 @@ export type TParams = Record<string, string | number>;
 export function translate(locale: Locale, key: TranslationKey | string, params?: TParams, numerals: Numerals = 'latn'): string {
   const dict = dictionaries[locale] as Record<string, string>;
   let s = dict[key] ?? (en as Record<string, string>)[key] ?? key;
+  // Digits written inside templates follow the user's numeral setting.
+  s = numerals === 'arab' ? s.replace(/[0-9]/g, (d) => String.fromCharCode(0x0660 + Number(d))) : s.replace(/[٠-٩]/g, (d) => String(d.charCodeAt(0) - 0x0660));
   if (params) {
     for (const [k, v] of Object.entries(params)) {
       const value = typeof v === 'number' ? formatNumber(v, locale, numerals) : v;

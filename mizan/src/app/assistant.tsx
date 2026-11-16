@@ -1,29 +1,51 @@
 import { router } from 'expo-router';
-import React, { useMemo } from 'react';
+import React, { useEffect, useState } from 'react';
 
-import { generateInsights } from '@/domain/aggregate';
+import { AiAnswer, LocalInsightsProvider, ProposedAction, getProviders } from '@/ai/provider';
+import { addDays } from '@/domain/dates';
 import { DOMAINS } from '@/domain/types';
 import { store, useApp, useStoreVersion } from '@/state/AppContext';
 import { InsightCard } from '@/ui/InsightCard';
-import { Button, EmptyState, Notice, Screen, Txt } from '@/ui/primitives';
+import { Badge, Button, Card, EmptyState, Notice, Row, Screen, SectionHeader, Txt } from '@/ui/primitives';
 
 /**
- * Local assistant: deterministic insights computed on-device from the
- * domains the user allows. No external AI provider is connected (decision
- * pending — blueprint 10 §8). It never changes data; insights only link to
- * screens.
+ * Assistant. Implemented provider: on-device local insights (no network).
+ * External providers plug in via src/ai/provider.ts (Pending External Setup).
+ * It can only PROPOSE actions; each requires explicit confirmation and is
+ * written to the audit log.
  */
 export default function Assistant() {
-  const { t, settings, today } = useApp();
+  const { t, settings, today, confirm, showToast } = useApp();
   const version = useStoreVersion();
+  const [answer, setAnswer] = useState<AiAnswer | null>(null);
+  const [error, setError] = useState(false);
   const allowed = DOMAINS.filter((d) => settings.ai.domains[d]);
-  const insights = useMemo(
-    () => (settings.ai.enabled ? generateInsights(store.list.bind(store) as never, { today, now: new Date(), timeZone: settings.timezone, weekStart: settings.weekStart, allowedDomains: allowed }) : []),
-    [version, settings.ai, today],
-  );
+
+  useEffect(() => {
+    if (!settings.ai.enabled) return;
+    new LocalInsightsProvider()
+      .analyse(store.list.bind(store) as never, { today, now: new Date(), timeZone: settings.timezone, weekStart: settings.weekStart, allowedDomains: allowed })
+      .then((a) => {
+        setAnswer(a);
+        setError(false);
+      })
+      .catch(() => setError(true));
+  }, [version, settings.ai, today]);
+
+  const approve = async (a: ProposedAction) => {
+    const ok = await confirm({ title: t('ai.confirmTitle'), body: t(a.summaryKey, a.params), confirmLabel: t('common.add') });
+    if (!ok) return;
+    if (a.kind === 'create_study_session' && a.payload) {
+      const exam = store.get('exams', String(a.payload.exam_id));
+      store.insert('study_sessions', { title: String(a.payload.title), exam_id: exam?.id ?? null, subject_id: exam?.subject_id ?? null, planned_date: addDays(today, 1), planned_minutes: 45 });
+    }
+    const ts = new Date().toISOString();
+    store.insert('audit_logs', { action: 'ai_action_approved', entity_type: a.kind, entity_id: null, occurred_at: ts, metadata: { provider: answer?.providerId ?? 'local' } }, { skipValidation: true });
+    showToast({ message: t('toast.saved') });
+  };
+
   return (
     <Screen title={t('ai.title')} testID="screen-assistant">
-      <Notice text={t('ai.noProvider')} />
       {!settings.ai.enabled ? (
         <>
           <EmptyState icon="sparkles-outline" body={t('ai.disabled')} />
@@ -32,12 +54,31 @@ export default function Assistant() {
       ) : (
         <>
           <Txt color="textSecondary">{t('ai.intro')}</Txt>
+          <Row wrap>
+            {getProviders().map((p) => (
+              <Badge key={p.id} label={`${t(`ai.provider.${p.id}`)}: ${p.isAvailable() ? t('common.on') : t('ai.pendingSetup')}`} tone={p.isAvailable() ? 'success' : 'neutral'} />
+            ))}
+          </Row>
           {DOMAINS.filter((d) => !settings.ai.domains[d]).map((d) => (
             <Txt key={d} variant="caption" color="textMuted">
               {t('ai.domainOff', { domain: t(`domain.${d}`) })}
             </Txt>
           ))}
-          {insights.length === 0 ? <EmptyState icon="sparkles-outline" body={t('ai.noInsights')} /> : insights.map((i) => <InsightCard key={i.id} insight={i} />)}
+          {error ? <Notice tone="danger" text={t('state.errorBody')} /> : null}
+          {answer && answer.insights.length === 0 ? <EmptyState icon="sparkles-outline" body={t('ai.noInsights')} /> : null}
+          {answer?.insights.map((i) => <InsightCard key={i.id} insight={i} />)}
+          {answer?.actions.length ? (
+            <>
+              <SectionHeader title={t('ai.suggestedActions')} />
+              {answer.actions.map((a) => (
+                <Card key={a.id}>
+                  <Txt>{t(a.summaryKey, a.params)}</Txt>
+                  <Button small label={t('ai.review')} onPress={() => approve(a)} testID={`ai-action-${a.id}`} />
+                </Card>
+              ))}
+            </>
+          ) : null}
+          <Notice text={t('ai.noProvider')} />
           <Button variant="ghost" label={t('set.ai')} onPress={() => router.push('/settings/ai')} />
         </>
       )}

@@ -13,7 +13,7 @@ export default function GoalDetail() {
   const milestones = useCollection('milestones').filter((m) => m.goal_id === id).sort((a, b) => a.sort_order - b.sort_order);
   if (!goal)
     return (
-      <Screen title={t('goals.title')}>
+      <Screen title={t('goals.title')} testID="screen-not-found">
         <EmptyState body={t('state.notFound')} />
       </Screen>
     );

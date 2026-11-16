@@ -12,7 +12,7 @@ export default function RecordEditScreen() {
   const { t } = useApp();
   if (!COLLECTIONS.includes(collection as CollectionName)) {
     return (
-      <Screen title={t('state.errorTitle')}>
+      <Screen title={t('state.errorTitle')} testID="screen-not-found">
         <EmptyState body={t('state.notFound')} />
       </Screen>
     );

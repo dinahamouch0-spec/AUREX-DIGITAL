@@ -146,3 +146,10 @@ describe('i18n', () => {
     expect([...missing]).toEqual([]);
   });
 });
+
+describe('numerals', () => {
+  it('normalises digits inside templates to the chosen numeral system', () => {
+    expect(translate('ar', 'deen.recordedCount', { n: 2 }, 'latn')).toBe('2/5 مسجّلة');
+    expect(translate('ar', 'deen.recordedCount', { n: 2 }, 'arab')).toBe('٢/٥ مسجّلة');
+  });
+});

@@ -38,8 +38,8 @@ export default function TabsLayout() {
   const p = usePalette();
   const insets = useSafeAreaInsets();
   return (
-    <Tabs>
-      <TabSlot />
+    <Tabs style={{ flex: 1 }}>
+      <TabSlot style={{ flex: 1 }} />
       <TabList style={{ flexDirection: 'row', backgroundColor: p.surface, borderTopWidth: 1, borderTopColor: p.border, paddingBottom: insets.bottom, paddingHorizontal: 4 }}>
         {TABS.map((tab) => (
           <TabTrigger key={tab.name} name={tab.name} href={tab.href} asChild testID={`tab-${tab.name}`}>
