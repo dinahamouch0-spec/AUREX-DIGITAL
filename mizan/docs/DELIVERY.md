@@ -20,6 +20,8 @@ No keys or credentials were invented or committed. `.env.example` lists the vari
 
 ## 2. Running MIZAN on your iPhone (in order)
 
+**Free route, iPhone only:** Expo Go + EAS Update — see [`IPHONE.md`](IPHONE.md) §0 (needs only a free Expo account; prepared, not yet validated on a device). The steps below are the standalone-app route, which needs the Apple Developer Program.
+
 1. Join the **Apple Developer Program** (developer.apple.com) with your Apple ID.
 2. Create a free **Expo account** at expo.dev.
 3. On a computer with Node 22: `git clone` the repo, then
