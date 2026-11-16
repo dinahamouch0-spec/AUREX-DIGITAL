@@ -5,3 +5,5 @@ package-lock.json
 .data/
 .data-test/
 ya7kayti-*.zip
+mizan/tests/e2e/screenshots/
+!mizan/package-lock.json

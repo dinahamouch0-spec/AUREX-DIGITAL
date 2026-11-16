@@ -1,0 +1,46 @@
+name: MIZAN
+
+on:
+  pull_request:
+    paths: ['mizan/**', '.github/workflows/mizan.yml']
+  push:
+    branches: [main]
+    paths: ['mizan/**', '.github/workflows/mizan.yml']
+
+defaults:
+  run:
+    working-directory: mizan
+
+jobs:
+  check:
+    name: Typecheck, lint, unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm, cache-dependency-path: mizan/package-lock.json }
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm test
+
+  database:
+    name: Migrations + RLS tests (PostgreSQL)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: bash scripts/test-db.sh
+
+  e2e:
+    name: Web build + end-to-end flows
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm, cache-dependency-path: mizan/package-lock.json }
+      - run: npm ci
+      - run: npm i --no-save playwright@1.49.1 && npx playwright install --with-deps chromium
+      - run: npm run test:e2e
+      - if: failure()
+        uses: actions/upload-artifact@v4
+        with: { name: e2e-screenshots, path: mizan/tests/e2e/screenshots }
