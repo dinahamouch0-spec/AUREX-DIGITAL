@@ -135,6 +135,33 @@ try {
   await shot('05-habits-en');
   await noKeyLeak('habits');
 
+  // ---- PERFECT DAYS: user-defined, DEEN can't be alone, live today status
+  await go('/');
+  check('home shows perfect-day setup card before any definition', await tid('perfect-card-setup').isVisible());
+  await tid('perfect-card-setup').click();
+  await tid('screen-streak-definition').waitFor();
+  await tid('pd-crit-prayers').click();
+  await tid('pd-save').click();
+  check('prayers-only definition is rejected', await page.getByText("Prayers can't be the only item").isVisible());
+  await page.locator('[data-testid^="pd-crit-habit:"]').first().click();
+  await tid('pd-crit-prayers').click(); // turn prayers back off
+  await tid('pd-save').click();
+  await tid('screen-streak').waitFor();
+  check('today is perfect once the chosen habit is done', (await tid('streak-current').innerText()).includes('1'));
+  await shot('05b-streak-en');
+  await noKeyLeak('streak');
+  await go('/');
+  check('home 🔥 card shows current streak', (await tid('perfect-current').innerText()).includes('1'));
+  await shot('05c-home-streak-en');
+  await go('/habits');
+  await page.locator('[data-testid^="habit-"]').filter({ hasText: 'Read 10 pages' }).first().click(); // undo check-in
+  await go('/streak');
+  check('undoing the habit returns today to pending (not failed)', (await tid('streak-current').innerText()).includes('0') && (await page.getByText('Pending').first().isVisible()));
+  await go('/habits');
+  await page.locator('[data-testid^="habit-"]').filter({ hasText: 'Read 10 pages' }).first().click(); // redo
+  await go('/analytics');
+  check('analytics shows perfect days this month', (await tid('an-pd-month').innerText()).includes('1'));
+
   // ---- ACADEMICS: subject + grades → transparent average
   await go('/records/subjects/new');
   await fill('field-name', 'Mathematics');
@@ -209,7 +236,7 @@ try {
   await tid('set-theme-dark').click();
 
   // ---- Visit every screen: renders, no crash, no key leaks
-  const routes = ['/', '/calendar', '/analytics', '/goals', '/sections', '/search', '/notifications', '/assistant', '/settings', '/settings/prayer', '/settings/notifications', '/settings/ai', '/settings/sync', '/settings/data', '/settings/diagnostics', '/settings/about', '/settings/integrations', '/auth', '/deen', '/deen/history', '/deen/tasbih', '/fitness', '/fitness/body', '/fitness/nutrition', '/fitness/workout/active', '/fitness/exercises', '/fitness/programs', '/fitness/recovery', '/fitness/analytics', '/academics', '/academics/planner', '/business', '/business/clients', '/business/pipeline', '/business/finance', '/habits', '/records/goals', '/records/reminders', '/records/calendar_events'];
+  const routes = ['/', '/calendar', '/analytics', '/goals', '/sections', '/search', '/notifications', '/assistant', '/settings', '/settings/prayer', '/settings/notifications', '/settings/ai', '/settings/sync', '/settings/data', '/settings/diagnostics', '/settings/about', '/settings/integrations', '/auth', '/deen', '/deen/history', '/deen/tasbih', '/fitness', '/fitness/body', '/fitness/nutrition', '/fitness/workout/active', '/fitness/exercises', '/fitness/programs', '/fitness/recovery', '/fitness/analytics', '/academics', '/academics/planner', '/business', '/business/clients', '/business/pipeline', '/business/finance', '/habits', '/records/goals', '/records/reminders', '/records/calendar_events', '/streak', '/streak/definition'];
   for (const r of routes) {
     await go(r);
     await page.waitForTimeout(150);

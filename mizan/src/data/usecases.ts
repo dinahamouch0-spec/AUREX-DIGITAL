@@ -2,12 +2,13 @@
  * Application use cases: multi-step operations behind one-tap actions.
  * UI calls these instead of writing records ad hoc (blueprint 02 §2).
  */
-import { LocalDate, localDateOf } from '../domain/dates';
+import { LocalDate, addDays, localDateOf } from '../domain/dates';
+import { DayStatus, StreakSummary, computeStreaks, daysToSeal, liveStatus, sealTime, validateDefinition } from '../domain/perfectDays';
 import { findPrayerLog } from '../domain/deen';
 import { latestLog } from '../domain/habits';
 import { scaleNutrition } from '../domain/fitness';
 import type { PrayerType } from '../domain/prayerTimes';
-import type { DealStage, FoodItem, Habit, HabitLogStatus, PrayerStatus, Routine, Workout } from '../domain/types';
+import type { DealStage, FoodItem, Habit, HabitLogStatus, PerfectCriterion, PrayerStatus, Routine, Workout } from '../domain/types';
 import type { Store } from './store';
 
 /** Set (or clear) one prayer's record for a day. Each prayer is independent. */
@@ -136,4 +137,48 @@ export function moveStudySession(store: Store, id: string, date: LocalDate) {
 
 export function moveDealStage(store: Store, id: string, stage: DealStage) {
   return store.update('deals', id, { stage });
+}
+
+// ---------------------------------------------------------------- perfect days
+
+/** New definition always takes effect today — it can't be backdated to rewrite history. */
+export function savePerfectDayDefinition(store: Store, criteria: PerfectCriterion[], now: Date, timeZone: string) {
+  const err = validateDefinition(criteria);
+  if (err) throw new Error(err);
+  return store.insert('perfect_day_definitions', { effective_from: localDateOf(now, timeZone), criteria });
+}
+
+/** Mark a rest/holiday day. Only today or a future date: no retroactive excuses. */
+export function addDayExemption(store: Store, date: LocalDate, reason: 'rest' | 'holiday' | 'sick' | 'travel' | 'other', now: Date, timeZone: string) {
+  if (date < localDateOf(now, timeZone)) throw new Error('past_date');
+  const existing = store.list('day_exemptions').find((e) => e.local_date === date);
+  if (existing) return existing;
+  return store.insert('day_exemptions', { local_date: date, reason });
+}
+
+/** Remove a planned exemption; allowed only while the day hasn't started yet or is today. */
+export function removeDayExemption(store: Store, id: string, now: Date, timeZone: string) {
+  const e = store.get('day_exemptions', id);
+  if (!e) return;
+  if (e.local_date < localDateOf(now, timeZone)) throw new Error('past_date');
+  store.remove('day_exemptions', id);
+}
+
+/** Append immutable results for every day whose seal time has passed. */
+export function sealPerfectDays(store: Store, now: Date, timeZone: string): number {
+  const list = store.list.bind(store) as never;
+  const rows = daysToSeal(list, timeZone, now);
+  for (const r of rows) store.insert('perfect_day_results', r);
+  return rows.length;
+}
+
+export function streakSummary(store: Store, now: Date, timeZone: string): StreakSummary {
+  const list = store.list.bind(store) as never;
+  const today = localDateOf(now, timeZone);
+  const live = new Map<LocalDate, DayStatus>();
+  live.set(today, liveStatus(list, today, timeZone, now));
+  const yesterday = addDays(today, -1);
+  const sealedY = store.list('perfect_day_results').some((r) => r.local_date === yesterday);
+  if (!sealedY && now < sealTime(yesterday, timeZone)) live.set(yesterday, liveStatus(list, yesterday, timeZone, now));
+  return computeStreaks(store.list('perfect_day_results'), today, live);
 }

@@ -9,7 +9,7 @@
  * - Deletes are tombstones (`deleted_at`) so they can sync and be undone.
  * - The UI never touches the driver directly — only this store / use cases.
  */
-import { AUDITED_COLLECTIONS, BaseRecord, CollectionMap, CollectionName, COLLECTIONS, LOCAL_ONLY_COLLECTIONS } from '../domain/types';
+import { APPEND_ONLY_COLLECTIONS, AUDITED_COLLECTIONS, BaseRecord, CollectionMap, CollectionName, COLLECTIONS, LOCAL_ONLY_COLLECTIONS } from '../domain/types';
 import { ValidationError, defaultsFor, validateRecord } from '../domain/schema';
 
 export type Row = BaseRecord & Record<string, unknown> & { _server_updated_at?: string | null };
@@ -173,6 +173,7 @@ export class Store {
     id: string,
     patch: Partial<CollectionMap[C]> & Record<string, unknown>,
   ): CollectionMap[C] {
+    if (APPEND_ONLY_COLLECTIONS.includes(collection)) throw new Error('append_only');
     const existing = this.data.get(collection)?.get(id);
     if (!existing) throw new Error('not_found');
     const next: Row = {
@@ -191,6 +192,7 @@ export class Store {
 
   /** Tombstone delete. Returns a function that undoes it. */
   remove(collection: CollectionName, id: string): () => void {
+    if (APPEND_ONLY_COLLECTIONS.includes(collection)) throw new Error('append_only');
     const existing = this.data.get(collection)?.get(id);
     if (!existing || existing.deleted_at) return () => undefined;
     const ts = this.now().toISOString();

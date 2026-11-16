@@ -96,6 +96,21 @@ Legend:
 | Routines with ordered steps, per-step history, derived routine status | ✅ |
 | Categories | ✅ |
 
+## PERFECT DAYS STREAK 🔥
+| Feature | Status |
+|---|---|
+| User-defined perfect day (habits, routines, planned workout, planned study, tasks due, prayers). No imposed defaults | ✅ |
+| Prayers can't be the only criterion (validated in app) | ✅ |
+| Not applicable ≠ failure: archived/paused habits, unscheduled days, weekly-target habits, program rest days, days with nothing planned, low-priority tasks | ✅ |
+| Pending (never failed) until the day closes at 04:00 next morning; late logging allowed in the grace window | ✅ |
+| Immutable closed-day ledger (`perfect_day_results`), append-only in the app **and** in Postgres RLS | ✅ (unit + DB tests) |
+| Anti-fake-streak: records created/edited after a day closes don't count; definitions can't be backdated; rest days only for today or later | ✅ |
+| Rest / holiday days bridge a streak without counting | ✅ |
+| Current streak, start date, longest (with dates), total, history | ✅ |
+| Dashboard 🔥 card, detail screen, monthly calendar, month-by-month chart, analytics section | ✅ (e2e) |
+| Multi-device: each device seals days independently; the server keeps the first result per day (unique index). A second device's duplicate push is rejected and shown as a failed sync item | 🟡 needs live Supabase validation |
+| Device clock: closing uses the device clock; a user who changes the phone's date offline could affect sealing | Known limitation (server-side sealing would close this) |
+
 ## Assistant (AI)
 | Feature | Status |
 |---|---|

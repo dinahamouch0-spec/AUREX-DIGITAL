@@ -9,6 +9,7 @@ import { CollectionMap, CollectionName, COLLECTION_DOMAIN } from '../domain/type
 import { createPlatformDriver } from '../data/drivers/platform';
 import * as notif from '../data/notifications';
 import { Store } from '../data/store';
+import { sealPerfectDays } from '../data/usecases';
 import { getSupabase, isBackendConfigured, SupabaseRemote } from '../data/supabase';
 import { SyncEngine, SyncResult } from '../data/sync';
 import { Formatters, Locale, TParams, makeFormatters, translate } from '../i18n';
@@ -210,6 +211,16 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const requestNotificationPermission = useCallback(async () => {
     setPermission(await notif.requestPermission());
   }, []);
+
+  // Close finished days for the Perfect Days streak (append-only, idempotent).
+  useEffect(() => {
+    if (!ready) return;
+    try {
+      sealPerfectDays(store, new Date(clock), settings.timezone);
+    } catch {
+      // never block the app on sealing; it retries on the next tick
+    }
+  }, [ready, clock, settings.timezone]);
 
   // In-app notification centre: create a notification when a reminder comes due.
   useEffect(() => {

@@ -18,3 +18,7 @@
 | 14 | Assistant = deterministic on-device insights + provider abstraction | No external AI until the owner chooses a provider |
 | 15 | App icon: provisional gold balance on black | Owner to replace with final brand assets |
 | 16 | Default language Arabic, dark theme, week starts Monday (changeable) | Owner context |
+| 17 | Perfect Days: definitions are versioned and take effect from the day saved; each closed day is written once to an append-only ledger evaluated "as of" 04:00 the next morning | Fair (late logging allowed), tamper-resistant (no backfilling or rewriting history), and no duplicate of source data. The ledger is a derived, immutable result |
+| 18 | Rest/exempt days and days with no applicable criteria bridge streaks without counting | Owner spec: fair to rest days and holidays; nothing unrecorded is treated as failure |
+| 19 | Prayers may be a criterion but never the only one | Owner spec §5: DEEN alone must not define a perfect day; no faith score |
+| 20 | CI: GitHub Actions workflow for `mizan/**` (typecheck, lint, unit, DB/RLS, e2e) | Every PR verified the same way as locally |

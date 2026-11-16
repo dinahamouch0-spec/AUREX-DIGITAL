@@ -8,6 +8,8 @@ import { rangePrayerSummary } from '@/domain/deen';
 import { trainingVolumeKg } from '@/domain/fitness';
 import { habitSummary } from '@/domain/habits';
 import { CurrencyCode } from '@/domain/money';
+import { streakSummary } from '@/data/usecases';
+import { router } from 'expo-router';
 import { store, useApp, useStoreVersion } from '@/state/AppContext';
 import { spacing } from '@/theme/tokens';
 import { BarChart } from '@/ui/BarChart';
@@ -28,6 +30,7 @@ export default function Analytics() {
   };
 
   void version; // re-render on any store change
+  const streak = streakSummary(store, new Date(), settings.timezone);
   const data = (() => {
     const prayers = rangePrayerSummary(store.list('prayer_logs'), from, today);
     const quran = store.list('quran_logs').filter((q) => inRange(q.read_at)).length;
@@ -68,6 +71,17 @@ export default function Analytics() {
         {t('an.source', { from: fmt.localDate(from), to: fmt.localDate(today) })}
       </Txt>
       <Notice text={t('an.noLifeScore')} />
+
+      {store.list('perfect_day_definitions').length ? (
+        <>
+          <SectionHeader title={`🔥 ${t('pd.title')}`} action={t('common.seeAll')} onAction={() => router.push('/streak')} />
+          <View style={styles.grid}>
+            <MetricCard label={t('pd.perfectThisMonthLabel')} value={fmt.number(store.list('perfect_day_results').filter((r) => r.status === 'perfect' && r.local_date.slice(0, 7) === today.slice(0, 7)).length + (streak.todayStatus === 'perfect' ? 1 : 0))} testID="an-pd-month" />
+            <MetricCard label={t('pd.currentStreak')} value={fmt.number(streak.current)} tone="accent" />
+            <MetricCard label={t('pd.longestStreak')} value={fmt.number(streak.longest)} />
+          </View>
+        </>
+      ) : null}
 
       <SectionHeader title={t('domain.deen')} />
       <View style={styles.grid}>

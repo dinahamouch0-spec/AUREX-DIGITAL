@@ -669,6 +669,37 @@ export const SCHEMAS: Record<CollectionName, CollectionSchema> = {
       f('completed_at', 'datetime'),
     ],
   },
+  perfect_day_definitions: {
+    collection: 'perfect_day_definitions',
+    titleField: 'effective_from',
+    sortField: 'effective_from',
+    fields: [f('effective_from', 'date', { required: true }), f('criteria', 'json', { required: true, hidden: true })],
+  },
+  day_exemptions: {
+    collection: 'day_exemptions',
+    titleField: 'local_date',
+    sortField: 'local_date',
+    dateField: 'local_date',
+    fields: [
+      f('local_date', 'date', { required: true }),
+      f('reason', 'select', { required: true, options: ['rest', 'holiday', 'sick', 'travel', 'other'], optionPrefix: 'exempt', default: 'rest' }),
+      f('note', 'multiline', { maxLength: 500 }),
+    ],
+  },
+  perfect_day_results: {
+    collection: 'perfect_day_results',
+    titleField: 'local_date',
+    sortField: 'local_date',
+    dateField: 'local_date',
+    fields: [
+      f('local_date', 'date', { required: true }),
+      f('status', 'select', { required: true, options: ['perfect', 'incomplete', 'rest', 'exempt'], optionPrefix: 'pday' }),
+      f('met', 'integer', { required: true, min: 0, max: 1000 }),
+      f('applicable', 'integer', { required: true, min: 0, max: 1000 }),
+      f('sealed_at', 'datetime', { required: true }),
+      f('definition_id', 'text', { required: true }),
+    ],
+  },
   audit_logs: {
     collection: 'audit_logs',
     titleField: 'action',

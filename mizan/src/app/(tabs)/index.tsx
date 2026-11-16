@@ -15,6 +15,7 @@ import { store, useApp, useCollection, useStoreVersion, listAll } from '@/state/
 import { DOMAIN_COLORS, spacing } from '@/theme/tokens';
 import { TimelineList } from '@/ui/agenda';
 import { InsightCard } from '@/ui/InsightCard';
+import { PerfectDayCard } from '@/ui/PerfectDayCard';
 import { Button, Card, Chip, DomainDot, ListItem, ProgressBar, Row, Screen, SectionHeader, Txt } from '@/ui/primitives';
 import { newRecordHref } from '@/ui/records';
 import { SyncIndicator } from '@/ui/SyncIndicator';
@@ -107,6 +108,8 @@ export default function Home() {
         <Chip icon="cash-outline" label={t('qa.addTransaction')} onPress={() => router.push(newRecordHref('transactions', { occurred_on: today }) as never)} />
         <Chip icon="calendar-outline" label={t('qa.addEvent')} onPress={() => router.push(newRecordHref('calendar_events') as never)} />
       </ScrollView>
+
+      <PerfectDayCard />
 
       <SectionHeader title={t('home.today')} />
       <View style={{ gap: spacing.sm }}>

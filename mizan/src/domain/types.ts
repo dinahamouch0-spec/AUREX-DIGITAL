@@ -419,6 +419,36 @@ export interface RoutineStepLog extends BaseRecord {
   completed_at?: string | null;
 }
 
+// ---------- PERFECT DAYS ----------
+export type PerfectCriterion =
+  | { type: 'habit'; ref_id: string }
+  | { type: 'routine'; ref_id: string }
+  | { type: 'prayers' }
+  | { type: 'planned_workout' }
+  | { type: 'planned_study' }
+  | { type: 'tasks_due' };
+/** A version of the user's perfect-day definition, effective from a date (never backdated). */
+export interface PerfectDayDefinition extends BaseRecord {
+  effective_from: LocalDate;
+  criteria: PerfectCriterion[];
+}
+/** A day the user marks in advance as rest / holiday: it neither counts nor breaks a streak. */
+export interface DayExemption extends BaseRecord {
+  local_date: LocalDate;
+  reason: 'rest' | 'holiday' | 'sick' | 'travel' | 'other';
+  note?: string | null;
+}
+export type SealedDayStatus = 'perfect' | 'incomplete' | 'rest' | 'exempt';
+/** Immutable result of a closed day (written once at seal time). */
+export interface PerfectDayResult extends BaseRecord {
+  local_date: LocalDate;
+  status: SealedDayStatus;
+  met: number;
+  applicable: number;
+  sealed_at: string;
+  definition_id: string;
+}
+
 export interface AuditLog extends BaseRecord {
   action: string;
   entity_type: string;
@@ -473,6 +503,9 @@ export interface CollectionMap {
   routine_steps: RoutineStep;
   routine_logs: RoutineLog;
   routine_step_logs: RoutineStepLog;
+  perfect_day_definitions: PerfectDayDefinition;
+  day_exemptions: DayExemption;
+  perfect_day_results: PerfectDayResult;
   audit_logs: AuditLog;
 }
 export type CollectionName = keyof CollectionMap;
@@ -522,6 +555,9 @@ export const COLLECTION_DOMAIN: Record<CollectionName, Domain> = {
   routine_steps: 'habits',
   routine_logs: 'habits',
   routine_step_logs: 'habits',
+  perfect_day_definitions: 'general',
+  day_exemptions: 'general',
+  perfect_day_results: 'general',
   audit_logs: 'general',
 };
 
@@ -531,5 +567,8 @@ export const COLLECTIONS = Object.keys(COLLECTION_DOMAIN) as CollectionName[];
 export const AUDITED_COLLECTIONS: CollectionName[] = ['transactions', 'invoices', 'invoice_payments', 'deals', 'clients'];
 
 /** Collections stored only on this device: never queued for sync or sent to AI. */
+/** Collections that may only be appended to: updates and deletes are refused. */
+export const APPEND_ONLY_COLLECTIONS: CollectionName[] = ['perfect_day_results', 'audit_logs'];
+
 export const LOCAL_ONLY_COLLECTIONS: CollectionName[] = ['body_photos'];
 export const SYNCED_COLLECTIONS: CollectionName[] = COLLECTIONS.filter((c) => !LOCAL_ONLY_COLLECTIONS.includes(c));

@@ -97,4 +97,22 @@ do $$ begin
   end if;
   raise notice 'PASS: updated_at maintained by server';
 end $$;
+-- perfect-day results are append-only, even for their owner
+set role authenticated;
+select set_config('request.jwt.claim.sub', '11111111-1111-1111-1111-111111111111', false);
+insert into public.perfect_day_definitions (id, effective_from, criteria)
+  values ('bbbbbbbb-0000-0000-0000-000000000001', '2026-11-01', '[{"type":"habit","ref_id":"x"}]');
+insert into public.perfect_day_results (id, local_date, status, met, applicable, sealed_at, definition_id)
+  values ('bbbbbbbb-0000-0000-0000-000000000002', '2026-11-01', 'perfect', 1, 1, '2026-11-02T02:00:00Z', 'bbbbbbbb-0000-0000-0000-000000000001')
+  on conflict (id) do update set status = excluded.status;
+update public.perfect_day_results set status = 'incomplete';
+delete from public.perfect_day_results;
+do $$ begin
+  if (select status from public.perfect_day_results) <> 'perfect' then raise exception 'FAIL: sealed result was modified'; end if;
+  raise notice 'PASS: perfect-day results are append-only (upsert insert works, update/delete blocked)';
+end $$;
+select pg_temp.expect_error($$insert into public.perfect_day_results (local_date, status, met, applicable, sealed_at, definition_id) values ('2026-11-01', 'perfect', 1, 1, '2026-11-02T02:00:00Z', 'bbbbbbbb-0000-0000-0000-000000000001')$$, 'second result for the same day');
+select pg_temp.expect_error($$insert into public.perfect_day_results (local_date, status, met, applicable, sealed_at, definition_id) values ('2026-11-05', 'perfect', 1, 1, '2026-11-01T00:00:00Z', 'bbbbbbbb-0000-0000-0000-000000000001')$$, 'sealing a day before it ended');
+select pg_temp.expect_error($$insert into public.perfect_day_results (local_date, status, met, applicable, sealed_at, definition_id) values ('2026-11-06', 'perfect', 3, 1, '2026-11-07T02:00:00Z', 'bbbbbbbb-0000-0000-0000-000000000001')$$, 'met greater than applicable');
+reset role;
 \echo ALL RLS TESTS PASSED

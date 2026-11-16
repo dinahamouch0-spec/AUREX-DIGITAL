@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 
@@ -7,7 +7,8 @@ import { SYNCED_COLLECTIONS } from '../src/domain/types';
 
 /** Every field the app writes must exist as a column, or sync would fail at runtime. */
 describe('local schema ⇄ Postgres migration', () => {
-  const sql = readFileSync(join(__dirname, '../supabase/migrations/20261116000000_init.sql'), 'utf8');
+  const dir = join(__dirname, '../supabase/migrations');
+  const sql = readdirSync(dir).filter((f) => f.endsWith('.sql')).map((f) => readFileSync(join(dir, f), 'utf8')).join('\n');
   const tables = new Map<string, Set<string>>();
   for (const m of sql.matchAll(/create table public\.(\w+) \(([\s\S]*?)\n\);/g)) {
     const cols = new Set<string>();

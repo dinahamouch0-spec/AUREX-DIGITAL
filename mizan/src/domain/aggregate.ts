@@ -225,7 +225,7 @@ export interface SearchResult {
 }
 
 const SEARCHABLE: CollectionName[] = COLLECTIONS.filter(
-  (c) => !['audit_logs', 'workout_sets', 'routine_step_logs', 'routine_logs', 'notifications', 'prayer_logs'].includes(c),
+  (c) => !['audit_logs', 'workout_sets', 'routine_step_logs', 'routine_logs', 'notifications', 'prayer_logs', 'perfect_day_results', 'perfect_day_definitions', 'body_photos'].includes(c),
 );
 
 export function searchRecords(list: Lists, query: string, domainOf: (c: CollectionName) => Domain, filter?: Domain[], limit = 50): SearchResult[] {
