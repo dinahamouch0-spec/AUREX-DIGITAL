@@ -175,6 +175,8 @@ export interface WorkoutProgram extends BaseRecord {
   /** weekday (0=Sun) -> label; missing/empty = rest day */
   schedule_json: Record<string, string>;
   is_active: boolean;
+  /** structured training days (see domain/programs.ts); null for legacy label-only programs */
+  days_json?: import('./programs').ProgramDay[] | null;
 }
 export type MealType = 'breakfast' | 'lunch' | 'dinner' | 'snack';
 export interface Meal extends BaseRecord {
@@ -205,6 +207,16 @@ export interface MealItem extends BaseRecord {
   carbs_g?: number | null;
   fat_g?: number | null;
   source: NutritionSource;
+  /** "food:<id>" when logged from the built-in food table */
+  catalog_food_id?: string | null;
+  /** logged amount in grams (catalog foods and recipes by weight) */
+  grams?: number | null;
+}
+export interface Recipe extends BaseRecord {
+  name: string;
+  servings: number;
+  ingredients_json: import('./nutrition').RecipeIngredient[];
+  notes?: string | null;
 }
 export interface HydrationLog extends BaseRecord {
   logged_at: string;
@@ -479,6 +491,7 @@ export interface CollectionMap {
   meals: Meal;
   food_items: FoodItem;
   meal_items: MealItem;
+  recipes: Recipe;
   hydration_logs: HydrationLog;
   recovery_logs: RecoveryLog;
   academic_terms: AcademicTerm;
@@ -531,6 +544,7 @@ export const COLLECTION_DOMAIN: Record<CollectionName, Domain> = {
   meals: 'fitness',
   food_items: 'fitness',
   meal_items: 'fitness',
+  recipes: 'fitness',
   hydration_logs: 'fitness',
   recovery_logs: 'fitness',
   academic_terms: 'academics',

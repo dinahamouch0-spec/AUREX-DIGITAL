@@ -18,6 +18,9 @@ describe('local schema ⇄ Postgres migration', () => {
     }
     tables.set(m[1], cols);
   }
+  for (const m of sql.matchAll(/alter table public\.(\w+)\s+([\s\S]*?);/g)) {
+    for (const c of m[2].matchAll(/add column ([a-z_][a-z0-9_]*)\s+(uuid|text|date|timestamptz|numeric|integer|smallint|bigint|boolean|jsonb)/g)) tables.get(m[1])?.add(c[1]);
+  }
   it.each(SYNCED_COLLECTIONS)('%s has a table with every app field', (c) => {
     const cols = tables.get(c);
     expect(cols, `table ${c}`).toBeDefined();

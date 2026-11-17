@@ -264,4 +264,33 @@ reset role;
 select pg_temp.expect_error($$update public.perfect_day_definitions set effective_from = '2000-01-01' where id = 'cccccccc-0000-0000-0000-000000000001'$$, 'privileged update of effective_from', 'append-only');
 select pg_temp.expect_error($$update public.perfect_day_definitions set criteria = '[{"type":"tasks_due"}]' where id = 'cccccccc-0000-0000-0000-000000000001'$$, 'privileged update of criteria', 'append-only');
 
+-- ---- fitness & nutrition upgrade (20261117000000)
+set role authenticated;
+select set_config('request.jwt.claim.sub', '11111111-1111-1111-1111-111111111111', false);
+insert into public.recipes (id, name, servings, ingredients_json) values ('dddddddd-0000-0000-0000-000000000001', 'Chicken rice bowl', 2, '[{"ref":"food:chicken_breast_cooked","name":"Chicken","amount":150,"unit":"g","kcal":248,"protein":46.5,"carbs":0,"fat":5.4}]');
+insert into public.meals (id, logged_at, meal_type) values ('dddddddd-0000-0000-0000-000000000002', now(), 'lunch');
+insert into public.meal_items (meal_id, custom_name, quantity, calories, protein_g, carbs_g, fat_g, source, catalog_food_id, grams)
+  values ('dddddddd-0000-0000-0000-000000000002', 'Chicken breast', 1.5, 248, 46.5, 0, 5.4, 'estimate', 'food:chicken_breast_cooked', 150);
+insert into public.workout_programs (name, schedule_json, days_json, is_active)
+  values ('PPL', '{"1":"Push"}', '[{"id":"d1","name":"Push","weekdays":[1],"exercises":[{"exercise_id":"builtin:bench_press","sets":3,"reps_min":5,"reps_max":8,"rest_seconds":120}]}]', true);
+select pg_temp.expect_error($$insert into public.recipes (name, servings) values ('bad', 0)$$, 'recipe with zero servings', 'check');
+select pg_temp.expect_error($$insert into public.recipes (name, servings, ingredients_json) values ('bad', 1, '{}')$$, 'recipe ingredients must be an array', 'check');
+select pg_temp.expect_error($$insert into public.meal_items (meal_id, custom_name, quantity, source, catalog_food_id) values ('dddddddd-0000-0000-0000-000000000002', 'x', 1, 'estimate', 'pizza; drop table')$$, 'malformed catalog_food_id', 'check');
+select pg_temp.expect_error($$insert into public.meal_items (meal_id, custom_name, quantity, source, grams) values ('dddddddd-0000-0000-0000-000000000002', 'x', 1, 'estimate', -5)$$, 'negative grams', 'check');
+select pg_temp.expect_error($$insert into public.workout_programs (name, days_json) values ('bad', '{"a":1}')$$, 'program days must be an array', 'check');
+select set_config('request.jwt.claim.sub', '22222222-2222-2222-2222-222222222222', false);
+do $$ begin
+  if (select count(*) from public.recipes) <> 0 then raise exception 'FAIL: B can read A recipes'; end if;
+  raise notice 'PASS: recipes are private to their owner';
+end $$;
+update public.recipes set name = 'hacked';
+delete from public.recipes;
+select set_config('request.jwt.claim.sub', '11111111-1111-1111-1111-111111111111', false);
+do $$ begin
+  if (select name from public.recipes where id = 'dddddddd-0000-0000-0000-000000000001') <> 'Chicken rice bowl' then raise exception 'FAIL: B modified A recipe'; end if;
+  if (select grams from public.meal_items where catalog_food_id = 'food:chicken_breast_cooked') <> 150 then raise exception 'FAIL: grams not stored'; end if;
+  raise notice 'PASS: recipes untouched by other users; meal item grams/catalog id stored';
+end $$;
+reset role;
+
 \echo ALL RLS TESTS PASSED

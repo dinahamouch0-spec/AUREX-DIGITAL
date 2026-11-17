@@ -112,3 +112,102 @@ export function overloadSuggestion(
   const last = valid[valid.length - 1];
   return { suggestIncrease: last.every((s) => s.reps >= targetReps), basedOnSessions: valid.length };
 }
+
+// ------------------------------------------------------------------ strength analytics
+
+/** Estimated one-rep max (Epley). Only meaningful for 1–12 reps with a load; otherwise null. */
+export function estimatedOneRepMax(loadKg: number, reps: number): number | null {
+  if (!(loadKg > 0) || !(reps >= 1) || reps > 12) return null;
+  return reps === 1 ? loadKg : Math.round(loadKg * (1 + reps / 30) * 10) / 10;
+}
+
+export interface ExerciseSession {
+  workoutId: string;
+  date: string;
+  sets: WorkoutSet[];
+  topKg: number | null;
+  bestE1rm: number | null;
+  totalReps: number;
+  volumeKg: number;
+}
+
+/** Completed sessions containing the exercise, oldest first. */
+export function exerciseHistory(
+  exerciseId: string,
+  workouts: { id: string; started_at: string; status: string; deleted_at?: string | null }[],
+  sets: WorkoutSet[],
+  dateOf: (iso: string) => string,
+): ExerciseSession[] {
+  return workouts
+    .filter((w) => !w.deleted_at && w.status === 'completed')
+    .sort((a, b) => a.started_at.localeCompare(b.started_at))
+    .map((w) => {
+      const ss = sets.filter((s) => !s.deleted_at && s.workout_id === w.id && s.exercise_id === exerciseId);
+      const kgs = ss.filter((s) => s.load_value != null).map(setLoadKg);
+      const e1 = ss.map((s) => estimatedOneRepMax(setLoadKg(s), s.reps)).filter((x): x is number => x != null);
+      return {
+        workoutId: w.id,
+        date: dateOf(w.started_at),
+        sets: ss,
+        topKg: kgs.length ? Math.max(...kgs) : null,
+        bestE1rm: e1.length ? Math.max(...e1) : null,
+        totalReps: ss.reduce((a, s) => a + s.reps, 0),
+        volumeKg: Math.round(trainingVolumeKg(ss)),
+      };
+    })
+    .filter((s) => s.sets.length > 0);
+}
+
+export type PRKind = 'weight' | 'reps' | 'e1rm';
+
+/** Which records a new set would beat, compared with all earlier sets of the same exercise. */
+export function newRecords(candidate: Pick<WorkoutSet, 'reps' | 'load_value' | 'load_unit'>, previous: WorkoutSet[]): PRKind[] {
+  const prev = previous.filter((s) => !s.deleted_at);
+  if (!prev.length) return [];
+  const kg = candidate.load_value != null ? setLoadKg(candidate) : null;
+  const out: PRKind[] = [];
+  const prevKg = prev.filter((s) => s.load_value != null).map(setLoadKg);
+  if (kg != null && kg > 0 && prevKg.length && kg > Math.max(...prevKg)) out.push('weight');
+  // rep PR at the same or heavier load
+  const sameOrHeavier = prev.filter((s) => (kg == null ? s.load_value == null : s.load_value != null && setLoadKg(s) >= kg));
+  if (sameOrHeavier.length && candidate.reps > Math.max(...sameOrHeavier.map((s) => s.reps))) out.push('reps');
+  const e1 = kg != null ? estimatedOneRepMax(kg, candidate.reps) : null;
+  const prevE1 = prev.map((s) => estimatedOneRepMax(setLoadKg(s), s.reps)).filter((x): x is number => x != null);
+  if (e1 != null && prevE1.length && e1 > Math.max(...prevE1)) out.push('e1rm');
+  return out;
+}
+
+export interface WeekStat {
+  weekStart: string;
+  sessions: number;
+  volumeKg: number;
+  sets: number;
+}
+
+/** Sessions, sets and volume per week for the last `weeks` weeks (oldest first). */
+export function weeklyTraining(
+  workouts: { id: string; started_at: string; status: string; deleted_at?: string | null }[],
+  sets: WorkoutSet[],
+  weekStarts: string[],
+  weekOf: (iso: string) => string,
+): WeekStat[] {
+  const byWeek = new Map<string, WeekStat>(weekStarts.map((w) => [w, { weekStart: w, sessions: 0, volumeKg: 0, sets: 0 }]));
+  const wkOfWorkout = new Map<string, string>();
+  for (const w of workouts) {
+    if (w.deleted_at || w.status !== 'completed') continue;
+    const wk = weekOf(w.started_at);
+    const st = byWeek.get(wk);
+    if (!st) continue;
+    st.sessions++;
+    wkOfWorkout.set(w.id, wk);
+  }
+  for (const s of sets) {
+    if (s.deleted_at) continue;
+    const wk = wkOfWorkout.get(s.workout_id);
+    if (!wk) continue;
+    const st = byWeek.get(wk)!;
+    st.sets++;
+    st.volumeKg += s.reps * setLoadKg(s);
+  }
+  return weekStarts.map((w) => ({ ...byWeek.get(w)!, volumeKg: Math.round(byWeek.get(w)!.volumeKg) }));
+}
