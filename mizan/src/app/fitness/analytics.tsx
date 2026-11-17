@@ -7,7 +7,7 @@ import { addDays, localDateOf, startOfWeek } from '@/domain/dates';
 import { exerciseHistory, personalRecords, trainingVolumeKg, weeklyTraining } from '@/domain/fitness';
 import { useApp, useCollection } from '@/state/AppContext';
 import { exerciseName } from '@/ui/exercises';
-import { Bars, GlassCard, Hero, LineChart, Segmented, StatTile, useDomainTheme } from '@/ui/kit';
+import { Bars, GlassCard, Hero, LineChart, Segmented, StatTile, useDomainTheme , dayMonth } from '@/ui/kit';
 import { SelectSheet } from '@/ui/overlays';
 import { EmptyState, ListItem, Row, Screen, SectionHeader, Txt, styles } from '@/ui/primitives';
 
@@ -62,7 +62,7 @@ export default function FitnessAnalytics() {
       <GlassCard>
         <Segmented options={['sessions', 'volume', 'sets'] as Metric[]} value={metric} onChange={setMetric} labelOf={(m) => t(`fit.metric.${m}`)} testIDPrefix="fa-metric" />
         <Bars
-          data={weeks.map((w) => ({ label: fmt.localDate(w.weekStart, 'short'), value: metric === 'sessions' ? w.sessions : metric === 'sets' ? w.sets : w.volumeKg }))}
+          data={weeks.map((w) => ({ label: dayMonth(w.weekStart, fmt.number), value: metric === 'sessions' ? w.sessions : metric === 'sets' ? w.sets : w.volumeKg }))}
           highlight={weeks.length - 1}
           color={th.accent}
         />
@@ -77,14 +77,14 @@ export default function FitnessAnalytics() {
               <Txt variant="caption" color="textSecondary">
                 {t('fit.e1rmTrend')}
               </Txt>
-              <LineChart data={hist.slice(-12).map((h) => ({ label: h.date, value: h.bestE1rm }))} color={th.accent} testID="fa-e1rm" />
+              <LineChart data={hist.slice(-12).map((h) => ({ label: dayMonth(h.date, fmt.number), value: h.bestE1rm }))} color={th.accent} testID="fa-e1rm" />
             </>
           ) : hist.length > 1 ? (
             <>
               <Txt variant="caption" color="textSecondary">
                 {t('fit.repsTrend')}
               </Txt>
-              <LineChart data={hist.slice(-12).map((h) => ({ label: h.date, value: h.totalReps }))} color={th.accent} />
+              <LineChart data={hist.slice(-12).map((h) => ({ label: dayMonth(h.date, fmt.number), value: h.totalReps }))} color={th.accent} />
             </>
           ) : (
             <Txt color="textMuted">{t('fit.needTwoSessions')}</Txt>

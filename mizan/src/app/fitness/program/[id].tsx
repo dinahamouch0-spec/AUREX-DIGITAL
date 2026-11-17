@@ -8,9 +8,9 @@ import { saveProgramDays, startWorkout } from '@/data/usecases';
 import { store, useApp, useCollection, useRecord } from '@/state/AppContext';
 import { MIN_TOUCH, radius, spacing } from '@/theme/tokens';
 import { exerciseName, exerciseOptions } from '@/ui/exercises';
-import { BooleanField, Input } from '@/ui/fields';
+import { BooleanField, CommitInput } from '@/ui/fields';
 import { SelectSheet } from '@/ui/overlays';
-import { GlassCard, Hero, useDomainTheme } from '@/ui/kit';
+import { GlassCard, Hero, ltr, useDomainTheme } from '@/ui/kit';
 import { Button, EmptyState, Icon, IconButton, Row, Screen, Txt } from '@/ui/primitives';
 import { usePalette } from '@/ui/theme';
 
@@ -40,7 +40,7 @@ export default function ProgramEditor() {
   return (
     <Screen title={program.name} testID="screen-program">
       <Hero domain="fitness" eyebrow={t('fit.programs')} title={program.name} subtitle={t('fit.daysCount', { n: days.length })} />
-      <Input defaultValue={program.name} accessibilityLabel={t('field.name')} onEndEditing={(e) => e.nativeEvent.text.trim() && store.update('workout_programs', program.id, { name: e.nativeEvent.text.trim() })} testID="program-rename" />
+      <CommitInput value={program.name} accessibilityLabel={t('field.name')} onCommit={(v) => store.update('workout_programs', program.id, { name: v })} testID="program-rename" />
       <BooleanField
         label={t('field.is_active')}
         value={program.is_active}
@@ -132,7 +132,7 @@ function DayCard({
   return (
     <GlassCard accent={th.accent} testID={`day-${index}`}>
       <Row>
-        <Input style={{ flex: 1 }} defaultValue={day.name} accessibilityLabel={t('fit.dayName')} onEndEditing={(e) => e.nativeEvent.text.trim() && onChange({ ...day, name: e.nativeEvent.text.trim() })} testID={`day-${index}-name`} />
+        <CommitInput style={{ flex: 1 }} value={day.name} accessibilityLabel={t('fit.dayName')} onCommit={(v) => onChange({ ...day, name: v })} testID={`day-${index}-name`} />
         <IconButton icon="trash-outline" label={t('fit.deleteDay')} onPress={onDelete} color="danger" />
       </Row>
       <Row gap={6}>
@@ -163,8 +163,7 @@ function DayCard({
                 {fmt.number(i + 1)}. {exerciseName(e.exercise_id, userEx, locale)}
               </Txt>
               <Txt variant="caption" color="textSecondary">
-                {fmt.number(e.sets)} × {fmt.number(e.reps_min)}
-                {e.reps_max !== e.reps_min ? `–${fmt.number(e.reps_max)}` : ''} · {t('fit.restS', { n: e.rest_seconds })}
+                {ltr(`${fmt.number(e.sets)} × ${fmt.number(e.reps_min)}${e.reps_max !== e.reps_min ? `–${fmt.number(e.reps_max)}` : ''}`)} · {t('fit.restS', { n: e.rest_seconds })}
               </Txt>
             </Pressable>
             <IconButton icon="chevron-up" label={t('fit.moveUp')} onPress={() => onChange(moveExercise(day, i, -1))} />

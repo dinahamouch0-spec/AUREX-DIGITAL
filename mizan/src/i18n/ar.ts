@@ -1246,4 +1246,16 @@ export const ar: Record<TranslationKey, string> = {
   'nut.tab.foods': 'الأطعمة',
   'nut.tab.mine': 'أطعمتي',
   'nut.tab.recipes': 'الوصفات',
+  // domain heroes
+  'deen.nextPrayer': 'التالية: {name} الساعة {time}',
+  'ac.heroTitle': '{n} مواعيد قادمة',
+  'ac.heroOverdue': '{n} متأخرة — ابدأ بها',
+  'ac.heroClear': 'لا شيء متأخر',
+  'hab.heroSub': 'خطوات صغيرة، كل يوم',
+  'goals.heroTitle': '{n} أهداف قيد التنفيذ',
+  'goals.heroSub': '{n} مكتملة',
+  'an.heroTitle': 'اتجاهاتك',
+  'an.heroSub': 'كل مجال يُقاس بمعاييره',
+  'ai.heroTitle': 'مساعدك على الجهاز',
+  'ai.heroSub': 'إجابات مدمجة من سجلاتك',
 };

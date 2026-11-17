@@ -47,6 +47,13 @@ In App Store Connect → TestFlight, add yourself as an internal tester and inst
 Bundle identifier: `app.mizan.personal` (change in `app.json` before the first build if you prefer another).
 
 ## C. Real-device validation checklist
+
+New in the fitness & nutrition upgrade — check on the phone:
+- [ ] Live workout: rest timer counts down while the screen stays open; haptic tap when it ends; logging a heavier set shows the 🏆 record toast.
+- [ ] Muscle-map illustrations, rings and charts render crisply (react-native-svg) in dark and light mode.
+- [ ] Food search → amount sheet: keyboard does not cover the "Add" button; grams/servings update the calories live.
+- [ ] Recipes: add ingredients, change servings, log a portion; values match the recipe screen.
+- [ ] Arabic: numeric ranges (e.g. 8–12) read left-to-right inside Arabic text.
 Nothing below is claimed to work until checked here. Record results in `docs/STATUS.md`.
 
 | # | Check | How |

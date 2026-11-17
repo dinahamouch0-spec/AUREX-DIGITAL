@@ -11,7 +11,7 @@ import { store, useApp, useCollection } from '@/state/AppContext';
 import { spacing } from '@/theme/tokens';
 import { exerciseName } from '@/ui/exercises';
 import { FitnessNav } from '@/ui/FitnessNav';
-import { Bars, GlassCard, Hero, IconBadge, MACRO_COLORS, MeterRow, PressableScale, ProgressRing, StatTile, useDomainTheme } from '@/ui/kit';
+import { Bars, GlassCard, Hero, IconBadge, MACRO_COLORS, MeterRow, PressableScale, ProgressRing, StatTile, useDomainTheme , dayMonth } from '@/ui/kit';
 import { Button, Chip, IconName, Notice, Row, Screen, SectionHeader, Txt, styles } from '@/ui/primitives';
 import { newRecordHref } from '@/ui/records';
 
@@ -108,7 +108,7 @@ export default function FitnessDashboard() {
             kg
           </Txt>
         </Row>
-        <Bars data={weeks.map((w) => ({ label: fmt.localDate(w.weekStart, 'short'), value: w.volumeKg }))} highlight={weeks.length - 1} color={th.accent} />
+        <Bars data={weeks.map((w) => ({ label: dayMonth(w.weekStart, fmt.number), value: w.volumeKg }))} highlight={weeks.length - 1} color={th.accent} />
       </GlassCard>
 
       <View style={styles.grid}>

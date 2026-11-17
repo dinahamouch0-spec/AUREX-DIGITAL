@@ -7,7 +7,7 @@ import { recipePerServing, recipeTotals } from '@/domain/nutrition';
 import type { MealType } from '@/domain/types';
 import { addRecipeToMeal, mealFor } from '@/data/usecases';
 import { store, useApp, useRecord } from '@/state/AppContext';
-import { Input } from '@/ui/fields';
+import { CommitInput, Input } from '@/ui/fields';
 import { GlassCard, Hero, MACRO_COLORS, StatTile, tap, useDomainTheme } from '@/ui/kit';
 import { Button, Chip, EmptyState, IconButton, ListItem, Row, Screen, SectionHeader, Txt, styles } from '@/ui/primitives';
 
@@ -35,7 +35,7 @@ export default function RecipeEditor() {
   return (
     <Screen title={recipe.name} testID="screen-recipe">
       <Hero domain="nutrition" eyebrow={t('nut.recipe')} title={recipe.name} subtitle={t('nut.ingredientsN', { n: ing.length })} />
-      <Input defaultValue={recipe.name} accessibilityLabel={t('nut.recipeName')} onEndEditing={(e) => e.nativeEvent.text.trim() && store.update('recipes', recipe.id, { name: e.nativeEvent.text.trim() })} />
+      <CommitInput value={recipe.name} accessibilityLabel={t('nut.recipeName')} onCommit={(v) => store.update('recipes', recipe.id, { name: v })} />
       <GlassCard>
         <Row>
           <Txt style={{ flex: 1 }}>{t('nut.servingsMakes')}</Txt>

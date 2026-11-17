@@ -442,3 +442,8 @@ export function mixAlpha(c: string, alpha: number): string {
   const [r, g, b] = hex(c);
   return `rgba(${r},${g},${b},${alpha})`;
 }
+
+/** Keep numeric ranges / dates left-to-right inside Arabic text (Unicode isolate). */
+export const ltr = (s: string) => `\u2066${s}\u2069`;
+/** Compact day/month label for chart axes, e.g. 16/11. */
+export const dayMonth = (date: string, num: (n: number) => string) => ltr(`${num(Number(date.slice(8, 10)))}/${num(Number(date.slice(5, 7)))}`);

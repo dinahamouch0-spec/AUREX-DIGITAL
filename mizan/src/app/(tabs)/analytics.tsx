@@ -15,6 +15,7 @@ import { spacing } from '@/theme/tokens';
 import { BarChart } from '@/ui/BarChart';
 import { FilterChips, MetricCard, Notice, Screen, SectionHeader, Txt, styles } from '@/ui/primitives';
 import { TopActions } from '@/ui/TopActions';
+import { Hero } from '@/ui/kit';
 
 const RANGES = ['7', '30', '90'] as const;
 
@@ -66,6 +67,7 @@ export default function Analytics() {
 
   return (
     <Screen title={t('an.title')} back={false} actions={<TopActions />} testID="screen-analytics">
+      <Hero domain="general" eyebrow={t('an.title')} title={t('an.heroTitle')} subtitle={t('an.heroSub')} />
       <FilterChips options={RANGES} value={range} onChange={setRange} labelOf={(r) => t(`an.range.${r}`)} testIDPrefix="an-range" />
       <Txt variant="caption" color="textMuted">
         {t('an.source', { from: fmt.localDate(from), to: fmt.localDate(today) })}

@@ -228,3 +228,24 @@ describe('fitness & nutrition use cases (real store)', () => {
     expect(saveProgramDays(store, p.id, days).schedule_json).toEqual({ '1': 'upper', '4': 'upper', '6': 'lower' });
   });
 });
+
+describe('labels for catalog values exist in both languages', () => {
+  it('muscle groups, muscles, equipment, kinds, food categories, templates and units', async () => {
+    const { en } = await import('../src/i18n/en');
+    const { ar } = await import('../src/i18n/ar');
+    const { FOOD_CATEGORIES } = await import('../src/domain/foodCatalog');
+    const keys = [
+      ...MUSCLE_GROUPS.map((g) => `mg.${g}`),
+      ...MUSCLES.map((m) => `mu.${m}`),
+      ...EQUIPMENT.map((q) => `eq.${q}`),
+      ...['compound', 'isolation', 'cardio', 'core'].map((k) => `kind.${k}`),
+      ...FOOD_CATEGORIES.map((c) => `fc.${c}`),
+      ...['reps', 'seconds', 'minutes'].map((u) => `fit.unit.${u}`),
+      ...[...TEMPLATE_IDS, 'custom'].flatMap((x) => [`fit.tpl.${x}`, `fit.tplShort.${x}`, `fit.tplDesc.${x}`]),
+      ...TEMPLATE_IDS.flatMap((x) => TEMPLATES[x].map((d) => `fit.day.${d.key}`)),
+      ...['weight', 'reps', 'e1rm'].map((k) => `fit.pr.${k}`),
+    ];
+    const missing = keys.filter((k) => !(k in en) || !(k in ar));
+    expect(missing).toEqual([]);
+  });
+});

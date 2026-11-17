@@ -1268,6 +1268,18 @@ export const en = {
   'nut.tab.foods': 'Foods',
   'nut.tab.mine': 'My foods',
   'nut.tab.recipes': 'Recipes',
+  // domain heroes
+  'deen.nextPrayer': 'Next: {name} at {time}',
+  'ac.heroTitle': '{n} upcoming deadlines',
+  'ac.heroOverdue': '{n} overdue — tackle these first',
+  'ac.heroClear': 'Nothing overdue',
+  'hab.heroSub': 'Small steps, every day',
+  'goals.heroTitle': '{n} goals in progress',
+  'goals.heroSub': '{n} completed',
+  'an.heroTitle': 'Your trends',
+  'an.heroSub': 'Each area measured on its own terms',
+  'ai.heroTitle': 'Your on-device assistant',
+  'ai.heroSub': 'Built-in answers from your own records',
 } as const;
 
 export type TranslationKey = keyof typeof en;

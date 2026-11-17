@@ -10,7 +10,7 @@ import { saveProgramDays } from '@/data/usecases';
 import { store, useApp, useCollection } from '@/state/AppContext';
 import { spacing } from '@/theme/tokens';
 import { SelectSheet } from '@/ui/overlays';
-import { GlassCard, Hero, IconBadge, LineChart, StatTile, useDomainTheme } from '@/ui/kit';
+import { GlassCard, Hero, IconBadge, LineChart, StatTile, dayMonth, ltr, useDomainTheme } from '@/ui/kit';
 import { MuscleMap } from '@/ui/MuscleMap';
 import { Badge, Button, EmptyState, Icon, ListItem, Row, Screen, SectionHeader, Txt, styles } from '@/ui/primitives';
 
@@ -34,7 +34,7 @@ export default function ExerciseDetail() {
   const name = ar ? e.name_ar : e.name;
   const p = e.prescription;
   const unitLabel = t(`fit.unit.${p.unit}`);
-  const range = (a: number, b: number) => (a === b ? fmt.number(a) : `${fmt.number(a)}–${fmt.number(b)}`);
+  const range = (a: number, b: number) => (a === b ? fmt.number(a) : ltr(`${fmt.number(a)}–${fmt.number(b)}`));
   const history = exerciseHistory(id, workouts, sets, (iso) => localDateOf(iso, settings.timezone));
   const e1 = history.filter((h) => h.bestE1rm != null);
   const heaviest = Math.max(0, ...history.map((h) => h.topKg ?? 0));
@@ -78,7 +78,7 @@ export default function ExerciseDetail() {
       <View style={styles.grid}>
         <StatTile icon="layers-outline" label={t('fit.sets')} value={range(p.sets[0], p.sets[1])} color={th.accent} />
         <StatTile icon="repeat-outline" label={unitLabel} value={range(p.reps[0], p.reps[1])} color={th.accent} />
-        <StatTile icon="timer-outline" label={t('fit.rest')} value={p.rest[1] ? `${range(p.rest[0], p.rest[1])} ${t('fit.sec')}` : '—'} color={th.accent} />
+        <StatTile icon="timer-outline" label={`${t('fit.rest')} (${t('fit.sec')})`} value={p.rest[1] ? range(p.rest[0], p.rest[1]) : '—'} color={th.accent} />
       </View>
       <Txt variant="caption" color="textMuted">
         {t('fit.guidelineNote')}
@@ -123,7 +123,7 @@ export default function ExerciseDetail() {
               <Txt variant="label" color="textSecondary">
                 {t('fit.e1rmTrend')}
               </Txt>
-              <LineChart data={e1.slice(-12).map((h) => ({ label: fmt.localDate(h.date, 'short'), value: h.bestE1rm }))} color={th.accent} />
+              <LineChart data={e1.slice(-12).map((h) => ({ label: dayMonth(h.date, fmt.number), value: h.bestE1rm }))} color={th.accent} />
             </GlassCard>
           ) : null}
           {last ? (

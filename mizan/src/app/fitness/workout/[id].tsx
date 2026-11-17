@@ -14,7 +14,7 @@ import { radius } from '@/theme/tokens';
 import { exerciseName, exerciseOptions } from '@/ui/exercises';
 import { FitnessNav } from '@/ui/FitnessNav';
 import { Input, TextField } from '@/ui/fields';
-import { GlassCard, Hero, IconBadge, ProgressRing, StatTile, tap, useDomainTheme } from '@/ui/kit';
+import { GlassCard, Hero, IconBadge, ProgressRing, StatTile, ltr, tap, useDomainTheme } from '@/ui/kit';
 import { SelectSheet } from '@/ui/overlays';
 import { Badge, Button, Chip, EmptyState, IconButton, ListItem, Notice, Row, Screen, SectionHeader, Txt, styles } from '@/ui/primitives';
 import { editRecordHref } from '@/ui/records';
@@ -71,7 +71,7 @@ function StartWorkout() {
           <>
             {plannedDay.exercises.slice(0, 6).map((e, i) => (
               <Txt key={i} color="textSecondary">
-                {fmt.number(i + 1)}. <ExName id={e.exercise_id} /> · {fmt.number(e.sets)}×{fmt.number(e.reps_min)}–{fmt.number(e.reps_max)}
+                {fmt.number(i + 1)}. <ExName id={e.exercise_id} /> · {ltr(`${fmt.number(e.sets)}×${fmt.number(e.reps_min)}–${fmt.number(e.reps_max)}`)}
               </Txt>
             ))}
             <Button label={t('fit.startNamed', { name: plannedDay.name })} icon="play" onPress={() => start(plannedDay.name, program?.id)} testID="workout-start-planned" />
@@ -246,7 +246,7 @@ function LiveWorkout({ workout }: { workout: Workout }) {
               <View style={{ flex: 1 }}>
                 <Txt variant="bodyStrong">{exerciseName(b.exercise_id, userEx, locale)}</Txt>
                 <Txt variant="caption" color="textSecondary">
-                  {b.plan ? `${t('fit.setOf', { n: b.sets.length, total: b.plan.sets })} · ${fmt.number(b.plan.reps_min)}–${fmt.number(b.plan.reps_max)} ${t('fit.unit.reps')}` : t('fit.setsCount', { n: b.sets.length })}
+                  {b.plan ? `${t('fit.setOf', { n: b.sets.length, total: b.plan.sets })} · ${ltr(`${fmt.number(b.plan.reps_min)}–${fmt.number(b.plan.reps_max)}`)} ${t('fit.unit.reps')}` : t('fit.setsCount', { n: b.sets.length })}
                 </Txt>
               </View>
               {CATALOG_BY_ID.has(b.exercise_id) ? <IconButton icon="information-circle-outline" label={t('fit.howTo')} onPress={() => router.push(`/fitness/exercise/${encodeURIComponent(b.exercise_id)}`)} /> : null}
@@ -333,7 +333,7 @@ function SetLogger({ block, priorSessions, onLog }: { block: Block; priorSession
       <Txt variant="title">{exerciseName(block.exercise_id, userEx, locale)}</Txt>
       <Txt color="textSecondary">
         {block.plan ? t('fit.setOf', { n: block.sets.length + 1, total: block.plan.sets }) : t('fit.setN', { n: block.sets.length + 1 })}
-        {block.plan ? ` · ${t('fit.target')} ${fmt.number(block.plan.reps_min)}–${fmt.number(block.plan.reps_max)} ${t(`fit.unit.${unitKind}`)}` : ''}
+        {block.plan ? ` · ${t('fit.target')} ${ltr(`${fmt.number(block.plan.reps_min)}–${fmt.number(block.plan.reps_max)}`)} ${t(`fit.unit.${unitKind}`)}` : ''}
       </Txt>
       {lastSession ? <Txt variant="caption" color="textSecondary">{t('fit.lastTime', { summary: lastSession.map((s) => `${fmt.number(s.reps)}×${s.load_value != null ? fmt.number(s.load_value) : '—'}`).join(', ') })}</Txt> : null}
       {suggestion?.suggestIncrease ? <Notice text={t('fit.overloadSuggest')} tone="success" /> : null}
