@@ -1,4 +1,5 @@
 import { router, useLocalSearchParams } from 'expo-router';
+import { fw } from '@/theme/typography';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Pressable, View } from 'react-native';
 
@@ -19,6 +20,7 @@ import { SelectSheet } from '@/ui/overlays';
 import { Badge, Button, Chip, EmptyState, IconButton, ListItem, Notice, Row, Screen, SectionHeader, Txt, styles } from '@/ui/primitives';
 import { editRecordHref } from '@/ui/records';
 import { usePalette } from '@/ui/theme';
+import { celebrate } from '@/ui/celebrate';
 
 const clock = (s: number) => {
   const m = Math.floor(s / 60);
@@ -264,7 +266,7 @@ function LiveWorkout({ workout }: { workout: Workout }) {
                       showToast({ message: t('common.deleted'), actionLabel: t('common.undo'), onAction: undo });
                     }}
                     style={{ paddingHorizontal: 10, paddingVertical: 6, borderRadius: radius.pill, borderWidth: 1, borderColor: prSets.has(s.id) ? pal.success : pal.border, flexDirection: 'row', gap: 4, alignItems: 'center' }}>
-                    <Txt variant="caption" style={{ fontWeight: '700' }}>
+                    <Txt variant="caption" style={{ ...fw('700') }}>
                       {fmt.number(s.reps)} × {s.load_value != null ? `${fmt.number(s.load_value)} ${t(`opt.unit.${s.load_unit}`)}` : t('fit.bw')}
                     </Txt>
                     {prSets.has(s.id) ? <Txt variant="caption">🏆</Txt> : null}
@@ -286,7 +288,14 @@ function LiveWorkout({ workout }: { workout: Workout }) {
         onPress={async () => {
           if (wSets.length === 0 && !(await confirm({ title: t('fit.finishWorkout'), body: t('fit.noSets') }))) return;
           finishWorkout(store, workout.id, new Date());
-          tap('success');
+          if (wSets.length)
+            celebrate({
+              style: 'burst',
+              title: t('cel.workoutTitle'),
+              subtitle: t('cel.workoutSub', { sets: wSets.length, volume: fmt.number(Math.round(volume)), prs: prSets.size }),
+              icon: 'barbell',
+              color: th.accent,
+            });
           router.replace(`/fitness/workout/${workout.id}`);
         }}
       />
@@ -327,7 +336,7 @@ function SetLogger({ block, priorSessions, onLog }: { block: Block; priorSession
   };
   return (
     <GlassCard accent={th.accent} testID="set-logger">
-      <Txt variant="caption" style={{ color: th.accent, fontWeight: '700', letterSpacing: 1 }}>
+      <Txt variant="caption" style={{ color: th.accent, ...fw('700'), letterSpacing: 1 }}>
         {t('fit.now')}
       </Txt>
       <Txt variant="title">{exerciseName(block.exercise_id, userEx, locale)}</Txt>
@@ -348,7 +357,7 @@ function SetLogger({ block, priorSessions, onLog }: { block: Block; priorSession
             {label}
           </Txt>
           <IconButton icon="remove-circle-outline" label={`${label} −`} onPress={() => set(bump(val, -step))} testID={`${id}-dec`} />
-          <Input style={{ flex: 1, textAlign: 'center', fontSize: 22, fontWeight: '700' }} value={val} onChangeText={set} keyboardType={kb} placeholder={k === 'load' ? t('fit.bw') : undefined} accessibilityLabel={label} invalid={!!err} testID={id} />
+          <Input style={{ flex: 1, textAlign: 'center', fontSize: 22, ...fw('700') }} value={val} onChangeText={set} keyboardType={kb} placeholder={k === 'load' ? t('fit.bw') : undefined} accessibilityLabel={label} invalid={!!err} testID={id} />
           <IconButton icon="add-circle-outline" label={`${label} +`} onPress={() => set(bump(val, step))} testID={`${id}-inc`} />
         </Row>
       ))}

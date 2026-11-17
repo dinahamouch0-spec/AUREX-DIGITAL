@@ -1,4 +1,5 @@
 import { router, useLocalSearchParams } from 'expo-router';
+import { fw } from '@/theme/typography';
 import React, { useState } from 'react';
 import { View } from 'react-native';
 
@@ -89,7 +90,7 @@ export default function ExerciseDetail() {
         {(ar ? e.steps_ar : e.steps).map((s, i) => (
           <Row key={i} style={{ alignItems: 'flex-start' }}>
             <View style={{ width: 26, height: 26, borderRadius: 13, backgroundColor: th.accent, alignItems: 'center', justifyContent: 'center' }}>
-              <Txt variant="caption" style={{ color: '#14110A', fontWeight: '800' }}>
+              <Txt variant="caption" style={{ color: '#14110A', ...fw('800') }}>
                 {fmt.number(i + 1)}
               </Txt>
             </View>

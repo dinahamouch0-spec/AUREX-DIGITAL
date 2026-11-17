@@ -1,6 +1,7 @@
 import { TabList, TabSlot, TabTrigger, TabTriggerSlotProps, Tabs } from 'expo-router/ui';
+import { fw } from '@/theme/typography';
 import React from 'react';
-import { Pressable, Text } from 'react-native';
+import { Pressable, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useApp } from '@/state/AppContext';
@@ -25,8 +26,10 @@ function TabButton({ isFocused, label, icon, iconActive, ...props }: TabTriggerS
       accessibilityLabel={label}
       accessibilityState={{ selected: !!isFocused }}
       style={{ flex: 1, minHeight: MIN_TOUCH + 8, alignItems: 'center', justifyContent: 'center', gap: 2 }}>
-      <Icon name={isFocused ? iconActive : icon} size={22} color={isFocused ? 'accent' : 'textMuted'} />
-      <Text style={[type.caption, { fontSize: 11, color: isFocused ? p.accent : p.textMuted, fontWeight: isFocused ? '600' : '400' }]} numberOfLines={1}>
+      <View style={{ paddingHorizontal: 14, paddingVertical: 3, borderRadius: 999, backgroundColor: isFocused ? p.accentMuted : 'transparent' }}>
+        <Icon name={isFocused ? iconActive : icon} size={22} color={isFocused ? 'accent' : 'textMuted'} />
+      </View>
+      <Text style={[type.caption, { fontSize: 11, color: isFocused ? p.accent : p.textMuted, ...fw(isFocused ? '600' : '400') }]} numberOfLines={1}>
         {label}
       </Text>
     </Pressable>

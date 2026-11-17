@@ -3,11 +3,14 @@
  * Everything reads colours from the palette / domain themes and works in Expo Go
  * (react-native-svg, expo-linear-gradient and expo-haptics are bundled in Expo Go).
  */
+import { fw } from '../theme/typography';
 import * as Haptics from 'expo-haptics';
 import { LinearGradient } from 'expo-linear-gradient';
 import React, { useEffect, useState } from 'react';
 import { Animated, Easing, Platform, Pressable, StyleProp, View, ViewStyle } from 'react-native';
+import RAnimated, { Easing as REasing, ReduceMotion, useAnimatedProps, useSharedValue, withTiming } from 'react-native-reanimated';
 import Svg, { Circle, Defs, LinearGradient as SvgGradient, Path, Stop } from 'react-native-svg';
+
 
 import { useApp } from '../state/AppContext';
 import { DOMAIN_THEME, DomainThemeKey, radius, spacing } from '../theme/tokens';
@@ -15,6 +18,7 @@ import { Icon, IconName, Txt } from './primitives';
 import { useIsDark, usePalette } from './theme';
 
 const NATIVE = Platform.OS !== 'web';
+const AnimatedCircle = RAnimated.createAnimatedComponent(Circle);
 
 export function tap(kind: 'light' | 'medium' | 'success' = 'light') {
   if (!NATIVE) return;
@@ -132,7 +136,7 @@ export function Hero({
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.md }}>
           <View style={{ flex: 1, gap: 2 }}>
             {eyebrow ? (
-              <Txt variant="caption" style={{ color: th.accent, fontWeight: '700', letterSpacing: 1.2, textTransform: 'uppercase' }}>
+              <Txt variant="caption" style={{ color: th.accent, ...fw('700'), letterSpacing: 1.2, textTransform: 'uppercase' }}>
                 {eyebrow}
               </Txt>
             ) : null}
@@ -188,13 +192,12 @@ export function ProgressRing({
   const r = (size - stroke) / 2;
   const c = 2 * Math.PI * r;
   const v = ratio == null ? 0 : Math.max(0, Math.min(1, ratio));
-  const [anim] = useState(() => new Animated.Value(0));
-  const [shown, setShown] = useState(0);
+  // sweep runs on the UI thread (Reanimated); instant under Reduce Motion
+  const progress = useSharedValue(0);
   useEffect(() => {
-    const id = anim.addListener(({ value }) => setShown(value));
-    Animated.timing(anim, { toValue: v, duration: 700, easing: Easing.out(Easing.cubic), useNativeDriver: false }).start();
-    return () => anim.removeListener(id);
-  }, [anim, v]);
+    progress.value = withTiming(v, { duration: 700, easing: REasing.out(REasing.cubic), reduceMotion: ReduceMotion.System });
+  }, [progress, v]);
+  const ringProps = useAnimatedProps(() => ({ strokeDashoffset: c * (1 - progress.value), opacity: progress.value > 0.001 ? 1 : 0 }));
   const col = color ?? p.accent;
   const gid = `ring-${col.replace('#', '')}`;
   return (
@@ -207,8 +210,8 @@ export function ProgressRing({
           </SvgGradient>
         </Defs>
         <Circle cx={size / 2} cy={size / 2} r={r} stroke={p.surfaceElevated} strokeWidth={stroke} fill="none" />
-        {shown > 0.001 ? (
-          <Circle
+        {v > 0 ? (
+          <AnimatedCircle
             cx={size / 2}
             cy={size / 2}
             r={r}
@@ -217,7 +220,7 @@ export function ProgressRing({
             strokeLinecap="round"
             fill="none"
             strokeDasharray={`${c} ${c}`}
-            strokeDashoffset={c * (1 - shown)}
+            animatedProps={ringProps}
             transform={`rotate(-90 ${size / 2} ${size / 2})`}
           />
         ) : null}
@@ -230,29 +233,54 @@ export function ProgressRing({
 /** Line chart with a gradient area. Accessible via a text summary. */
 export function LineChart({ data, height = 140, color, format, testID }: { data: { label: string; value: number | null }[]; height?: number; color?: string; format?: (n: number) => string; testID?: string }) {
   const p = usePalette();
-  const { fmt } = useApp();
+  const { fmt, rtl } = useApp();
   const [w, setW] = useState(0);
+  const [sel, setSel] = useState<number | null>(null);
   const col = color ?? p.accent;
   const pts = data.map((d, i) => ({ ...d, i })).filter((d) => d.value != null) as { label: string; value: number; i: number }[];
   const f = format ?? ((n: number) => fmt.number(Math.round(n * 10) / 10));
   const summary = data.map((d) => `${d.label}: ${d.value == null ? '—' : f(d.value)}`).join(', ');
-  const pad = 8;
+  const pad = 10;
+  const top = 26; // room for the scrub tooltip
   let path = '';
   let area = '';
-  let coords: { x: number; y: number }[] = [];
+  let coords: { x: number; y: number; k: number }[] = [];
   if (w > 0 && pts.length) {
     const min = Math.min(...pts.map((x) => x.value));
     const max = Math.max(...pts.map((x) => x.value));
     const span = max - min || Math.max(1, Math.abs(max) * 0.1);
     const step = data.length > 1 ? (w - pad * 2) / (data.length - 1) : 0;
-    coords = pts.map((x) => ({ x: pad + x.i * step, y: pad + (height - pad * 2) * (1 - (x.value - min) / span) }));
-    if (coords.length === 1) coords = [{ x: pad, y: coords[0].y }, { x: w - pad, y: coords[0].y }];
-    path = coords.map((c, k) => `${k ? 'L' : 'M'}${c.x.toFixed(1)} ${c.y.toFixed(1)}`).join(' ');
-    area = `${path} L${coords[coords.length - 1].x.toFixed(1)} ${height} L${coords[0].x.toFixed(1)} ${height} Z`;
+    const xOf = (i: number) => (rtl ? w - pad - i * step : pad + i * step);
+    coords = pts.map((x, k) => ({ x: xOf(x.i), y: top + (height - top - pad) * (1 - (x.value - min) / span), k }));
+    const line = coords.length === 1 ? [{ ...coords[0], x: pad }, { ...coords[0], x: w - pad }] : coords;
+    path = line.map((c, k) => `${k ? 'L' : 'M'}${c.x.toFixed(1)} ${c.y.toFixed(1)}`).join(' ');
+    area = `${path} L${line[line.length - 1].x.toFixed(1)} ${height} L${line[0].x.toFixed(1)} ${height} Z`;
   }
+  // finger scrubbing: nearest point to the touch, via the built-in responder (iOS + web)
+  const pick = (x: number) => {
+    if (!coords.length) return;
+    let best = 0;
+    for (let k = 1; k < coords.length; k++) if (Math.abs(coords[k].x - x) < Math.abs(coords[best].x - x)) best = k;
+    if (best !== sel) {
+      setSel(best);
+      tap('light');
+    }
+  };
+  const s = sel != null && sel < coords.length ? coords[sel] : null;
+  const sp = s ? pts[s.k] : null;
   const gid = `area-${col.replace('#', '')}`;
   return (
-    <View testID={testID} accessible accessibilityLabel={summary} onLayout={(e) => setW(e.nativeEvent.layout.width)} style={{ height }}>
+    <View
+      testID={testID}
+      accessible
+      accessibilityLabel={summary}
+      accessibilityHint={pts.length > 1 ? 'scrub' : undefined}
+      onLayout={(e) => setW(e.nativeEvent.layout.width)}
+      onStartShouldSetResponder={() => pts.length > 0}
+      onResponderTerminationRequest={() => false}
+      onResponderGrant={(e) => pick(e.nativeEvent.locationX)}
+      onResponderMove={(e) => pick(e.nativeEvent.locationX)}
+      style={{ height }}>
       {w > 0 ? (
         <Svg width={w} height={height}>
           <Defs>
@@ -263,8 +291,18 @@ export function LineChart({ data, height = 140, color, format, testID }: { data:
           </Defs>
           {area ? <Path d={area} fill={`url(#${gid})`} /> : null}
           {path ? <Path d={path} stroke={col} strokeWidth={2.5} fill="none" strokeLinejoin="round" strokeLinecap="round" /> : null}
-          {coords.length && pts.length > 1 ? coords.map((c, k) => <Circle key={k} cx={c.x} cy={c.y} r={3.5} fill={p.background} stroke={col} strokeWidth={2} />) : null}
+          {s ? <Path d={`M${s.x} ${top - 4} L${s.x} ${height}`} stroke={col} strokeWidth={1} strokeDasharray="3 3" opacity={0.7} /> : null}
+          {pts.length > 1 ? coords.map((c) => <Circle key={c.k} cx={c.x} cy={c.y} r={s?.k === c.k ? 6 : 3.5} fill={s?.k === c.k ? col : p.background} stroke={col} strokeWidth={2} />) : null}
         </Svg>
+      ) : null}
+      {s && sp ? (
+        <View pointerEvents="none" style={{ position: 'absolute', top: 0, left: Math.max(0, Math.min(w - 120, s.x - 60)), width: 120, alignItems: 'center' }}>
+          <View style={{ paddingHorizontal: 8, paddingVertical: 2, borderRadius: 8, backgroundColor: col }}>
+            <Txt variant="caption" style={{ color: '#14110A', ...fw('700') }} numberOfLines={1}>
+              {ltr(`${sp.label} · ${f(sp.value)}`)}
+            </Txt>
+          </View>
+        </View>
       ) : null}
     </View>
   );
@@ -274,34 +312,44 @@ export function LineChart({ data, height = 140, color, format, testID }: { data:
 export function Bars({ data, height = 110, color, highlight, format }: { data: { label: string; value: number }[]; height?: number; color?: string; highlight?: number; format?: (n: number) => string }) {
   const p = usePalette();
   const { fmt } = useApp();
+  const [sel, setSel] = useState<number | null>(null);
   const top = Math.max(1, ...data.map((d) => d.value));
   const col = color ?? p.accent;
   const f = format ?? ((n: number) => fmt.number(Math.round(n)));
+  const active = sel ?? highlight;
   return (
     <View accessible accessibilityLabel={data.map((d) => `${d.label} ${f(d.value)}`).join(', ')} style={{ gap: 6 }}>
       <View style={{ flexDirection: 'row', alignItems: 'flex-end', height, gap: 8 }}>
         {data.map((d, i) => {
           const h = Math.max(4, (d.value / top) * (height - 18));
-          const on = highlight === i;
+          const on = active === i;
           return (
-            <View key={i} style={{ flex: 1, alignItems: 'center', justifyContent: 'flex-end', gap: 4 }}>
-              {d.value > 0 ? (
-                <Txt variant="caption" color={on ? 'text' : 'textMuted'} style={{ fontSize: 10 }} numberOfLines={1}>
+            <Pressable
+              key={i}
+              onPress={() => {
+                setSel(sel === i ? null : i);
+                tap('light');
+              }}
+              accessibilityRole="button"
+              accessibilityLabel={`${d.label} ${f(d.value)}`}
+              style={{ flex: 1, height: '100%', alignItems: 'center', justifyContent: 'flex-end', gap: 4 }}>
+              {d.value > 0 && (on || sel == null) ? (
+                <Txt variant="caption" color={on ? 'text' : 'textMuted'} style={{ fontSize: on ? 12 : 10, ...fw(on ? '700' : '400') }} numberOfLines={1}>
                   {f(d.value)}
                 </Txt>
               ) : null}
               {d.value > 0 ? (
-                <LinearGradient colors={on ? [p.goldLight, col] : [mix(col, p.background, 0.15), mix(col, p.background, 0.55)]} style={{ width: '62%', height: h, borderRadius: 8 }} />
+                <LinearGradient colors={on ? [p.goldLight, col] : [mix(col, p.background, 0.15), mix(col, p.background, 0.55)]} style={{ width: on ? '78%' : '62%', height: h, borderRadius: 8 }} />
               ) : (
                 <View style={{ width: '62%', height: 4, borderRadius: 2, backgroundColor: p.border }} />
               )}
-            </View>
+            </Pressable>
           );
         })}
       </View>
       <View style={{ flexDirection: 'row', gap: 8 }}>
         {data.map((d, i) => (
-          <Txt key={i} variant="caption" color={highlight === i ? 'accent' : 'textMuted'} align="center" style={{ flex: 1, fontSize: 11 }} numberOfLines={1}>
+          <Txt key={i} variant="caption" color={active === i ? 'accent' : 'textMuted'} align="center" style={{ flex: 1, fontSize: 11 }} numberOfLines={1}>
             {d.label}
           </Txt>
         ))}
@@ -400,7 +448,7 @@ export function Segmented<T extends string>({ options, value, onChange, labelOf,
           <Pressable key={o} testID={testIDPrefix ? `${testIDPrefix}-${o}` : undefined} accessibilityRole="tab" accessibilityState={{ selected: on }} onPress={() => onChange(o)} style={{ flex: 1, minHeight: 36, borderRadius: radius.pill, overflow: 'hidden' }}>
             {on ? <GoldGradient style={{ position: 'absolute', top: 0, bottom: 0, start: 0, end: 0 }} /> : null}
             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 8 }}>
-              <Txt variant="label" align="center" numberOfLines={1} style={{ color: on ? p.onAccent : p.textSecondary, fontWeight: on ? '700' : '500' }}>
+              <Txt variant="label" align="center" numberOfLines={1} style={{ color: on ? p.onAccent : p.textSecondary, ...fw(on ? '700' : '500') }}>
                 {labelOf(o)}
               </Txt>
             </View>

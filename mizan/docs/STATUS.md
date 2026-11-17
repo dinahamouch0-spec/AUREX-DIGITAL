@@ -14,6 +14,10 @@ Legend:
 | Numerals: Latin or Arabic-Indic | ✅ | applied consistently, including inside templates |
 | Onboarding, privacy explanation | ✅ | |
 | Home command center: dynamic greeting and date, separate per-domain rings (prayers, training, nutrition, habits, study), quick actions, Perfect Days, domain cards, weekly overview (one domain at a time), priorities, timeline, deadlines, goals, insights | ✅ | real data only; domains are never merged into one score |
+| Living Home (phase 1): sky that follows the user's real prayer times (dawn / day / dusk / night, sun & moon position), one "Next up" action chosen from real data, tappable domain rings with inline panels (record a prayer, tick habits, macros, plan), evening review of what was recorded, deadline strip, interactive weekly bars | ✅ (unit + e2e) |
+| Motion & feedback: UI-thread animations (Reanimated), staggered entrances, count-ups, ring sweeps, scrubbable line charts and tappable bars, haptics; all honour iOS Reduce Motion; nothing animates in the background | ✅ web (e2e incl. Reduce Motion) · 📱 feel on iPhone |
+| Celebrations for real milestones only: all five prayers (calm glow, no confetti), all of today's habits, perfect day, workout complete — each at most once per day | ✅ (e2e) |
+| Typography: IBM Plex Sans Arabic (Arabic + Latin) and Sora for display numbers, OFL fonts bundled; system font fallback if loading fails | ✅ |
 | Visual identity: black / metallic gold / white, gradient heroes with a distinct accent per domain, rings, line & bar charts, animated press feedback, haptics (iPhone) | ✅ web · 📱 haptics and animation feel on iPhone | `src/ui/kit.tsx` |
 | Calendar: day/week/month, domain filters, conflict flags, links to source records | ✅ | no duplicated records |
 | Goals centre and milestones, per-goal progress only | ✅ | |
@@ -136,10 +140,10 @@ Legend:
 ## Test counts (current)
 | Suite | Count |
 |---|---|
-| Unit (`npm test`) | 183 |
+| Unit (`npm test`) | 190 |
 | PostgreSQL (`npm run test:db`) | 53 checks |
 | End-to-end smoke (`tests/e2e/smoke.mjs`) | 164 checks |
-| End-to-end functional flows (`tests/e2e/flows.mjs`) | 36 checks |
+| End-to-end functional flows (`tests/e2e/flows.mjs`) | 42 checks |
 | Native iOS bundle (`expo export --platform ios`) + iOS prebuild | compiles / generates |
 
 ## Security review (post-merge)

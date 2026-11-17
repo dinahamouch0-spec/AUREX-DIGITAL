@@ -1,4 +1,5 @@
 import * as Crypto from 'expo-crypto';
+import { fw } from '@/theme/typography';
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useState } from 'react';
 import { Pressable, View } from 'react-native';
@@ -147,7 +148,7 @@ function DayCard({
               onPress={() => onToggleWeekday(w)}
               testID={`day-${index}-wd-${w}`}
               style={{ flex: 1, minHeight: 36, alignItems: 'center', justifyContent: 'center', borderRadius: 10, borderWidth: 1, borderColor: on ? th.accent : p.border, backgroundColor: on ? th.accent : 'transparent' }}>
-              <Txt variant="caption" style={{ fontWeight: '700', color: on ? '#14110A' : p.textSecondary }}>
+              <Txt variant="caption" style={{ ...fw('700'), color: on ? '#14110A' : p.textSecondary }}>
                 {t(`weekday.${w}`)}
               </Txt>
             </Pressable>

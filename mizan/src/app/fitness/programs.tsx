@@ -1,4 +1,5 @@
 import * as Crypto from 'expo-crypto';
+import { fw } from '@/theme/typography';
 import { router } from 'expo-router';
 import React, { useState } from 'react';
 import { View } from 'react-native';
@@ -81,7 +82,7 @@ export default function Programs() {
                 const label = p.schedule_json?.[String(d)];
                 return (
                   <View key={d} style={{ flex: 1, alignItems: 'center', paddingVertical: 6, borderRadius: 8, backgroundColor: label ? th.accent : 'transparent', borderWidth: 1, borderColor: label ? th.accent : '#3a3a3a', opacity: label ? 1 : 0.6 }}>
-                    <Txt variant="caption" style={{ fontSize: 11, fontWeight: '700', color: label ? '#14110A' : undefined }}>
+                    <Txt variant="caption" style={{ fontSize: 11, ...fw('700'), color: label ? '#14110A' : undefined }}>
                       {t(`weekday.${d}`)}
                     </Txt>
                   </View>

@@ -347,6 +347,53 @@ try {
     check('turning the assistant off hides insights', await page.getByText('The assistant is turned off').first().isVisible());
   });
 
+  await flow('living home', async () => {
+    await go('/');
+    check('home shows one "next up" action', await tid('home-next-up').isVisible());
+    await tid('home-ring-nutrition').click();
+    await page.waitForTimeout(400);
+    check('tapping a domain ring opens its inline panel with real values', (await tid('home-panel-nutrition').innerText()).includes('kcal'));
+    await tid('home-ring-nutrition').click();
+    await page.waitForTimeout(300);
+    check('tapping the ring again closes the panel', (await tid('home-panel-nutrition').count()) === 0);
+  });
+
+  await flow('calm celebration for all five prayers', async () => {
+    await go('/deen');
+    for (const p of ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha']) {
+      const btn = tid(`prayer-${p}`);
+      const txt = await btn.innerText();
+      if (!/Prayed/.test(txt)) await btn.click();
+      await page.waitForTimeout(120);
+    }
+    await page.waitForTimeout(300);
+    check('recording all five prayers shows a (calm) celebration once', await tid('celebration').isVisible());
+    await page.waitForTimeout(2800);
+    await go('/deen');
+    await page.waitForTimeout(500);
+    check('the celebration does not repeat on revisiting', (await tid('celebration').count()) === 0);
+  });
+
+  await flow('reduce motion', async () => {
+    const rctx = await page.context().browser().newContext({ viewport: { width: 390, height: 844 }, timezoneId: 'Asia/Beirut', locale: 'en-GB', reducedMotion: 'reduce' });
+    const rp = await rctx.newPage();
+    await rp.goto(BASE + '/');
+    await rp.getByTestId('screen-onboarding').waitFor({ timeout: 20000 });
+    await rp.getByTestId('onb-lang-en').click().catch(() => {});
+    await rp.getByTestId('onb-next').click();
+    await rp.getByTestId('onb-next').click();
+    await rp.getByTestId('onb-start').click();
+    await rp.getByTestId('screen-home').waitFor();
+    await rp.waitForTimeout(100);
+    const op = await rp.getByTestId('home-ring-deen').evaluate((el) => {
+      let e = el, o = 1;
+      while (e) { o *= Number(getComputedStyle(e).opacity || 1); e = e.parentElement; }
+      return o;
+    });
+    check('with Reduce Motion, home content is fully visible immediately', op > 0.99, String(op));
+    await rctx.close();
+  });
+
   await flow('export', async () => {
     await go('/settings/data');
     const [dl] = await Promise.all([page.waitForEvent('download'), tid('data-export').click()]);

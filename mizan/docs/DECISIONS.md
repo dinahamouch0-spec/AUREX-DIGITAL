@@ -31,3 +31,7 @@
 | 27 | Program structure lives in `workout_programs.days_json`; `schedule_json` is derived from it on every save | Additive migration; the dashboard and Perfect Days keep reading weekday labels unchanged |
 | 28 | Nutrition targets are optional and per device (settings), no defaults | Owner rule: nothing imposed; remaining amounts appear only when the user sets a target |
 | 29 | Separate per-domain rings on Home instead of one overall score | Owner rule: religious, health, study and financial progress are never merged |
+| 30 | Motion rules: 180–450 ms, explain a change, never loop in the background, UI thread (Reanimated), Reduce Motion respected; Deen uses calm fades only | Owner: premium feel without hurting speed or battery |
+| 31 | No Skia / Lottie in phase 1; charts and celebrations are SVG + Reanimated | Smaller bundle and battery cost; both libraries remain available in Expo Go if a later phase needs them |
+| 32 | Celebrations fire only from stored data (all prayers recorded with none missed, all habits done, perfect day) or a completed workout; once per day each | Owner: achievements must be real, not decorative |
+| 33 | Home sky phase is derived from the computed prayer times, not just the clock | The day's rhythm in MIZAN follows the user's own prayer schedule |
