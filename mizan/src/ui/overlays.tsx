@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Modal, Pressable, ScrollView, TextInput, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { normalizeSearch } from '../domain/exerciseCatalog';
 import { useApp } from '../state/AppContext';
 import { MIN_TOUCH, radius, spacing, type } from '../theme/tokens';
 import { Button, Icon, Row, Txt } from './primitives';
@@ -133,7 +134,8 @@ export function SelectSheet({
     setWasVisible(visible);
     if (visible) setQ('');
   }
-  const filtered = q ? options.filter((o) => o.label.toLocaleLowerCase().includes(q.toLocaleLowerCase())) : options;
+  const nq = normalizeSearch(q);
+  const filtered = nq ? options.filter((o) => normalizeSearch(`${o.label} ${o.subtitle ?? ''}`).includes(nq)) : options;
   return (
     <Modal transparent visible={visible} animationType="slide" onRequestClose={onClose}>
       <Pressable style={{ flex: 1, backgroundColor: p.overlay }} onPress={onClose} accessibilityLabel={t('common.close')} />

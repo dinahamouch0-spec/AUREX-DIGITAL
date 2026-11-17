@@ -48,7 +48,7 @@ async function fill(id, value) {
 async function shot(name) {
   await page.screenshot({ path: join(SHOTS, `${name}.png`), fullPage: false });
 }
-const KEY_LEAK = /\b(?:opt|field|common|home|deen|fit|ac|bus|hab|set|setn|sync|notif|ai|ins|an|cal|goals|col|domain|data|diag|about|onb|state|error|qa|int|lim|ps|auth|toast|confirm|weekday|search|tab|nav|sec)\.[a-zA-Z_]+(?:\.[a-zA-Z_]+)?\b/;
+const KEY_LEAK = /\b(?:mg|mu|eq|fc|kind|nut|opt|field|common|home|deen|fit|ac|bus|hab|set|setn|sync|notif|ai|ins|an|cal|goals|col|domain|data|diag|about|onb|state|error|qa|int|lim|ps|auth|toast|confirm|weekday|search|tab|nav|sec)\.[a-zA-Z_]+(?:\.[a-zA-Z_]+)?\b/;
 async function noKeyLeak(label) {
   const text = await page.locator('body').innerText();
   const m = text.match(KEY_LEAK);

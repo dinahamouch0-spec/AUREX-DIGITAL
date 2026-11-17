@@ -8,6 +8,7 @@ import { NAMED_COLORS } from '@/theme/tokens';
 import { BarChart } from '@/ui/BarChart';
 import { Badge, Button, Card, EmptyState, ListItem, Row, Screen, SectionHeader, Txt } from '@/ui/primitives';
 import { newRecordHref } from '@/ui/records';
+import { Hero, StatTile, useDomainTheme } from '@/ui/kit';
 
 export default function Academics() {
   const { t, fmt, today, settings } = useApp();
@@ -24,8 +25,16 @@ export default function Academics() {
     ...exams.filter((e) => localDateOf(e.exam_at, tz) >= today && localDateOf(e.exam_at, tz) <= addDays(today, 30)).map((e) => ({ id: e.id, title: e.title, sub: subjectName(e.subject_id), at: e.exam_at, href: `/records/exams/${e.id}`, kind: 'col.exams' })),
   ].sort((a, b) => a.at.localeCompare(b.at));
   const workload = workloadByDay(assignments, today, 7, tz);
+  const acTheme = useDomainTheme('academics');
+  const avg = averageGrades(grades);
   return (
     <Screen title={t('ac.title')} testID="screen-academics">
+      <Hero domain="academics" eyebrow={t('ac.title')} title={t('ac.heroTitle', { n: upcoming.length })} subtitle={overdue.length ? t('ac.heroOverdue', { n: overdue.length }) : t('ac.heroClear')}>
+        <Row wrap>
+          <StatTile icon="book-outline" label={t('col.subjects')} value={fmt.number(subjects.length)} color={acTheme.accent} />
+          <StatTile icon="ribbon-outline" label={t('ac.average')} value={avg ? fmt.percent(avg.percent / 100) : '—'} color={acTheme.accent} />
+        </Row>
+      </Hero>
       <Row wrap>
         <Button small label={t('qa.addHomework')} icon="add" onPress={() => router.push(newRecordHref('assignments') as never)} testID="ac-add-hw" />
         <Button small variant="secondary" label={t('col.exams')} icon="add" onPress={() => router.push(newRecordHref('exams') as never)} />

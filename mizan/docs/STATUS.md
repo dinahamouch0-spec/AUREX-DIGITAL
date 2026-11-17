@@ -13,7 +13,12 @@ Legend:
 | Dark / light / system theme, semantic tokens | ✅ | `src/theme/tokens.ts` |
 | Numerals: Latin or Arabic-Indic | ✅ | applied consistently, including inside templates |
 | Onboarding, privacy explanation | ✅ | |
-| Home dashboard: greeting, domain cards, quick actions, priorities, timeline, deadlines, goals, insights | ✅ | counts only recorded items; no "life score" |
+| Home command center: dynamic greeting and date, separate per-domain rings (prayers, training, nutrition, habits, study), quick actions, Perfect Days, domain cards, weekly overview (one domain at a time), priorities, timeline, deadlines, goals, insights | ✅ | real data only; domains are never merged into one score |
+| Living Home (phase 1): sky that follows the user's real prayer times (dawn / day / dusk / night, sun & moon position), one "Next up" action chosen from real data, tappable domain rings with inline panels (record a prayer, tick habits, macros, plan), evening review of what was recorded, deadline strip, interactive weekly bars | ✅ (unit + e2e) |
+| Motion & feedback: UI-thread animations (Reanimated), staggered entrances, count-ups, ring sweeps, scrubbable line charts and tappable bars, haptics; all honour iOS Reduce Motion; nothing animates in the background | ✅ web (e2e incl. Reduce Motion) · 📱 feel on iPhone |
+| Celebrations for real milestones only: all five prayers (calm glow, no confetti), all of today's habits, perfect day, workout complete — each at most once per day | ✅ (e2e) |
+| Typography: IBM Plex Sans Arabic (Arabic + Latin) and Sora for display numbers, OFL fonts bundled; system font fallback if loading fails | ✅ |
+| Visual identity: black / metallic gold / white, gradient heroes with a distinct accent per domain, rings, line & bar charts, animated press feedback, haptics (iPhone) | ✅ web · 📱 haptics and animation feel on iPhone | `src/ui/kit.tsx` |
 | Calendar: day/week/month, domain filters, conflict flags, links to source records | ✅ | no duplicated records |
 | Goals centre and milestones, per-goal progress only | ✅ | |
 | Analytics: 7/30/90 days per domain, data range shown | ✅ | |
@@ -35,7 +40,7 @@ Legend:
 | Durable outbox, retry with backoff + jitter, never discarded | ✅ | unit tests with a fake server |
 | Conflict detection, user resolution (finance never auto-merged) | ✅ | unit tests + resolution UI |
 | Tombstone deletes | ✅ | |
-| Supabase schema: 49 tables across 3 migrations (46 core + 3 perfect-days), constraints, indexes | ✅ | `npm run test:db` on PostgreSQL 16 |
+| Supabase schema: 50 tables across 4 migrations (46 core + 3 perfect-days + recipes), constraints, indexes | ✅ | `npm run test:db` on PostgreSQL 16 |
 | RLS on every table: cross-user isolation, spoof/hijack rejected, audit append-only | ✅ | `supabase/tests/rls_test.sql` |
 | Every app field has a DB column | ✅ | `tests/schema-sync.test.ts` |
 | Supabase Auth (email/password, reset), session in iOS Keychain | 🟡 | Needs a Supabase project + `EXPO_PUBLIC_SUPABASE_*` |
@@ -59,11 +64,17 @@ Legend:
 | Section tabs: Dashboard / Body / Nutrition / Workout + More | ✅ |
 | Body measurements, weight history chart, phases (organisational only) | ✅ |
 | Progress photos: private, on-device only, never synced or sent to AI | 📱 (needs photo library on iPhone; hidden on web) |
-| Live workout: exercise picker (built-in text catalog + custom), sets/reps/load (kg/lb), finish, history | ✅ |
-| PRs, volume, muscle-group split, weekly volume, overload *suggestion* (≥2 sessions, opt-in) | ✅ |
-| Programs: editable weekly schedule, rest days, today's plan | ✅ |
-| Nutrition: meals, food library, quantities, estimate labels, missing-data warnings, repeat meal; no calorie limits | ✅ |
-| External food database | ⏳ / 🟡 (provider not chosen) |
+| Exercise library: 83 bilingual exercises in 10 groups (chest, back, shoulders, biceps, triceps, legs, abs, calves, forearms, cardio) — primary/secondary muscles, equipment, difficulty, steps, common mistakes, guideline sets/reps/rest, alternatives; search (Arabic/English, diacritics-insensitive) and filters by group/equipment | ✅ (data-integrity unit tests + e2e) |
+| Exercise illustrations: drawn muscle map (front/back) highlighting the listed muscles — no stock photos, so nothing can mismatch | ✅ |
+| Programs: Push/Pull/Legs, Upper/Lower, Full body templates + custom; add/remove/reorder exercises; sets, rep range, rest; training days per weekday; one active program | ✅ (unit + e2e) |
+| Live workout: today's planned queue, prefilled weight/reps from last time, ± steppers, automatic rest timer (+15 s / skip), personal-record detection (weight, reps, est. 1RM), undo / long-press delete, summary | ✅ (unit + e2e) · 📱 rest-timer haptic |
+| Progress analytics: weekly sessions / sets / volume, est. 1RM trend per exercise (Epley, 1–12 reps), records per exercise, sets per muscle group, overload *suggestion* | ✅ |
+| Food table: 102 common foods (incl. Middle-Eastern staples) per 100 g from USDA FoodData Central, bilingual, typical servings; Atwater consistency test on every row | ✅ |
+| Nutrition calculator: pick food + grams or servings → calories, protein, carbs, fat computed and added to Breakfast/Lunch/Dinner/Snacks; values marked as estimates and editable | ✅ (unit + e2e) |
+| Recipes from several ingredients, per-serving values, log portions; save a logged meal as a recipe; repeat meal; recent foods | ✅ (unit + e2e) |
+| Optional daily targets (kcal, protein, carbs, fat) with remaining amounts; day and week summaries (averages over logged days only); no imposed calorie limits | ✅ (unit + e2e) |
+| Branded / packaged-food database, barcode scanning | ⏳ (no free reliable source chosen; add as "my foods" from the label) |
+| Meal estimation from photos | ⏳ future, optional — would be labelled as an estimate |
 | Hydration quick add, no fixed target | ✅ |
 | Recovery self-reports with wellness disclaimer | ✅ |
 | Apple Health | 🟡 + 📱: framework and scopes defined, **no fake connection**, see `docs/INTEGRATIONS.md` |
@@ -129,10 +140,10 @@ Legend:
 ## Test counts (current)
 | Suite | Count |
 |---|---|
-| Unit (`npm test`) | 159 |
-| PostgreSQL (`npm run test:db`) | 45 checks |
+| Unit (`npm test`) | 190 |
+| PostgreSQL (`npm run test:db`) | 53 checks |
 | End-to-end smoke (`tests/e2e/smoke.mjs`) | 164 checks |
-| End-to-end functional flows (`tests/e2e/flows.mjs`) | 22 checks |
+| End-to-end functional flows (`tests/e2e/flows.mjs`) | 42 checks |
 | Native iOS bundle (`expo export --platform ios`) + iOS prebuild | compiles / generates |
 
 ## Security review (post-merge)
@@ -143,7 +154,7 @@ Legend:
 | Client env vars | only public: Supabase URL, anon key, AI proxy URL |
 | RLS forced on every table | ✅ (DB test) |
 | `console.*` logging in app code | none |
-| `npm audit` (production deps) | 3 moderate, all `minimatch` ReDoS via `@expo/fingerprint` (build tooling). Only automated fix is an Expo SDK downgrade (58 → 52) — not applied |
+| `npm audit` | 11 advisories, all in development/build tooling, none in app runtime code: `minimatch` via `@expo/fingerprint` and `typescript-eslint` (moderate), `vitest`/`tinypool` (2 critical, test runner only; fix requires vitest 5). Not applied in this change |
 
 ## Release
 | Item | Status |

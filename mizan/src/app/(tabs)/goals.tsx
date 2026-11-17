@@ -7,6 +7,7 @@ import { useApp, useCollection } from '@/state/AppContext';
 import { Badge, Button, Card, EmptyState, FilterChips, ProgressBar, Row, Screen, Txt } from '@/ui/primitives';
 import { newRecordHref } from '@/ui/records';
 import { TopActions } from '@/ui/TopActions';
+import { Hero } from '@/ui/kit';
 
 export default function Goals() {
   const { t, fmt } = useApp();
@@ -18,6 +19,7 @@ export default function Goals() {
     .sort((a, b) => (a.status === 'completed' ? 1 : 0) - (b.status === 'completed' ? 1 : 0) || (a.target_date ?? '9').localeCompare(b.target_date ?? '9'));
   return (
     <Screen title={t('goals.title')} back={false} actions={<TopActions />} testID="screen-goals">
+      <Hero domain="general" eyebrow={t('goals.title')} title={t('goals.heroTitle', { n: goals.filter((g) => g.status === 'in_progress' || g.status === 'not_started').length })} subtitle={t('goals.heroSub', { n: goals.filter((g) => g.status === 'completed').length })} />
       <FilterChips options={['all', ...DOMAINS, 'general'] as const} value={filter} onChange={setFilter} labelOf={(d) => (d === 'all' ? t('common.all') : t(`domain.${d}`))} />
       <Button label={t('common.new')} icon="add" onPress={() => router.push(newRecordHref('goals', filter !== 'all' ? { domain: filter } : undefined) as never)} testID="goal-add" />
       {shown.length === 0 ? (

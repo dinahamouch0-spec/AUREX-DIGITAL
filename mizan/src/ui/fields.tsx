@@ -263,3 +263,20 @@ export function RatingField({ label, value, onChange, error }: { label: string; 
     </FieldShell>
   );
 }
+
+/** Text input that keeps its own draft and commits on blur / submit (works the same on iOS and web). */
+export function CommitInput({ value, onCommit, ...rest }: Omit<TextInputProps, 'value' | 'onChangeText' | 'defaultValue'> & { value: string; onCommit: (v: string) => void }) {
+  const [draft, setDraft] = useState(value);
+  const [seen, setSeen] = useState(value);
+  if (value !== seen) {
+    // external change (e.g. undo, sync): adopt it (derived-state pattern)
+    setSeen(value);
+    setDraft(value);
+  }
+  const commit = () => {
+    const v = draft.trim();
+    if (v && v !== value) onCommit(v);
+    else if (!v) setDraft(value);
+  };
+  return <Input {...rest} value={draft} onChangeText={setDraft} onBlur={commit} onSubmitEditing={commit} />;
+}

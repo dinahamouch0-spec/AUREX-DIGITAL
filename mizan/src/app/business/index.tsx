@@ -8,6 +8,7 @@ import { CurrencyCode, CurrencyTotals } from '@/domain/money';
 import { useApp, useCollection } from '@/state/AppContext';
 import { Button, Icon, IconName, ListItem, MetricCard, Notice, Row, Screen, SectionHeader, Txt, styles } from '@/ui/primitives';
 import { newRecordHref } from '@/ui/records';
+import { Hero } from '@/ui/kit';
 
 const moneyText = (totals: CurrencyTotals, fmt: ReturnType<typeof useApp>['fmt']) => {
   const e = Object.entries(totals) as [CurrencyCode, number][];
@@ -39,6 +40,7 @@ export default function Business() {
   ];
   return (
     <Screen title={t('bus.title')} subtitle={t('bus.subtitle')} testID="screen-business">
+      <Hero domain="business" eyebrow={t('bus.thisMonth')} title={moneyText(month.netCash, fmt)} subtitle={`${t('home.receivables')}: ${moneyText(all.receivables, fmt)}`} />
       <Row wrap>
         <Button small label={t('qa.addTransaction')} icon="add" onPress={() => router.push(newRecordHref('transactions', { occurred_on: today }) as never)} testID="bus-add-tx" />
         <Button small variant="secondary" label={t('col.clients')} icon="person-add-outline" onPress={() => router.push(newRecordHref('clients') as never)} testID="bus-add-client" />

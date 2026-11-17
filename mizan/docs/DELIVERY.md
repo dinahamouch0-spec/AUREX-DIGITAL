@@ -20,6 +20,8 @@ No keys or credentials were invented or committed. `.env.example` lists the vari
 
 ## 2. Running MIZAN on your iPhone (in order)
 
+**Free route, iPhone only:** Expo Go + EAS Update — see [`IPHONE.md`](IPHONE.md) §0 (needs only a free Expo account; prepared, not yet validated on a device). The steps below are the standalone-app route, which needs the Apple Developer Program.
+
 1. Join the **Apple Developer Program** (developer.apple.com) with your Apple ID.
 2. Create a free **Expo account** at expo.dev.
 3. On a computer with Node 22: `git clone` the repo, then
@@ -54,9 +56,9 @@ No keys or credentials were invented or committed. `.env.example` lists the vari
 
 **Verified in this environment (automated, repeatable):**
 - TypeScript strict, ESLint (0 issues), `expo-doctor` 20/20.
-- 159 unit tests — domain rules, store, sync engine (fake server), use cases, notifications planning, Perfect Days incl. as-of stability.
-- 45 PostgreSQL checks — RLS isolation, integrity constraints, append-only ledgers, seal times (DST), definition immutability.
-- Web build + 164 smoke checks (both languages, every screen) + 22 functional flow checks (goals, reminders → notification centre, invoice + partial payment, client timeline, pipeline, programs, meals, routines, planner, calendar, assistant approval, prayer adjustment, settings persistence, AI switch, export).
+- 190 unit tests — living-home logic, domain rules, exercise & food data integrity, nutrition calculator, programs, strength analytics, store, sync engine (fake server), use cases, notifications planning, Perfect Days incl. as-of stability.
+- 53 PostgreSQL checks — RLS isolation (incl. recipes), integrity constraints, append-only ledgers, seal times (DST), definition immutability.
+- Web build + 164 smoke checks (both languages, every screen) + 42 functional flow checks (living home, celebrations, Reduce Motion, programs + live workout with rest timer and PRs, exercise library, food calculator, nutrition targets, recipes, goals, reminders → notification centre, invoice + partial payment, client timeline, pipeline, programs, meals, routines, planner, calendar, assistant approval, prayer adjustment, settings persistence, AI switch, export).
 - **Native iOS JavaScript bundle compiles** (`expo export --platform ios`, Hermes bytecode).
 - **iOS project generation succeeds** (`expo prebuild --platform ios` in a scratch copy): bundle id `app.mizan.personal`, iOS 16.4+, only the photo-library permission string, no camera/microphone/HealthKit requests.
 

@@ -1,6 +1,24 @@
 # Installing and testing MIZAN on an iPhone
 
-MIZAN uses native modules (SQLite, notifications, Keychain, photo picker), so use a **development build** or **TestFlight**, not Expo Go.
+Every native module MIZAN uses (SQLite, notifications, Secure Store, image picker, file system, sharing) is included in Expo Go SDK 58, so there are three ways to run it: **Expo Go + EAS Update** (free, iPhone only — section 0), a **development build**, or **TestFlight** (both need the Apple Developer Program).
+
+## 0. Expo Go + EAS Update (free, no computer, no Apple Developer Program)
+
+Status: **prepared, not yet validated on a device.** Expo's docs confirm Expo Go loads EAS Updates for projects you own (changelog, May 2026), but the exact iOS steps to open a published update are not documented, so this path is only proven once it works on the phone.
+
+How the project is set up for it:
+- `expo-updates` is installed (EAS CLI needs it to publish).
+- `app.json` → `"runtimeVersion": { "policy": "sdkVersion" }`, which resolves to `exposdk:58.0.0` — the runtime Expo Go SDK 58 accepts. (The default `appVersion` policy would produce `1.0.0`, which Expo Go rejects.)
+- Linked to the owner's Expo project `@ahmadalhaj/mizan` (`owner` and `extra.eas.projectId` in `app.json`; neither is a secret). `updates.url` is added by EAS CLI on the first `eas update`. No secrets are in the project.
+
+Steps (owner actions are marked **you**):
+1. **You:** on expo.dev → Settings → Access Tokens, create a token limited to your personal account with the **Developer** role. Enter it only in the session's secure credential form for `api.expo.dev` — never in chat or files.
+2. Verify the account: `eas whoami`.
+3. Link the project: `eas init` (creates the MIZAN project on your account; commit the resulting `app.json` change).
+4. Publish once: `eas update --platform ios --environment production --message "…"` (free plan: unlimited updates up to 1,000 monthly users).
+5. **You (iPhone):** open Expo Go signed in to the same account and open MIZAN from your projects, or tap the update link from the project page on expo.dev.
+
+Limits inside Expo Go: the app shows as Expo Go (name, icon, notification sender, photo-permission text); data lives inside Expo Go and is lost if Expo Go is deleted — use Settings → Export regularly; remote push is unavailable (MIZAN doesn't use it); scheduled local notifications on iOS must be checked with the list in section C.
 
 ## Prerequisites (owner)
 1. An **Apple Developer Program** membership (paid). It's needed for device builds and TestFlight.
@@ -29,6 +47,13 @@ In App Store Connect → TestFlight, add yourself as an internal tester and inst
 Bundle identifier: `app.mizan.personal` (change in `app.json` before the first build if you prefer another).
 
 ## C. Real-device validation checklist
+
+New in the fitness & nutrition upgrade — check on the phone:
+- [ ] Live workout: rest timer counts down while the screen stays open; haptic tap when it ends; logging a heavier set shows the 🏆 record toast.
+- [ ] Muscle-map illustrations, rings and charts render crisply (react-native-svg) in dark and light mode.
+- [ ] Food search → amount sheet: keyboard does not cover the "Add" button; grams/servings update the calories live.
+- [ ] Recipes: add ingredients, change servings, log a portion; values match the recipe screen.
+- [ ] Arabic: numeric ranges (e.g. 8–12) read left-to-right inside Arabic text.
 Nothing below is claimed to work until checked here. Record results in `docs/STATUS.md`.
 
 | # | Check | How |

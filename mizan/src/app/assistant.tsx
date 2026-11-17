@@ -1,6 +1,8 @@
 import { router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 
+import { Hero } from '@/ui/kit';
+
 import { AiAnswer, LocalInsightsProvider, ProposedAction, getProviders } from '@/ai/provider';
 import { addDays } from '@/domain/dates';
 import { DOMAINS } from '@/domain/types';
@@ -46,6 +48,7 @@ export default function Assistant() {
 
   return (
     <Screen title={t('ai.title')} testID="screen-assistant">
+      <Hero domain="general" eyebrow={t('ai.title')} title={t('ai.heroTitle')} subtitle={t('ai.heroSub')} />
       {!settings.ai.enabled ? (
         <>
           <EmptyState icon="sparkles-outline" body={t('ai.disabled')} />

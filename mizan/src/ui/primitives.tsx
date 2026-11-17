@@ -4,7 +4,9 @@
  * - respect RTL via the app-level `direction` plus explicit text alignment,
  * - expose accessibility roles/labels and ≥44pt touch targets.
  */
+import { fw } from '../theme/typography';
 import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 import { router } from 'expo-router';
 import React from 'react';
 import {
@@ -80,15 +82,23 @@ export function Row({ children, gap = spacing.sm, style, wrap }: { children: Rea
 
 export function Card({ children, style, onPress, accessibilityLabel, testID }: { children: React.ReactNode; style?: StyleProp<ViewStyle>; onPress?: () => void; accessibilityLabel?: string; testID?: string }) {
   const p = usePalette();
-  const base: ViewStyle = { backgroundColor: p.surface, borderRadius: radius.md, borderWidth: 1, borderColor: p.border, padding: spacing.lg, gap: spacing.sm };
-  if (!onPress) return <View style={[base, style]} testID={testID}>{children}</View>;
+  const base: ViewStyle = { backgroundColor: p.surface, borderRadius: radius.md, borderWidth: 1, borderColor: p.border, padding: spacing.lg, gap: spacing.sm, overflow: 'hidden' };
+  const sheen = <LinearGradient pointerEvents="none" colors={[p.cardFrom, p.cardTo]} style={StyleSheet.absoluteFill} />;
+  if (!onPress)
+    return (
+      <View style={[base, style]} testID={testID}>
+        {sheen}
+        {children}
+      </View>
+    );
   return (
     <Pressable
       testID={testID}
       accessibilityRole="button"
       accessibilityLabel={accessibilityLabel}
       onPress={onPress}
-      style={({ pressed }) => [base, pressed && { opacity: 0.8 }, style]}>
+      style={({ pressed }) => [base, pressed && { opacity: 0.85, transform: [{ scale: 0.99 }] }, style]}>
+      {sheen}
       {children}
     </Pressable>
   );
@@ -101,13 +111,19 @@ export function Divider() {
 
 export function SectionHeader({ title, action, onAction, testID }: { title: string; action?: string; onAction?: () => void; testID?: string }) {
   return (
-    <Row style={{ justifyContent: 'space-between', marginTop: spacing.lg, marginBottom: spacing.sm }}>
+    <Row style={{ justifyContent: 'space-between', marginTop: spacing.lg, marginBottom: spacing.xs }}>
+      <SectionBar />
       <Txt variant="heading" accessibilityRole="header" style={{ flex: 1 }}>
         {title}
       </Txt>
       {action && onAction ? <LinkButton label={action} onPress={onAction} testID={testID} /> : null}
     </Row>
   );
+}
+
+function SectionBar() {
+  const p = usePalette();
+  return <View style={{ width: 4, height: 18, borderRadius: 2, backgroundColor: p.accent }} />;
 }
 
 // ---------------------------------------------------------------- buttons
@@ -150,6 +166,7 @@ export function Button({
           minHeight: small ? 36 : MIN_TOUCH,
           paddingHorizontal: small ? spacing.md : spacing.lg,
           borderRadius: radius.sm,
+          overflow: 'hidden',
           backgroundColor: bg,
           borderWidth: variant === 'secondary' ? 1 : 0,
           borderColor: p.border,
@@ -161,8 +178,9 @@ export function Button({
         },
         style,
       ]}>
+      {variant === 'primary' && !disabled ? <LinearGradient pointerEvents="none" colors={[p.goldLight, p.accent, p.goldDeep]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={StyleSheet.absoluteFill} /> : null}
       {loading ? <ActivityIndicator color={fg} /> : icon ? <Icon name={icon} size={18} color={fg} /> : null}
-      <Text style={[type.label, { color: fg, fontWeight: '600' }]}>{label}</Text>
+      <Text style={[type.label, { color: fg, ...fw('700') }]}>{label}</Text>
     </Pressable>
   );
 }
@@ -176,7 +194,7 @@ export function LinkButton({ label, onPress, testID }: { label: string; onPress:
   );
 }
 
-export function IconButton({ icon, onPress, label, color, testID, badge }: { icon: IconName; onPress: () => void; label: string; color?: keyof Palette; testID?: string; badge?: number }) {
+export function IconButton({ icon, onPress, label, color, testID, badge }: { icon: IconName; onPress: () => void; label: string; color?: keyof Palette | string; testID?: string; badge?: number }) {
   const p = usePalette();
   return (
     <Pressable
@@ -189,7 +207,7 @@ export function IconButton({ icon, onPress, label, color, testID, badge }: { ico
       <Icon name={icon} size={22} color={color ?? 'text'} />
       {badge ? (
         <View style={{ position: 'absolute', top: 6, end: 4, minWidth: 18, height: 18, borderRadius: 9, backgroundColor: p.accent, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 4 }}>
-          <Text style={{ color: p.onAccent, fontSize: 11, fontWeight: '700' }}>{badge > 99 ? '99+' : badge}</Text>
+          <Text style={{ color: p.onAccent, fontSize: 11, ...fw('700') }}>{badge > 99 ? '99+' : badge}</Text>
         </View>
       ) : null}
     </Pressable>
@@ -241,7 +259,7 @@ export function Badge({ label, tone = 'neutral', icon }: { label: string; tone?:
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4, borderWidth: 1, borderColor: c, borderRadius: radius.pill, paddingHorizontal: 8, paddingVertical: 2, alignSelf: 'flex-start' }}>
       {icon ? <Icon name={icon} size={12} color={c} /> : null}
-      <Text style={[type.caption, { color: c, fontWeight: '600' }]}>{label}</Text>
+      <Text style={[type.caption, { color: c, ...fw('600') }]}>{label}</Text>
     </View>
   );
 }
@@ -261,7 +279,7 @@ export function ProgressBar({ ratio, label, testID }: { ratio: number | null; la
       accessibilityLabel={label}
       accessibilityValue={ratio == null ? undefined : { min: 0, max: 100, now: Math.round(r * 100) }}
       style={{ height: 8, borderRadius: 4, backgroundColor: p.surfaceElevated, overflow: 'hidden' }}>
-      <View style={{ width: `${r * 100}%`, height: '100%', backgroundColor: p.accent }} />
+      <LinearGradient colors={[p.goldLight, p.accent]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }} style={{ width: `${r * 100}%`, height: '100%', borderRadius: 4 }} />
     </View>
   );
 }
@@ -320,7 +338,7 @@ export function ListItem({
         paddingVertical: spacing.sm,
         paddingHorizontal: spacing.md,
         backgroundColor: pressed ? p.surfaceElevated : p.surface,
-        borderRadius: radius.sm,
+        borderRadius: radius.md,
         borderWidth: 1,
         borderColor: p.border,
       })}>
@@ -410,7 +428,10 @@ export function Screen({
   scroll = true,
   testID,
   footer,
+  bare,
 }: {
+  /** no header bar: the screen draws its own immersive top (Home) */
+  bare?: boolean;
   title: string;
   subtitle?: string;
   children: React.ReactNode;
@@ -430,7 +451,8 @@ export function Screen({
   );
   return (
     <View style={{ flex: 1, backgroundColor: p.background }} testID={testID}>
-      <View style={{ paddingTop: insets.top + spacing.sm, paddingHorizontal: spacing.sm, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: p.divider }}>
+      {bare ? null : (
+      <View style={{ paddingTop: insets.top + spacing.sm, paddingHorizontal: spacing.sm, paddingBottom: spacing.xs, backgroundColor: p.background, borderBottomWidth: StyleSheet.hairlineWidth, borderBottomColor: p.divider }}>
         <View style={{ width: '100%', maxWidth: MAX_CONTENT_WIDTH + spacing.lg, alignSelf: 'center', flexDirection: 'row', alignItems: 'center', minHeight: 52 }}>
           {back ? (
             <IconButton
@@ -443,7 +465,7 @@ export function Screen({
             <View style={{ width: spacing.sm }} />
           )}
           <View style={{ flex: 1, paddingHorizontal: spacing.xs }}>
-            <Txt variant="title" accessibilityRole="header" numberOfLines={1}>
+            <Txt variant="title" accessibilityRole="header" numberOfLines={1} style={{ fontSize: 24, letterSpacing: -0.3 }}>
               {title}
             </Txt>
             {subtitle ? (
@@ -455,8 +477,9 @@ export function Screen({
           <Row gap={0}>{actions}</Row>
         </View>
       </View>
+      )}
       {scroll ? (
-        <ScrollView contentContainerStyle={{ paddingTop: spacing.lg }} keyboardShouldPersistTaps="handled">
+        <ScrollView contentContainerStyle={{ paddingTop: bare ? insets.top + spacing.lg : spacing.lg }} keyboardShouldPersistTaps="handled">
           {content}
         </ScrollView>
       ) : (

@@ -7,8 +7,11 @@ import { DayStatus, StreakSummary, computeStreaks, daysToSeal, liveStatus, sealT
 import { findPrayerLog } from '../domain/deen';
 import { latestLog } from '../domain/habits';
 import { scaleNutrition } from '../domain/fitness';
+import type { CatalogFood } from '../domain/foodCatalog';
+import { Macros, RecipeIngredient, macrosForGrams, recipePerServing, roundMacros, scaleMacros } from '../domain/nutrition';
+import { ProgramDay, TemplateId, buildTemplate, scheduleFromDays } from '../domain/programs';
 import type { PrayerType } from '../domain/prayerTimes';
-import type { DealStage, FoodItem, Habit, HabitLogStatus, PerfectCriterion, PrayerStatus, Routine, Workout } from '../domain/types';
+import type { DealStage, FoodItem, Habit, MealType, Recipe, WorkoutProgram, HabitLogStatus, PerfectCriterion, PrayerStatus, Routine, Workout } from '../domain/types';
 import type { Store } from './store';
 
 /** Set (or clear) one prayer's record for a day. Each prayer is independent. */
@@ -87,6 +90,75 @@ export function addFoodToMeal(store: Store, mealId: string, food: FoodItem, quan
     fat_g: scaleNutrition(food.fat_g, quantity),
     source: food.source,
   });
+}
+
+/** Log a built-in food by weight. `servings`/`label` only describe how the user entered it. */
+export function addCatalogFoodToMeal(store: Store, mealId: string, food: CatalogFood, grams: number, name: string) {
+  if (!(grams > 0) || grams > 5000) throw new Error('invalid_amount');
+  const m = macrosForGrams(food, grams);
+  return store.insert('meal_items', {
+    meal_id: mealId,
+    custom_name: name,
+    catalog_food_id: food.id,
+    grams: Math.round(grams * 10) / 10,
+    quantity: Math.max(0.01, Math.round((grams / 100) * 100) / 100),
+    calories: m.kcal,
+    protein_g: m.protein,
+    carbs_g: m.carbs,
+    fat_g: m.fat,
+    source: 'estimate',
+  });
+}
+
+/** Log `portions` servings of a recipe as one meal item (values = per-serving × portions). */
+export function addRecipeToMeal(store: Store, mealId: string, recipe: Recipe, portions: number) {
+  if (!(portions > 0) || portions > 100) throw new Error('invalid_amount');
+  const m = roundMacros(scaleMacros(recipePerServing(recipe.ingredients_json ?? [], recipe.servings), portions));
+  return store.insert('meal_items', { meal_id: mealId, custom_name: recipe.name, quantity: portions, calories: m.kcal, protein_g: m.protein, carbs_g: m.carbs, fat_g: m.fat, source: 'estimate' });
+}
+
+/** Find today's meal of a type or create it, so "add to Lunch" is one tap. */
+export function mealFor(store: Store, type: MealType, date: LocalDate, now: Date, timeZone: string) {
+  const existing = store
+    .list('meals')
+    .filter((m) => m.meal_type === type && localDateOf(m.logged_at, timeZone) === date)
+    .sort((a, b) => a.logged_at.localeCompare(b.logged_at))[0];
+  if (existing) return existing;
+  const at = localDateOf(now, timeZone) === date ? now.toISOString() : new Date(`${date}T12:00:00Z`).toISOString();
+  return store.insert('meals', { meal_type: type, logged_at: at });
+}
+
+/** Turn a logged meal into a reusable recipe (one serving = the whole meal). */
+export function saveMealAsRecipe(store: Store, mealId: string, name: string) {
+  const items = store.list('meal_items').filter((i) => i.meal_id === mealId);
+  if (!items.length) throw new Error('empty');
+  const ingredients: RecipeIngredient[] = items.map((i) => ({
+    ref: i.catalog_food_id ?? i.food_item_id ?? 'custom',
+    name: i.custom_name ?? '',
+    amount: i.grams ?? i.quantity,
+    unit: i.grams ? 'g' : 'serving',
+    kcal: i.calories ?? 0,
+    protein: i.protein_g ?? 0,
+    carbs: i.carbs_g ?? 0,
+    fat: i.fat_g ?? 0,
+  }));
+  return store.insert('recipes', { name: name.trim(), servings: 1, ingredients_json: ingredients });
+}
+
+export function ingredientFromCatalog(food: CatalogFood, grams: number, name: string): RecipeIngredient {
+  const m: Macros = macrosForGrams(food, grams);
+  return { ref: food.id, name, amount: grams, unit: 'g', kcal: m.kcal, protein: m.protein, carbs: m.carbs, fat: m.fat };
+}
+
+// ---------------------------------------------------------------- programs
+export function createProgramFromTemplate(store: Store, template: TemplateId, name: string, nameOf: (key: string) => string, newId: () => string, activate: boolean) {
+  const days = buildTemplate(template, nameOf, newId);
+  if (activate) for (const p of store.list('workout_programs')) if (p.is_active) store.update('workout_programs', p.id, { is_active: false });
+  return store.insert('workout_programs', { name: name.trim(), is_active: activate, days_json: days, schedule_json: scheduleFromDays(days) });
+}
+
+export function saveProgramDays(store: Store, programId: string, days: ProgramDay[]): WorkoutProgram {
+  return store.update('workout_programs', programId, { days_json: days, schedule_json: scheduleFromDays(days) });
 }
 
 /** Copy a saved meal (with its items) to now. */

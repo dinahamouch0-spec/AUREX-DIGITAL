@@ -10,6 +10,7 @@ import { MIN_TOUCH, NAMED_COLORS, radius, spacing } from '@/theme/tokens';
 import { SelectSheet } from '@/ui/overlays';
 import { Button, EmptyState, Icon, IconButton, ListItem, Row, Screen, SectionHeader, Txt } from '@/ui/primitives';
 import { newRecordHref } from '@/ui/records';
+import { Hero, ProgressRing, useDomainTheme } from '@/ui/kit';
 import { usePalette } from '@/ui/theme';
 
 const STATUSES: HabitLogStatus[] = ['completed', 'partial', 'skipped', 'deferred', 'paused'];
@@ -29,8 +30,12 @@ export default function Habits() {
   };
   const targetHabit = habits.find((h) => h.id === sheetTarget);
   const todays = habits.filter((h) => isScheduledOn(h, today) || h.status === 'paused');
+  const habTheme = useDomainTheme('habits');
+  const scheduledToday = habits.filter((h) => isScheduledOn(h, today) && h.schedule_type !== 'times_per_week');
+  const doneToday = scheduledToday.filter((h) => habitDayStatus(h, logs, today) === 'completed').length;
   return (
     <Screen title={t('hab.title')} actions={<IconButton icon="add" label={t('common.new')} onPress={() => router.push(newRecordHref('habits') as never)} testID="habit-add" />} testID="screen-habits">
+      <Hero domain="habits" eyebrow={fmt.localDate(today, 'weekday')} title={t('home.habitsToday', { done: doneToday, total: scheduledToday.length })} subtitle={t('hab.heroSub')} right={<ProgressRing ratio={scheduledToday.length ? doneToday / scheduledToday.length : null} size={72} stroke={8} color={habTheme.accent} label={t('home.habitsToday', { done: doneToday, total: scheduledToday.length })}><Txt variant="bodyStrong">{scheduledToday.length ? fmt.percent(doneToday / scheduledToday.length) : '—'}</Txt></ProgressRing>} />
       <SectionHeader title={`${t('hab.today')} · ${fmt.localDate(today, 'weekday')}`} />
       <Txt variant="caption" color="textMuted">
         {t('hab.tapHint')}

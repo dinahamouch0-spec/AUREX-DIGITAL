@@ -150,21 +150,103 @@ try {
 
   await flow('workout program', async () => {
     await go('/fitness/programs');
-    await tid('program-add').click();
-    await fill('field-name', 'Teen strength');
-    await save();
-    await go('/fitness/programs');
-    const day = prefix('program-').filter({ has: page.locator('input') }).locator(`[data-testid$="-day-${weekday}"]`).first();
-    const input = page.locator(`[data-testid$="-day-${weekday}"]`).first();
-    void day;
-    await input.fill('Push day');
-    await input.blur();
+    await tid('tpl-custom').click();
+    await fill('program-name', 'Teen strength');
+    await tid('program-create').click();
+    await tid('screen-program').waitFor();
+    await fill('day-0-name', 'Push day');
+    await tid('day-0-name').first().blur();
+    await tid(`day-0-wd-${weekday}`).click();
+    await tid('day-0-add').click();
+    await tid('select-option-builtin:push_up').click();
+    await tid('day-0-ex-0').click();
+    await tid('day-0-ex-0-sets-inc').click();
     await page.waitForTimeout(200);
+    check('program exercise sets can be adjusted', (await tid('day-0-ex-0-sets').innerText()).trim() === '4');
     await page.reload();
     await page.waitForLoadState('networkidle');
-    check('program schedule persists after reload', (await page.locator(`[data-testid$="-day-${weekday}"]`).first().inputValue()) === 'Push day');
+    check('program day persists after reload', (await tid('day-0-name').first().inputValue()) === 'Push day');
+    check('program exercise persists after reload', await tid('day-0-ex-0').first().innerText().then((x) => x.includes('Push-up')));
     await go('/fitness');
-    check("fitness dashboard shows today's planned workout", await page.getByText('Push day').first().isVisible());
+    check("fitness dashboard shows today's planned day", await page.getByText('Push day').first().isVisible());
+    await tid('fit-start').click();
+    await tid('screen-workout').waitFor();
+    check('starting today\'s day queues the planned exercise', (await tid('set-logger').innerText()).includes('Push-up'));
+    await fill('set-reps', '10');
+    await tid('set-add').click();
+    await page.waitForTimeout(300);
+    check('logging a set starts the rest timer', await tid('rest-timer').isVisible());
+    await tid('rest-skip').click();
+    await tid('workout-finish').click();
+    await page.waitForTimeout(300);
+    await go('/fitness/workout/active');
+    await tid('workout-start-planned').click();
+    await tid('screen-workout').waitFor();
+    await fill('set-reps', '12');
+    await tid('set-add').click();
+    await page.waitForTimeout(200);
+    check('beating last session is flagged as a personal record', (await tid('toast').innerText()).includes('New record'));
+    await tid('workout-finish').click();
+    await page.waitForTimeout(300);
+    await go('/fitness/analytics');
+    check('analytics count this week\'s completed sessions', (await tid('screen-fitness-analytics').innerText()).includes('2 sessions'));
+  });
+
+  await flow('exercise library', async () => {
+    await go('/fitness/exercises');
+    await fill('ex-search', 'incline');
+    check('library search finds matching exercises', await tid('ex-builtin:incline_db_press').isVisible());
+    await tid('ex-builtin:incline_db_press').click();
+    await tid('screen-exercise').waitFor();
+    const txt = await tid('screen-exercise').innerText();
+    check('exercise detail shows steps, mistakes and alternatives', txt.includes('How to do it') && txt.includes('Common mistakes') && txt.includes('Alternatives'));
+  });
+
+  await flow('food calculator', async () => {
+    await go('/fitness/food?meal=lunch');
+    await fill('food-search', 'chicken breast');
+    await tid('food-food:chicken_breast_cooked').click();
+    await fill('amount-grams', '150');
+    await page.waitForTimeout(100);
+    check('150 g of cooked chicken breast is calculated as 248 kcal', (await tid('amount-kcal').innerText()).includes('248'));
+    await tid('amount-add').click();
+    await page.waitForTimeout(200);
+    await go('/fitness/nutrition');
+    check('the food appears under Lunch with its calories', (await tid('nut-meal-lunch').innerText()).includes('248'));
+    check('daily protein total is computed (46.5 g)', (await tid('nut-protein').innerText()).includes('46.5'));
+    await page.reload();
+    await page.waitForLoadState('networkidle');
+    check('logged food persists after reload', (await tid('nut-meal-lunch').innerText()).includes('248'));
+  });
+
+  await flow('nutrition targets', async () => {
+    await go('/fitness/nutrition-targets');
+    await fill('target-kcal', '2000');
+    await fill('target-protein', '120');
+    await tid('targets-save').click();
+    await page.waitForTimeout(200);
+    await go('/fitness/nutrition');
+    check('remaining calories are shown against the target', (await tid('nut-hero').innerText()).includes('1,752 kcal left') || (await tid('nut-hero').innerText()).includes('1752 kcal left'));
+  });
+
+  await flow('recipe', async () => {
+    await go('/fitness/recipes');
+    await fill('recipe-name', 'Rice bowl');
+    await tid('recipe-create').click();
+    await tid('screen-recipe').waitFor();
+    await tid('recipe-add-ing').click();
+    await tid('screen-food').waitFor();
+    await fill('food-search', 'white rice');
+    await tid('food-food:rice_white_cooked').click();
+    await fill('amount-grams', '200');
+    await tid('amount-add').click();
+    await page.waitForTimeout(200);
+    await page.goBack();
+    await page.waitForLoadState('networkidle');
+    await tid('screen-recipe').waitFor();
+    await tid('recipe-serv-inc').click();
+    await page.waitForTimeout(150);
+    check('recipe per-serving value = total / servings (260 / 2 = 130 kcal)', (await tid('recipe-per').innerText()).includes('130'));
   });
 
   await flow('meal from food library', async () => {
@@ -263,6 +345,53 @@ try {
     await tid('ai-enabled').click();
     await go('/assistant');
     check('turning the assistant off hides insights', await page.getByText('The assistant is turned off').first().isVisible());
+  });
+
+  await flow('living home', async () => {
+    await go('/');
+    check('home shows one "next up" action', await tid('home-next-up').isVisible());
+    await tid('home-ring-nutrition').click();
+    await page.waitForTimeout(400);
+    check('tapping a domain ring opens its inline panel with real values', (await tid('home-panel-nutrition').innerText()).includes('kcal'));
+    await tid('home-ring-nutrition').click();
+    await page.waitForTimeout(300);
+    check('tapping the ring again closes the panel', (await tid('home-panel-nutrition').count()) === 0);
+  });
+
+  await flow('calm celebration for all five prayers', async () => {
+    await go('/deen');
+    for (const p of ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha']) {
+      const btn = tid(`prayer-${p}`);
+      const txt = await btn.innerText();
+      if (!/Prayed/.test(txt)) await btn.click();
+      await page.waitForTimeout(120);
+    }
+    await page.waitForTimeout(300);
+    check('recording all five prayers shows a (calm) celebration once', await tid('celebration').isVisible());
+    await page.waitForTimeout(2800);
+    await go('/deen');
+    await page.waitForTimeout(500);
+    check('the celebration does not repeat on revisiting', (await tid('celebration').count()) === 0);
+  });
+
+  await flow('reduce motion', async () => {
+    const rctx = await page.context().browser().newContext({ viewport: { width: 390, height: 844 }, timezoneId: 'Asia/Beirut', locale: 'en-GB', reducedMotion: 'reduce' });
+    const rp = await rctx.newPage();
+    await rp.goto(BASE + '/');
+    await rp.getByTestId('screen-onboarding').waitFor({ timeout: 20000 });
+    await rp.getByTestId('onb-lang-en').click().catch(() => {});
+    await rp.getByTestId('onb-next').click();
+    await rp.getByTestId('onb-next').click();
+    await rp.getByTestId('onb-start').click();
+    await rp.getByTestId('screen-home').waitFor();
+    await rp.waitForTimeout(100);
+    const op = await rp.getByTestId('home-ring-deen').evaluate((el) => {
+      let e = el, o = 1;
+      while (e) { o *= Number(getComputedStyle(e).opacity || 1); e = e.parentElement; }
+      return o;
+    });
+    check('with Reduce Motion, home content is fully visible immediately', op > 0.99, String(op));
+    await rctx.close();
   });
 
   await flow('export', async () => {

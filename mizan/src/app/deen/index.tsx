@@ -12,6 +12,7 @@ import { MIN_TOUCH, radius, spacing } from '@/theme/tokens';
 import { SelectSheet } from '@/ui/overlays';
 import { Badge, Button, Card, Chip, Icon, IconButton, ListItem, Notice, Row, Screen, SectionHeader, Txt } from '@/ui/primitives';
 import { newRecordHref } from '@/ui/records';
+import { Hero, ProgressRing, useDomainTheme } from '@/ui/kit';
 import { usePalette } from '@/ui/theme';
 
 const STATUS_ICON = { performed: 'checkmark-circle', missed: 'remove-circle-outline', excused: 'ellipse-outline', not_recorded: 'ellipse-outline' } as const;
@@ -33,6 +34,9 @@ export default function Deen() {
   const summary = dayPrayerSummary(logs, date);
   const times = useMemo(() => computePrayerTimes(date, settings.prayer), [date, settings.prayer]);
   const recorded = summary.performed + summary.missed + summary.excused;
+  const deenTheme = useDomainTheme('deen');
+  const nowIso = new Date().toISOString();
+  const nextPrayer = date === today ? (PRAYERS.map((pr) => [pr, times.times[pr]] as const).find(([, at]) => at != null && at > nowIso) as readonly [PrayerType, string] | undefined) : undefined;
 
   const set = (prayer: PrayerType, status: PrayerStatus | null) => {
     const undo = setPrayerStatus(store, date, prayer, status, new Date(), settings.timezone);
@@ -57,6 +61,7 @@ export default function Deen() {
         </Pressable>
         <IconButton icon={rtl ? 'chevron-back' : 'chevron-forward'} label={t('common.next')} onPress={() => date < today && setDate(addDays(date, 1))} testID="deen-next" />
       </Row>
+      <Hero domain="deen" eyebrow={date === today ? t('common.today') : fmt.localDate(date, 'weekday')} title={t('deen.recordedCount', { n: recorded })} subtitle={nextPrayer ? t('deen.nextPrayer', { name: t(`opt.prayer.${nextPrayer[0]}`), time: fmt.time(nextPrayer[1]) }) : undefined} right={<ProgressRing ratio={recorded / 5} size={72} stroke={8} color={deenTheme.accent} label={t('deen.recordedCount', { n: recorded })}><Txt variant="bodyStrong">{fmt.number(summary.performed)}</Txt></ProgressRing>} />
 
       <SectionHeader title={t('deen.todayPrayers')} />
       <Txt variant="caption" color="textSecondary" testID="deen-count">

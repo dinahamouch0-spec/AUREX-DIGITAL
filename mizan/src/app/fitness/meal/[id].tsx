@@ -1,9 +1,10 @@
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useState } from 'react';
 
+import { localDateOf } from '@/domain/dates';
 import { nutritionTotals } from '@/domain/fitness';
 import { parseNumberInput } from '@/domain/formValues';
-import { addFoodToMeal, repeatMeal } from '@/data/usecases';
+import { addFoodToMeal, repeatMeal, saveMealAsRecipe } from '@/data/usecases';
 import { store, useApp, useCollection, useRecord } from '@/state/AppContext';
 import { SelectField, TextField } from '@/ui/fields';
 import { Badge, Button, Card, EmptyState, IconButton, ListItem, Row, Screen, SectionHeader, Txt } from '@/ui/primitives';
@@ -11,7 +12,7 @@ import { editRecordHref, newRecordHref } from '@/ui/records';
 
 export default function MealDetail() {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { t, fmt, showToast } = useApp();
+  const { t, fmt, showToast, settings } = useApp();
   const meal = useRecord('meals', id);
   const items = useCollection('meal_items').filter((i) => i.meal_id === id);
   const foods = useCollection('food_items');
@@ -46,7 +47,7 @@ export default function MealDetail() {
         <ListItem
           key={i.id}
           title={i.custom_name ?? t('common.untitled')}
-          subtitle={`× ${fmt.number(i.quantity)}${i.calories != null ? ` · ${fmt.number(i.calories)} kcal` : ''}`}
+          subtitle={`${i.grams != null ? `${fmt.number(i.grams)} g` : `× ${fmt.number(i.quantity)}`}${i.calories != null ? ` · ${fmt.number(i.calories)} kcal` : ''}`}
           right={<Badge label={t(`opt.nsource.${i.source}`)} tone={i.source === 'package_label' ? 'info' : 'neutral'} />}
           onPress={() => router.push(editRecordHref('meal_items', i.id) as never)}
         />
@@ -64,6 +65,19 @@ export default function MealDetail() {
       <Row wrap>
         <Button variant="secondary" label={t('fit.customFood')} icon="create-outline" onPress={() => router.push(newRecordHref('meal_items', { meal_id: meal.id, source: 'user_entered' }) as never)} testID="meal-custom" />
         <Button variant="secondary" label={t('fit.saveToLibrary')} icon="bookmark-outline" onPress={() => router.push(newRecordHref('food_items') as never)} />
+        <Button variant="secondary" label={t('nut.searchAdd')} icon="search-outline" onPress={() => router.push(`/fitness/food?meal=${meal.meal_type}&date=${localDateOf(meal.logged_at, settings.timezone)}` as never)} testID="meal-search" />
+        {items.length ? (
+          <Button
+            variant="ghost"
+            label={t('nut.saveAsRecipe')}
+            icon="book-outline"
+            onPress={() => {
+              const r = saveMealAsRecipe(store, meal.id, `${t(`opt.meal.${meal.meal_type}`)} · ${fmt.localDate(localDateOf(meal.logged_at, settings.timezone), 'short')}`);
+              showToast({ message: t('nut.recipeSaved') });
+              router.push(`/fitness/recipe/${r.id}`);
+            }}
+          />
+        ) : null}
         <Button
           variant="ghost"
           label={t('fit.repeatMeal')}

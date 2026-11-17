@@ -1,5 +1,6 @@
 import { DEFAULT_TIMEZONE } from '../domain/dates';
 import { DEFAULT_PRAYER_SETTINGS, PrayerCalcSettings } from '../domain/prayerTimes';
+import { NO_TARGETS, NutritionTargets } from '../domain/nutrition';
 import type { Domain } from '../domain/types';
 import type { Locale, Numerals } from '../i18n';
 
@@ -29,6 +30,8 @@ export interface Settings {
     reviewTime: string;
   };
   ai: { enabled: boolean; domains: Record<Domain, boolean> };
+  /** optional daily nutrition targets set by the user (none by default) */
+  nutrition: NutritionTargets;
 }
 
 export const DEFAULT_SETTINGS: Settings = {
@@ -53,6 +56,7 @@ export const DEFAULT_SETTINGS: Settings = {
     reviewTime: '20:30',
   },
   ai: { enabled: true, domains: { deen: false, fitness: true, academics: true, business: true, habits: true, general: true } },
+  nutrition: NO_TARGETS,
 };
 
 export function mergeSettings(stored: Partial<Settings> | null): Settings {
@@ -67,6 +71,7 @@ export function mergeSettings(stored: Partial<Settings> | null): Settings {
       channels: { ...DEFAULT_SETTINGS.notifications.channels, ...(stored.notifications?.channels ?? {}) },
     },
     ai: { ...DEFAULT_SETTINGS.ai, ...(stored.ai ?? {}), domains: { ...DEFAULT_SETTINGS.ai.domains, ...(stored.ai?.domains ?? {}) } },
+    nutrition: { ...NO_TARGETS, ...(stored.nutrition ?? {}) },
   };
 }
 

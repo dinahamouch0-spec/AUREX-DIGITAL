@@ -293,6 +293,7 @@ export const SCHEMAS: Record<CollectionName, CollectionSchema> = {
       f('name', 'text', { required: true, maxLength: 100 }),
       f('is_active', 'boolean', { default: true }),
       f('schedule_json', 'json', { hidden: true, default: () => ({}) }),
+      f('days_json', 'json', { hidden: true }),
     ],
   },
   meals: {
@@ -336,6 +337,19 @@ export const SCHEMAS: Record<CollectionName, CollectionSchema> = {
       f('carbs_g', 'number', { min: 0, max: 2000 }),
       f('fat_g', 'number', { min: 0, max: 2000 }),
       f('source', 'select', { required: true, options: ['user_entered', 'package_label', 'estimate'], optionPrefix: 'nsource', default: 'estimate' }),
+      f('catalog_food_id', 'text', { hidden: true, maxLength: 80 }),
+      f('grams', 'number', { min: 0.1, max: 5000, advanced: true }),
+    ],
+  },
+  recipes: {
+    collection: 'recipes',
+    titleField: 'name',
+    sortField: 'name',
+    fields: [
+      f('name', 'text', { required: true, maxLength: 120 }),
+      f('servings', 'number', { required: true, min: 0.5, max: 100, default: 1 }),
+      f('ingredients_json', 'json', { hidden: true, default: () => [] }),
+      f('notes', 'multiline', { maxLength: 2000 }),
     ],
   },
   hydration_logs: {
