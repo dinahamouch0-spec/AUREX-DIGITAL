@@ -9,7 +9,7 @@ Status: **prepared, not yet validated on a device.** Expo's docs confirm Expo Go
 How the project is set up for it:
 - `expo-updates` is installed (EAS CLI needs it to publish).
 - `app.json` → `"runtimeVersion": { "policy": "sdkVersion" }`, which resolves to `exposdk:58.0.0` — the runtime Expo Go SDK 58 accepts. (The default `appVersion` policy would produce `1.0.0`, which Expo Go rejects.)
-- No secrets are in the project. `owner`, `extra.eas.projectId` and `updates.url` are written by `eas init` once an Expo account is linked.
+- Linked to the owner's Expo project `@ahmadalhaj/mizan` (`owner` and `extra.eas.projectId` in `app.json`; neither is a secret). `updates.url` is added by EAS CLI on the first `eas update`. No secrets are in the project.
 
 Steps (owner actions are marked **you**):
 1. **You:** on expo.dev → Settings → Access Tokens, create a token limited to your personal account with the **Developer** role. Enter it only in the session's secure credential form for `api.expo.dev` — never in chat or files.
