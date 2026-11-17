@@ -64,6 +64,9 @@
         "projectId": "2a1de0fc-a814-452e-ba02-1d8d9e9ce90f"
       }
     },
-    "owner": "ahmadalhaj"
+    "owner": "ahmadalhaj",
+    "updates": {
+      "url": "https://u.expo.dev/2a1de0fc-a814-452e-ba02-1d8d9e9ce90f"
+    }
   }
 }
