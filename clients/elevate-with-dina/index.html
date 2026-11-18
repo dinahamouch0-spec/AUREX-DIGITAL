@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>تذكرة التدفّق المالي لصاحبة الخبرة</title>
-<meta name="description" content="تذكرة التدفّق المالي لصاحبة الخبرة مع دينا حمّوش: اكتشفي شو قيمة خبرتِك، ابني برنامجِك البصمة وبيعيه بثقة. مدعوم بالذكاء الاصطناعي.">
+<meta name="description" content="تذكرة التدفّق المالي لصاحبة الخبرة مع دينا حاموش: اكتشفي شو قيمة خبرتِك، ابني برنامجِك البصمة وبيعيه بثقة. مدعوم بالذكاء الاصطناعي.">
 <meta property="og:title" content="تذكرة التدفّق المالي | Elevate with Dina">
 <meta property="og:description" content="دخل من خبرتِك. وشغل بيشبهِك.">
 <meta property="og:type" content="website">
@@ -12,12 +12,21 @@
 <meta name="theme-color" content="#071331">
 <link rel="alternate" hreflang="ar" href="https://elevate-with-dina.netlify.app/">
 <link rel="alternate" hreflang="en" href="https://elevate-with-dina.netlify.app/en/">
+<script>document.documentElement.classList.add("js");try{if(sessionStorage.getItem("ewd-seen"))document.documentElement.classList.add("seen")}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Jost:wght@400;500&family=Mr+Dafoe&family=Noto+Naskh+Arabic:wght@500;600;700&family=Noto+Sans+Arabic:wght@300;400;500;600&display=swap">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+<div class="loader" aria-hidden="true">
+  <div class="loader-inner">
+    <svg class="loader-ring" viewBox="0 0 120 120"><circle cx="60" cy="60" r="56"/></svg>
+    <img src="logo.webp" alt="" width="96" height="96">
+  </div>
+  <span class="loader-word" lang="en">Elevate with Dina</span>
+  <span class="loader-line"></span>
+</div>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
@@ -60,6 +69,7 @@
 <main>
   <!-- HERO -->
   <section class="hero">
+    <canvas class="hero-dust" aria-hidden="true"></canvas>
     <div class="wrap hero-grid">
       <div class="hero-copy">
         <span class="eyebrow">تذكرة التدفّق المالي لصاحبة الخبرة</span>
@@ -85,7 +95,7 @@
       <div class="ticket-stage" aria-label="تذكرة التدفّق المالي لصاحبة الخبرة">
         <div class="photo-ring" aria-hidden="true"></div>
         <figure class="hero-photo">
-          <img src="dina-portrait.webp" alt="دينا حمّوش بجاكيت أسود" width="880" height="1100" fetchpriority="high">
+          <img src="dina-portrait.webp" alt="دينا حاموش بجاكيت أسود" width="880" height="1100" fetchpriority="high">
         </figure>
         <div class="ticket">
           <div class="ticket-main">
@@ -94,7 +104,7 @@
             <h2 class="t-title">تذكرة<em>التدفّق المالي</em></h2>
             <dl class="t-fields">
               <div><dt>حاملة التذكرة</dt><dd>إنتِ، صاحبة الخبرة</dd></div>
-              <div><dt>صادرة عن</dt><dd>دينا حمّوش</dd></div>
+              <div><dt>صادرة عن</dt><dd>دينا حاموش</dd></div>
             </dl>
             <div class="t-admit"><span lang="en">Elevate</span><small>مدعومة بالذكاء الاصطناعي</small></div>
           </div>
@@ -103,6 +113,17 @@
           </div>
         </div>
       </div>
+    </div>
+  </section>
+
+  <div class="marquee" aria-hidden="true"><div class="marquee-track"><div class="marquee-set"><span>تفكير <bdi lang="en">ERP</bdi></span><i aria-hidden="true">✦</i><span>المبيعات</span><i aria-hidden="true">✦</i><span>الذكاء الاصطناعي</span><i aria-hidden="true">✦</i><span><bdi lang="en">Her Business OS™</bdi></span><i aria-hidden="true">✦</i><span>برنامجِك البصمة</span><i aria-hidden="true">✦</i><span>التدفّق المالي</span><i aria-hidden="true">✦</i><span>خبرتِك رأس مالِك</span><i aria-hidden="true">✦</i></div><div class="marquee-set"><span>تفكير <bdi lang="en">ERP</bdi></span><i aria-hidden="true">✦</i><span>المبيعات</span><i aria-hidden="true">✦</i><span>الذكاء الاصطناعي</span><i aria-hidden="true">✦</i><span><bdi lang="en">Her Business OS™</bdi></span><i aria-hidden="true">✦</i><span>برنامجِك البصمة</span><i aria-hidden="true">✦</i><span>التدفّق المالي</span><i aria-hidden="true">✦</i><span>خبرتِك رأس مالِك</span><i aria-hidden="true">✦</i></div></div></div>
+
+  <section class="stats" aria-label="دينا بالأرقام">
+    <div class="wrap stats-grid">
+        <div class="stat"><b class="stat-num" dir="ltr"><span data-count="13">13</span><em>K+</em></b><span class="stat-label">متابِعة على إنستغرام</span></div>
+        <div class="stat"><b class="stat-num" dir="ltr"><span data-count="120">120</span><em>+</em></b><span class="stat-label">صبيّة ساعدتها دينا تبني بزنسها</span></div>
+        <div class="stat"><b class="stat-num" dir="ltr"><span data-count="99">99</span><em>%</em></b><span class="stat-label">نسبة النجاح عند الصبايا اللي اشتغلت معهن</span></div>
+        <div class="stat"><b class="stat-num" dir="ltr"><span data-count="5">5</span><em></em></b><span class="stat-label">تذاكر بتاخدِك من الفكرة للإطلاق</span></div>
     </div>
   </section>
 
@@ -225,23 +246,45 @@
   </section>
 
   <!-- INSIDE -->
-  <section class="section" id="inside" style="padding-top:0">
-    <div class="wrap inside">
-      <div class="section-head">
-        <span class="eyebrow">شو في جوّا البرنامج</span>
-        <h2>كل شي مشمول.</h2>
-        <p>أسماء الوحدات تحت مؤقّتة لحتى يتأكّد المنهج النهائي. <span class="ph">مؤقّت</span></p>
-        <a class="btn btn-gold" href="#tickets" style="justify-self:start">اكتشفي تذكرتِك للبداية <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+  <section class="section courses" id="inside">
+    <div class="wrap">
+      <div class="section-head center">
+        <span class="eyebrow">شو في جوّا تذكرتِك</span>
+        <h2>خمس تذاكر. <span class="gold-text">رحلة وحدة.</span></h2>
+        <p>كل تذكرة مرحلة، ومعها دفتر عمل لتطبّقي خطوة بخطوة.</p>
       </div>
-      <ol class="modules">
-        <li class="module"><span class="num">01</span><div><h3>اسم الوحدة: اكتشاف قيمتِك</h3><p>وصف قصير عن شو بتتعلّمي هون.</p></div><span class="tag">فيديو · 00 دقيقة</span></li>
-        <li class="module"><span class="num">02</span><div><h3>اسم الوحدة: طريقتِك وتموضعِك</h3><p>وصف قصير عن شو بتتعلّمي هون.</p></div><span class="tag">فيديو · 00 دقيقة</span></li>
-        <li class="module"><span class="num">03</span><div><h3>اسم الوحدة: بناء العرض</h3><p>وصف قصير عن شو بتتعلّمي هون.</p></div><span class="tag">ورشة عمل</span></li>
-        <li class="module"><span class="num">04</span><div><h3>اسم الوحدة: من متابِعة لعميلة</h3><p>وصف قصير عن شو بتتعلّمي هون.</p></div><span class="tag">فيديو · 00 دقيقة</span></li>
-        <li class="module"><span class="num">05</span><div><h3>اسم الوحدة: نظام البيع اللي بيتكرّر</h3><p>وصف قصير عن شو بتتعلّمي هون.</p></div><span class="tag">قالب جاهز</span></li>
-        <li class="module bonus"><span class="num">+</span><div><h3>بونص: أدوات ذكاء اصطناعي لصاحبات الخبرة</h3><p>وصف قصير عن البونص.</p></div><span class="tag">بونص</span></li>
-      </ol>
     </div>
+    <div class="orbit-stage" data-orbit>
+      <div class="orbit-ellipse" aria-hidden="true"></div>
+      <ul class="orbit" aria-label="الكورسات">
+        <li class="orbit-item" data-no="001" data-title="رحلة فردية مع دينا" data-sub="لصاحبات الخبرة والمدرّبات: برنامج من بصمتِك ونظام واضح لبيعه وتسليمه، مع خطة إطلاق لـ30 يوم." data-book="دفتر العمل: برنامجِك من الفكرة للإطلاق">
+          <button type="button" class="orbit-card" aria-label="تذكرة 001: رحلة فردية مع دينا"><img src="courses/c1.webp" alt="رحلة فردية مع دينا" width="960" height="640" loading="lazy" draggable="false"><span class="orbit-no" dir="ltr">001</span></button>
+        </li>
+        <li class="orbit-item" data-no="002" data-title="خبرتِك رأس مالِك" data-sub="اكتشفي قيمة خبرتِك وحدّدي اتجاه مشروعِك." data-book="دفتر اكتشاف الخبرة">
+          <button type="button" class="orbit-card" aria-label="تذكرة 002: خبرتِك رأس مالِك"><img src="courses/c2.webp" alt="خبرتِك رأس مالِك" width="960" height="640" loading="lazy" draggable="false"><span class="orbit-no" dir="ltr">002</span></button>
+        </li>
+        <li class="orbit-item" data-no="003" data-title="عرضِك عالسوق" data-sub="من قيمة العرض إلى الظهور الرقمي: عرض واضح، وحملة بتوصّله للناس الصح." data-book="مخطّط الحملة التجريبية">
+          <button type="button" class="orbit-card" aria-label="تذكرة 003: عرضِك عالسوق"><img src="courses/c3.webp" alt="عرضِك عالسوق" width="960" height="640" loading="lazy" draggable="false"><span class="orbit-no" dir="ltr">003</span></button>
+        </li>
+        <li class="orbit-item" data-no="004" data-title="كيف تبني برنامجِك البصمة؟" data-sub="من الوعد إلى التجربة: صمّمي تجربة توصل عميلتِك للنتيجة اللي وعدتيها فيها." data-book="دليل تصميم البرنامج: خريطة رحلة العميلة">
+          <button type="button" class="orbit-card" aria-label="تذكرة 004: كيف تبني برنامجِك البصمة؟"><img src="courses/c4.webp" alt="كيف تبني برنامجِك البصمة؟" width="960" height="640" loading="lazy" draggable="false"><span class="orbit-no" dir="ltr">004</span></button>
+        </li>
+        <li class="orbit-item" data-no="005" data-title="حزمة مبيعات برنامجِك" data-sub="من أوّل اهتمام لقرار الشراء." data-book="دليل البيع والمتابعة">
+          <button type="button" class="orbit-card" aria-label="تذكرة 005: حزمة مبيعات برنامجِك"><img src="courses/c5.webp" alt="حزمة مبيعات برنامجِك" width="960" height="640" loading="lazy" draggable="false"><span class="orbit-no" dir="ltr">005</span></button>
+        </li>
+      </ul>
+    </div>
+    <div class="wrap orbit-ui">
+      <button type="button" class="orbit-nav" data-dir="-1" aria-label="التذكرة السابقة"><svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
+      <div class="orbit-caption">
+        <span class="oc-no">تذكرة <bdi dir="ltr">001</bdi></span>
+        <h3 class="oc-title">رحلة فردية مع دينا</h3>
+        <p class="oc-sub">لصاحبات الخبرة والمدرّبات: برنامج من بصمتِك ونظام واضح لبيعه وتسليمه، مع خطة إطلاق لـ30 يوم.</p>
+        <span class="oc-book"><svg aria-hidden="true"><use href="#i-book"/></svg><span>دفتر العمل: برنامجِك من الفكرة للإطلاق</span></span>
+      </div>
+      <button type="button" class="orbit-nav" data-dir="1" aria-label="التذكرة الجاية"><svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
+    </div>
+    <div class="orbit-dots" aria-hidden="true"></div>
   </section>
 
   <!-- ABOUT -->
@@ -249,13 +292,13 @@
     <div class="wrap about">
       <div class="portrait-wrap">
         <div class="portrait">
-          <img src="dina-portrait.webp" alt="صورة دينا حمّوش" width="880" height="1100" loading="lazy">
+          <img src="dina-portrait.webp" alt="صورة دينا حاموش" width="880" height="1100" loading="lazy">
         </div>
         <div class="badge-float"><b dir="ltr">13K+</b><span>امرأة بمجتمعها</span></div>
       </div>
       <div class="about-copy">
         <span class="eyebrow">تعرّفي على دليلتِك</span>
-        <h2>دينا حمّوش</h2>
+        <h2>دينا حاموش</h2>
         <p class="role">مستشارة تحوّل الأعمال ومدرّبة معتمدة</p>
         <p>دينا بتبني مع رائدات الأعمال بزنس منظّم، بيبيع، مربح وقابل للنمو. هي مؤسِّسة <bdi lang="en">Her Business OS™</bdi>، طريقة لإدارة البزنس بتجمع بين تفكير الـ<bdi lang="en">ERP</bdi> والمبيعات والذكاء الاصطناعي.</p>
         <p>قصة دينا بسطرين أو تلاتة: من وين بلّشت، نقطة التحوّل، ومين بتساعد اليوم. <span class="ph">مؤقّت</span></p>
@@ -332,6 +375,7 @@
       </div>
       <div class="tickets-grid">
         <article class="opt featured">
+          <span class="opt-sheen" aria-hidden="true"></span>
           <div class="opt-body">
             <span class="opt-badge"><svg aria-hidden="true"><use href="#i-spark"/></svg>ابدئي من هون</span>
             <h3>اكتشفي وين واقفة</h3>
@@ -432,7 +476,7 @@
       <a href="#privacy">سياسة الخصوصية</a>
       <a href="#terms">الشروط</a>
     </nav>
-    <small>© <span id="yr">2026</span> دينا حمّوش. جميع الحقوق محفوظة.</small>
+    <small>© <span id="yr">2026</span> دينا حاموش. جميع الحقوق محفوظة.</small>
   </div>
 </footer>
 
@@ -440,20 +484,6 @@
   <a class="btn btn-gold" href="#tickets" tabindex="-1">اكتشفي تذكرتِك للبداية <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
 </div>
 
-<script>
-(function(){
-  var y=document.getElementById('yr'); if(y) y.textContent=new Date().getFullYear();
-  var header=document.querySelector('.site-header');
-  var onScroll=function(){ header.classList.toggle('scrolled', window.scrollY>12); };
-  onScroll(); window.addEventListener('scroll', onScroll, {passive:true});
-  var m=document.getElementById('mcta'), hero=document.querySelector('.hero'), fin=document.getElementById('claim');
-  if('IntersectionObserver' in window && m){
-    var heroVis=true, finVis=false;
-    var update=function(){ var show=!heroVis && !finVis; m.classList.toggle('show',show); m.setAttribute('aria-hidden',String(!show)); m.querySelector('a').tabIndex=show?0:-1; };
-    new IntersectionObserver(function(e){ heroVis=e[0].isIntersecting; update(); }).observe(hero);
-    new IntersectionObserver(function(e){ finVis=e[0].isIntersecting; update(); }).observe(fin);
-  }
-})();
-</script>
+<script src="site.js" defer></script>
 </body>
 </html>

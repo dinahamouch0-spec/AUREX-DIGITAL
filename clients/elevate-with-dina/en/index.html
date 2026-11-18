@@ -12,12 +12,21 @@
 <meta name="theme-color" content="#071331">
 <link rel="alternate" hreflang="ar" href="https://elevate-with-dina.netlify.app/">
 <link rel="alternate" hreflang="en" href="https://elevate-with-dina.netlify.app/en/">
+<script>document.documentElement.classList.add("js");try{if(sessionStorage.getItem("ewd-seen"))document.documentElement.classList.add("seen")}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Jost:wght@300;400;500;600&family=Mr+Dafoe&family=Noto+Naskh+Arabic:wght@500;600;700&display=swap">
 <link rel="stylesheet" href="../styles.css">
 </head>
 <body>
+<div class="loader" aria-hidden="true">
+  <div class="loader-inner">
+    <svg class="loader-ring" viewBox="0 0 120 120"><circle cx="60" cy="60" r="56"/></svg>
+    <img src="../logo.webp" alt="" width="96" height="96">
+  </div>
+  <span class="loader-word" lang="en">Elevate with Dina</span>
+  <span class="loader-line"></span>
+</div>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
@@ -60,6 +69,7 @@
 <main>
   <!-- HERO -->
   <section class="hero">
+    <canvas class="hero-dust" aria-hidden="true"></canvas>
     <div class="wrap hero-grid">
       <div class="hero-copy">
         <span class="eyebrow">Your Ticket for Cash Flow</span>
@@ -103,6 +113,17 @@
           </div>
         </div>
       </div>
+    </div>
+  </section>
+
+  <div class="marquee" aria-hidden="true"><div class="marquee-track"><div class="marquee-set"><span>ERP Thinking</span><i aria-hidden="true">✦</i><span>Sales</span><i aria-hidden="true">✦</i><span>AI</span><i aria-hidden="true">✦</i><span>Her Business OS™</span><i aria-hidden="true">✦</i><span>Your Signature Program</span><i aria-hidden="true">✦</i><span>Cash Flow</span><i aria-hidden="true">✦</i><span>Your Expertise Is Your Capital</span><i aria-hidden="true">✦</i></div><div class="marquee-set"><span>ERP Thinking</span><i aria-hidden="true">✦</i><span>Sales</span><i aria-hidden="true">✦</i><span>AI</span><i aria-hidden="true">✦</i><span>Her Business OS™</span><i aria-hidden="true">✦</i><span>Your Signature Program</span><i aria-hidden="true">✦</i><span>Cash Flow</span><i aria-hidden="true">✦</i><span>Your Expertise Is Your Capital</span><i aria-hidden="true">✦</i></div></div></div>
+
+  <section class="stats" aria-label="Dina in numbers">
+    <div class="wrap stats-grid">
+        <div class="stat"><b class="stat-num" dir="ltr"><span data-count="13">13</span><em>K+</em></b><span class="stat-label">followers on Instagram</span></div>
+        <div class="stat"><b class="stat-num" dir="ltr"><span data-count="120">120</span><em>+</em></b><span class="stat-label">women Dina has helped build their business</span></div>
+        <div class="stat"><b class="stat-num" dir="ltr"><span data-count="99">99</span><em>%</em></b><span class="stat-label">success rate among the women she has worked with</span></div>
+        <div class="stat"><b class="stat-num" dir="ltr"><span data-count="5">5</span><em></em></b><span class="stat-label">tickets from idea to launch</span></div>
     </div>
   </section>
 
@@ -225,23 +246,45 @@
   </section>
 
   <!-- INSIDE -->
-  <section class="section" id="inside" style="padding-top:0">
-    <div class="wrap inside">
-      <div class="section-head">
-        <span class="eyebrow">Inside the program</span>
-        <h2>Everything included.</h2>
-        <p>The modules below are placeholders until the final curriculum is confirmed. <span class="ph">Placeholder</span></p>
-        <a class="btn btn-gold" href="#tickets" style="justify-self:start">Find Your Starting Ticket <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
+  <section class="section courses" id="inside">
+    <div class="wrap">
+      <div class="section-head center">
+        <span class="eyebrow">Inside your ticket</span>
+        <h2>Five tickets. <em class="serif gold-text">One journey.</em></h2>
+        <p>Each ticket is a stage, with its own workbook so you apply as you go.</p>
       </div>
-      <ol class="modules">
-        <li class="module"><span class="num">01</span><div><h3>Module name: discovering your value</h3><p>Short description of what she learns here.</p></div><span class="tag">Video · 00 min</span></li>
-        <li class="module"><span class="num">02</span><div><h3>Module name: your method and positioning</h3><p>Short description of what she learns here.</p></div><span class="tag">Video · 00 min</span></li>
-        <li class="module"><span class="num">03</span><div><h3>Module name: building the offer</h3><p>Short description of what she learns here.</p></div><span class="tag">Workshop</span></li>
-        <li class="module"><span class="num">04</span><div><h3>Module name: from follower to client</h3><p>Short description of what she learns here.</p></div><span class="tag">Video · 00 min</span></li>
-        <li class="module"><span class="num">05</span><div><h3>Module name: your repeatable sales system</h3><p>Short description of what she learns here.</p></div><span class="tag">Template</span></li>
-        <li class="module bonus"><span class="num">+</span><div><h3>Bonus: AI toolkit for experts</h3><p>Short description of the bonus.</p></div><span class="tag">Bonus</span></li>
-      </ol>
     </div>
+    <div class="orbit-stage" data-orbit>
+      <div class="orbit-ellipse" aria-hidden="true"></div>
+      <ul class="orbit" aria-label="Courses">
+        <li class="orbit-item" data-no="001" data-title="A 1:1 Journey with Dina" data-sub="For experts and trainers: a program with your fingerprint and a clear system to sell and deliver it, with a 30-day launch plan." data-book="Workbook: your program from idea to launch">
+          <button type="button" class="orbit-card" aria-label="Ticket 001: A 1:1 Journey with Dina"><img src="../courses/c1.webp" alt="A 1:1 Journey with Dina" width="960" height="640" loading="lazy" draggable="false"><span class="orbit-no" dir="ltr">001</span></button>
+        </li>
+        <li class="orbit-item" data-no="002" data-title="Your Expertise Is Your Capital" data-sub="Discover what your expertise is worth and set the direction of your project." data-book="Expertise Discovery Workbook">
+          <button type="button" class="orbit-card" aria-label="Ticket 002: Your Expertise Is Your Capital"><img src="../courses/c2.webp" alt="Your Expertise Is Your Capital" width="960" height="640" loading="lazy" draggable="false"><span class="orbit-no" dir="ltr">002</span></button>
+        </li>
+        <li class="orbit-item" data-no="003" data-title="Your Offer, Out in the Market" data-sub="From your offer’s value to your digital presence: a clear offer, and a campaign that reaches the right people." data-book="Pilot Campaign Planner">
+          <button type="button" class="orbit-card" aria-label="Ticket 003: Your Offer, Out in the Market"><img src="../courses/c3.webp" alt="Your Offer, Out in the Market" width="960" height="640" loading="lazy" draggable="false"><span class="orbit-no" dir="ltr">003</span></button>
+        </li>
+        <li class="orbit-item" data-no="004" data-title="How to Build Your Signature Program" data-sub="From promise to experience: design an experience that takes your client to the result you promised." data-book="Program Design Guide: client journey map">
+          <button type="button" class="orbit-card" aria-label="Ticket 004: How to Build Your Signature Program"><img src="../courses/c4.webp" alt="How to Build Your Signature Program" width="960" height="640" loading="lazy" draggable="false"><span class="orbit-no" dir="ltr">004</span></button>
+        </li>
+        <li class="orbit-item" data-no="005" data-title="Your Program’s Sales Kit" data-sub="From first interest to the buying decision." data-book="Sales &amp; Follow-up Guide">
+          <button type="button" class="orbit-card" aria-label="Ticket 005: Your Program’s Sales Kit"><img src="../courses/c5.webp" alt="Your Program’s Sales Kit" width="960" height="640" loading="lazy" draggable="false"><span class="orbit-no" dir="ltr">005</span></button>
+        </li>
+      </ul>
+    </div>
+    <div class="wrap orbit-ui">
+      <button type="button" class="orbit-nav" data-dir="-1" aria-label="Previous ticket"><svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
+      <div class="orbit-caption">
+        <span class="oc-no">Ticket <bdi dir="ltr">001</bdi></span>
+        <h3 class="oc-title">A 1:1 Journey with Dina</h3>
+        <p class="oc-sub">For experts and trainers: a program with your fingerprint and a clear system to sell and deliver it, with a 30-day launch plan.</p>
+        <span class="oc-book"><svg aria-hidden="true"><use href="#i-book"/></svg><span>Workbook: your program from idea to launch</span></span>
+      </div>
+      <button type="button" class="orbit-nav" data-dir="1" aria-label="Next ticket"><svg aria-hidden="true"><use href="#i-arrow"/></svg></button>
+    </div>
+    <div class="orbit-dots" aria-hidden="true"></div>
   </section>
 
   <!-- ABOUT -->
@@ -332,6 +375,7 @@
       </div>
       <div class="tickets-grid">
         <article class="opt featured">
+          <span class="opt-sheen" aria-hidden="true"></span>
           <div class="opt-body">
             <span class="opt-badge"><svg aria-hidden="true"><use href="#i-spark"/></svg>Start here</span>
             <h3>Find Your Business Stage</h3>
@@ -440,20 +484,6 @@
   <a class="btn btn-gold" href="#tickets" tabindex="-1">Find Your Starting Ticket <svg aria-hidden="true"><use href="#i-arrow"/></svg></a>
 </div>
 
-<script>
-(function(){
-  var y=document.getElementById('yr'); if(y) y.textContent=new Date().getFullYear();
-  var header=document.querySelector('.site-header');
-  var onScroll=function(){ header.classList.toggle('scrolled', window.scrollY>12); };
-  onScroll(); window.addEventListener('scroll', onScroll, {passive:true});
-  var m=document.getElementById('mcta'), hero=document.querySelector('.hero'), fin=document.getElementById('claim');
-  if('IntersectionObserver' in window && m){
-    var heroVis=true, finVis=false;
-    var update=function(){ var show=!heroVis && !finVis; m.classList.toggle('show',show); m.setAttribute('aria-hidden',String(!show)); m.querySelector('a').tabIndex=show?0:-1; };
-    new IntersectionObserver(function(e){ heroVis=e[0].isIntersecting; update(); }).observe(hero);
-    new IntersectionObserver(function(e){ finVis=e[0].isIntersecting; update(); }).observe(fin);
-  }
-})();
-</script>
+<script src="../site.js" defer></script>
 </body>
 </html>
